@@ -180,12 +180,12 @@ async function translateElementAttributes(
         translated =
           await translateText(value)
 
-        cache.set(value, translated)
+        cache.set(value, translated ?? "")
       }
 
       element.setAttribute(
         attribute,
-        translated
+        translated ?? ""
       )
     }
   }

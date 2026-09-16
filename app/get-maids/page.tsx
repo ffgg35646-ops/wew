@@ -650,7 +650,7 @@ export default function GetMaidsPage() {
                       {maid.imageIds[0] ? (
                         <img
                           src={`/api/maids/media?id=${maid.imageIds[0]}`}
-                          alt=<span data-no-translate="true">{maid.name}</span>
+                          alt={maid.name}
                           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                         />
                       ) : (
@@ -1140,7 +1140,7 @@ export default function GetMaidsPage() {
                       <img
                         key={imageId}
                         src={`/api/maids/media?id=${imageId}`}
-                        alt=<span data-no-translate="true">{selected.name}</span>
+                        alt={selected.name}
                         className="h-52 w-full rounded-[18px] object-cover"
                       />
                     ))}
@@ -1165,7 +1165,7 @@ export default function GetMaidsPage() {
               <div>
 
                 <div className="grid gap-3 sm:grid-cols-2">
-                  <Detail label="الاسم" value=<span data-no-translate="true">{selected.name}</span> />
+                  <Detail label="الاسم" value={selected.name} />
                   <Detail label="العمر" value={selected.age || "غير محدد"} />
                   <Detail label="الجنسية" value={selected.nationality || "غير محددة"} />
                   <Detail label="البلد" value={selected.country || "غير محدد"} />
