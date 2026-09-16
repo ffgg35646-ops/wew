@@ -1,0 +1,884 @@
+
+/* =========================================================
+   AL SAADA PREMIUM VISUAL SYSTEM
+   ========================================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #f7f9fc;
+}
+
+.AL SAADA-glow {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 9999px;
+  filter: blur(90px);
+  opacity: .65;
+}
+
+.hero-premium-card {
+  animation: heroFloat 6s ease-in-out infinite;
+}
+
+.hero-premium-card-delay {
+  animation: heroFloat 7s ease-in-out infinite;
+  animation-delay: -2s;
+}
+
+@keyframes heroFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.premium-card {
+  transition:
+    transform .45s cubic-bezier(.2,.8,.2,1),
+    box-shadow .45s ease,
+    border-color .45s ease;
+}
+
+.premium-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 25px 60px rgba(18,87,214,.10);
+  border-color: rgba(18,87,214,.16);
+}
+
+.premium-image {
+  transition:
+    transform .8s cubic-bezier(.2,.8,.2,1),
+    filter .5s ease;
+}
+
+.group:hover .premium-image {
+  transform: scale(1.045);
+  filter: saturate(1.04);
+}
+
+.section-line {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(18,87,214,.16),
+    transparent
+  );
+}
+
+.blue-number {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.04em;
+}
+
+.soft-blue-section {
+  background:
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(18,87,214,.075),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 10% 80%,
+      rgba(91,141,239,.055),
+      transparent 28%
+    ),
+    #f7f9fc;
+}
+
+.premium-cta {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 80% 10%,
+      rgba(91,141,239,.30),
+      transparent 32%
+    ),
+    linear-gradient(
+      135deg,
+      #0c3fa5 0%,
+      #1257d6 48%,
+      #174fc0 100%
+    );
+}
+
+.premium-cta::after {
+  content: "";
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  left: -120px;
+  bottom: -180px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.07);
+  filter: blur(4px);
+}
+
+.glass-light {
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(255,255,255,.85);
+  box-shadow:
+    0 18px 50px rgba(18,87,214,.07),
+    inset 0 1px 0 rgba(255,255,255,.9);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.trust-item {
+  transition: transform .3s ease, background .3s ease;
+}
+
+.trust-item:hover {
+  transform: translateY(-3px);
+}
+
+@media (max-width: 768px) {
+  .hero-premium-card {
+    animation-duration: 7s;
+  }
+
+  .premium-card:hover {
+    transform: translateY(-3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-premium-card,
+  .hero-premium-card-delay {
+    animation: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Hero hiring button */
+.hero-hire-button {
+  isolation: isolate;
+}
+
+.hero-hire-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -45%;
+  width: 28%;
+  transform: skewX(-18deg);
+  background: rgba(255,255,255,.55);
+  animation: heroButtonShine 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes heroButtonShine {
+  0%, 55% {
+    left: -45%;
+    opacity: 0;
+  }
+
+  65% {
+    opacity: .7;
+  }
+
+  78%, 100% {
+    left: 125%;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-hire-button::after {
+    animation: none;
+  }
+}
+
+
+/* حركة زر التوظيف فقط */
+.hero-hire-button {
+  animation: heroHirePulse 3.2s ease-in-out infinite;
+}
+
+@keyframes heroHirePulse {
+  0%, 70%, 100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 10px 30px rgba(18,87,214,0.20);
+  }
+
+  76% {
+    transform: translateY(-2px) scale(1.025);
+    box-shadow: 0 14px 34px rgba(18,87,214,0.28);
+  }
+
+  82% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 10px 30px rgba(18,87,214,0.20);
+  }
+}
+
+.hero-hire-button:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-hire-button {
+    animation: none;
+  }
+}
+
+/* =========================================================
+   PAGE STRUCTURE — CLEAR VISUAL HIERARCHY
+   ========================================================= */
+
+body {
+  background: #f7f9fc;
+}
+
+/* Sections breathe more */
+main > section {
+  position: relative;
+}
+
+/* Soft separators between major sections */
+main > section + section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 6%;
+  right: 6%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(18,87,214,.10),
+    transparent
+  );
+}
+
+/* =========================================================
+   SERVICES
+   ========================================================= */
+
+#services {
+  background:
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(18,87,214,.045),
+      transparent 30%
+    ),
+    #ffffff;
+}
+
+#services h2 {
+  color: #203957;
+}
+
+#services .premium-card {
+  border-color: rgba(18,87,214,.08);
+  box-shadow: 0 12px 40px rgba(24,55,95,.045);
+}
+
+/* =========================================================
+   LOCATION / MAP
+   ========================================================= */
+
+#location,
+section:has(iframe) {
+  background:
+    linear-gradient(
+      180deg,
+      #f7f9fc 0%,
+      #ffffff 100%
+    );
+}
+
+section:has(iframe) iframe {
+  border: 1px solid rgba(18,87,214,.10);
+  box-shadow: 0 20px 55px rgba(24,55,95,.09);
+}
+
+/* =========================================================
+   HOW IT WORKS
+   ========================================================= */
+
+section:has([class*="01"]) {
+  scroll-margin-top: 110px;
+}
+
+section:has([class*="01"]) h2 {
+  color: #29456f;
+}
+
+/* =========================================================
+   WHY US
+   ========================================================= */
+
+#why {
+  background:
+    radial-gradient(
+      circle at 10% 50%,
+      rgba(18,87,214,.055),
+      transparent 30%
+    ),
+    #f7f9fc;
+}
+
+#why h2 {
+  color: #29456f;
+}
+
+/* =========================================================
+   MAIDS
+   ========================================================= */
+
+#maids {
+  background: #ffffff;
+}
+
+#maids h2 {
+  color: #29456f;
+}
+
+#maids .premium-card {
+  background: #ffffff;
+  border: 1px solid rgba(18,87,214,.08);
+  box-shadow: 0 12px 40px rgba(24,55,95,.055);
+}
+
+#maids .premium-card:hover {
+  box-shadow: 0 24px 55px rgba(18,87,214,.12);
+}
+
+/* =========================================================
+   REVIEWS
+   ========================================================= */
+
+#reviews {
+  background:
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(18,87,214,.045),
+      transparent 28%
+    ),
+    #f7f9fc;
+}
+
+/* Review cards */
+#reviews [class*="rounded"] {
+  border-color: rgba(18,87,214,.08);
+}
+
+/* =========================================================
+   FAQ
+   ========================================================= */
+
+#faq {
+  background: #ffffff;
+}
+
+#faq h2 {
+  color: #29456f;
+}
+
+#faq button {
+  color: #29456f;
+  transition:
+    background .25s ease,
+    transform .25s ease,
+    border-color .25s ease;
+}
+
+#faq button:hover {
+  background: #f7f9fc;
+}
+
+/* =========================================================
+   CTA BEFORE FOOTER
+   ========================================================= */
+
+.premium-cta {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* =========================================================
+   FOOTER — HIGH CONTRAST
+   ========================================================= */
+
+footer {
+  position: relative;
+  background:
+    radial-gradient(
+      circle at 82% 10%,
+      rgba(65,126,225,.22),
+      transparent 30%
+    ),
+    linear-gradient(
+      145deg,
+      #0b2346 0%,
+      #0d3268 52%,
+      #0a2854 100%
+    ) !important;
+
+  color: rgba(255,255,255,.90) !important;
+  border-top: 1px solid rgba(255,255,255,.10);
+}
+
+/* Footer all text becomes readable */
+footer p,
+footer span,
+footer li {
+  color: rgba(255,255,255,.68) !important;
+}
+
+footer h3,
+footer h4,
+footer strong {
+  color: #ffffff !important;
+}
+
+/* Footer links */
+footer a {
+  color: rgba(255,255,255,.72) !important;
+  transition:
+    color .25s ease,
+    transform .25s ease;
+}
+
+footer a:hover {
+  color: #ffffff !important;
+}
+
+/* Footer logo */
+footer a:first-child {
+  color: #ffffff !important;
+}
+
+/* Footer separators */
+footer hr,
+footer [class*="border"] {
+  border-color: rgba(255,255,255,.10) !important;
+}
+
+/* Footer bottom text */
+footer small {
+  color: rgba(255,255,255,.50) !important;
+}
+
+/* =========================================================
+   TYPOGRAPHY HIERARCHY
+   ========================================================= */
+
+main h2 {
+  letter-spacing: -1px;
+}
+
+main h3 {
+  letter-spacing: -.5px;
+}
+
+/* Orange only as tiny accent */
+main .text-\[\#F28C28\] {
+  color: #d97b22 !important;
+}
+
+/* =========================================================
+   MOBILE SPACING
+   ========================================================= */
+
+@media (max-width: 768px) {
+  main > section {
+    overflow: hidden;
+  }
+
+  main > section + section::before {
+    left: 8%;
+    right: 8%;
+  }
+
+  footer {
+    text-align: center;
+  }
+}
+
+
+/* Hero hiring glass button */
+.hero-hire-button {
+  isolation: isolate;
+}
+
+.hero-hire-button::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 16px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.82),
+      rgba(255,255,255,.38)
+    );
+  opacity: .72;
+  z-index: -1;
+}
+
+.hero-hire-shine {
+  animation: heroHireShine 3.8s ease-in-out infinite;
+}
+
+@keyframes heroHireShine {
+  0%, 35% {
+    left: -55%;
+    opacity: 0;
+  }
+
+  45% {
+    opacity: .85;
+  }
+
+  70%, 100% {
+    left: 125%;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-hire-shine {
+    animation: none;
+  }
+}
+
+/* =========================================================
+   PAGE STRUCTURE — CLEAR VISUAL HIERARCHY
+   ========================================================= */
+
+body {
+  background: #f7f9fc;
+}
+
+/* Sections breathe more */
+main > section {
+  position: relative;
+}
+
+/* Soft separators between major sections */
+main > section + section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 6%;
+  right: 6%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(18,87,214,.10),
+    transparent
+  );
+}
+
+/* =========================================================
+   SERVICES
+   ========================================================= */
+
+#services {
+  background:
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(18,87,214,.045),
+      transparent 30%
+    ),
+    #ffffff;
+}
+
+#services h2 {
+  color: #203957;
+}
+
+#services .premium-card {
+  border-color: rgba(18,87,214,.08);
+  box-shadow: 0 12px 40px rgba(24,55,95,.045);
+}
+
+/* =========================================================
+   LOCATION / MAP
+   ========================================================= */
+
+#location,
+section:has(iframe) {
+  background:
+    linear-gradient(
+      180deg,
+      #f7f9fc 0%,
+      #ffffff 100%
+    );
+}
+
+section:has(iframe) iframe {
+  border: 1px solid rgba(18,87,214,.10);
+  box-shadow: 0 20px 55px rgba(24,55,95,.09);
+}
+
+/* =========================================================
+   HOW IT WORKS
+   ========================================================= */
+
+section:has([class*="01"]) {
+  scroll-margin-top: 110px;
+}
+
+section:has([class*="01"]) h2 {
+  color: #29456f;
+}
+
+/* =========================================================
+   WHY US
+   ========================================================= */
+
+#why {
+  background:
+    radial-gradient(
+      circle at 10% 50%,
+      rgba(18,87,214,.055),
+      transparent 30%
+    ),
+    #f7f9fc;
+}
+
+#why h2 {
+  color: #29456f;
+}
+
+/* =========================================================
+   MAIDS
+   ========================================================= */
+
+#maids {
+  background: #ffffff;
+}
+
+#maids h2 {
+  color: #29456f;
+}
+
+#maids .premium-card {
+  background: #ffffff;
+  border: 1px solid rgba(18,87,214,.08);
+  box-shadow: 0 12px 40px rgba(24,55,95,.055);
+}
+
+#maids .premium-card:hover {
+  box-shadow: 0 24px 55px rgba(18,87,214,.12);
+}
+
+/* =========================================================
+   REVIEWS
+   ========================================================= */
+
+#reviews {
+  background:
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(18,87,214,.045),
+      transparent 28%
+    ),
+    #f7f9fc;
+}
+
+/* Review cards */
+#reviews [class*="rounded"] {
+  border-color: rgba(18,87,214,.08);
+}
+
+/* =========================================================
+   FAQ
+   ========================================================= */
+
+#faq {
+  background: #ffffff;
+}
+
+#faq h2 {
+  color: #29456f;
+}
+
+#faq button {
+  color: #29456f;
+  transition:
+    background .25s ease,
+    transform .25s ease,
+    border-color .25s ease;
+}
+
+#faq button:hover {
+  background: #f7f9fc;
+}
+
+/* =========================================================
+   CTA BEFORE FOOTER
+   ========================================================= */
+
+.premium-cta {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* =========================================================
+   FOOTER — HIGH CONTRAST
+   ========================================================= */
+
+footer {
+  position: relative;
+  background:
+    radial-gradient(
+      circle at 82% 10%,
+      rgba(65,126,225,.22),
+      transparent 30%
+    ),
+    linear-gradient(
+      145deg,
+      #0b2346 0%,
+      #0d3268 52%,
+      #0a2854 100%
+    ) !important;
+
+  color: rgba(255,255,255,.90) !important;
+  border-top: 1px solid rgba(255,255,255,.10);
+}
+
+/* Footer all text becomes readable */
+footer p,
+footer span,
+footer li {
+  color: rgba(255,255,255,.68) !important;
+}
+
+footer h3,
+footer h4,
+footer strong {
+  color: #ffffff !important;
+}
+
+/* Footer links */
+footer a {
+  color: rgba(255,255,255,.72) !important;
+  transition:
+    color .25s ease,
+    transform .25s ease;
+}
+
+footer a:hover {
+  color: #ffffff !important;
+}
+
+/* Footer logo */
+footer a:first-child {
+  color: #ffffff !important;
+}
+
+/* Footer separators */
+footer hr,
+footer [class*="border"] {
+  border-color: rgba(255,255,255,.10) !important;
+}
+
+/* Footer bottom text */
+footer small {
+  color: rgba(255,255,255,.50) !important;
+}
+
+/* =========================================================
+   TYPOGRAPHY HIERARCHY
+   ========================================================= */
+
+main h2 {
+  letter-spacing: -1px;
+}
+
+main h3 {
+  letter-spacing: -.5px;
+}
+
+/* Orange only as tiny accent */
+main .text-\[\#F28C28\] {
+  color: #d97b22 !important;
+}
+
+/* =========================================================
+   MOBILE SPACING
+   ========================================================= */
+
+@media (max-width: 768px) {
+  main > section {
+    overflow: hidden;
+  }
+
+  main > section + section::before {
+    left: 8%;
+    right: 8%;
+  }
+
+  footer {
+    text-align: center;
+  }
+}
+
+
+
+/* ✨ لمعة زر توظيف عاملة منزلية */
+.hero-hire-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-hire-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255,255,255,0.08) 35%,
+    rgba(255,255,255,0.65) 50%,
+    rgba(255,255,255,0.08) 65%,
+    transparent 100%
+  );
+  transform: skewX(-18deg);
+  animation: hireButtonShine 3.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.hero-hire-button > * {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes hireButtonShine {
+  0%, 55% {
+    left: -80%;
+  }
+
+  75% {
+    left: 130%;
+  }
+
+  100% {
+    left: 130%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-hire-button::after {
+    animation: none;
+  }
+}

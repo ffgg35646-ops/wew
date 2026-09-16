@@ -1,26 +1,3908 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --ink: #1c1c1a;
+  --muted: #6f6b64;
+  --bg: #faf8f5;
+  --accent: #9c8465;
+  --line: #e7e3dc;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Manrope', Arial, sans-serif;
+  background: var(--bg);
 }
+
+@keyframes scrollX {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.slider-track {
+  animation: scrollX 45s linear infinite;
+}
+.slider-track:hover {
+  animation-play-state: paused;
+}
+
+
+/* ✨ HERO HIRE BUTTON */
+.hero-hire-button {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero-hire-button::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: -60%;
+  width: 35%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.75),
+    transparent
+  );
+  transform: skewX(-20deg);
+  animation: hireShine 2.8s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-hire-button > * {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes hireShine {
+  0% {
+    left: -60%;
+  }
+
+  45%,
+  100% {
+    left: 130%;
+  }
+}
+
+
+
+
+
+/* === خط الفوتر: حبر ثقيل وواضح === */
+.footer-heavy,
+.footer-heavy h4,
+.footer-heavy p,
+.footer-heavy a,
+.footer-heavy span,
+.footer-heavy div {
+  -webkit-text-stroke: 0.38px currentColor;
+  text-shadow:
+    0 0 0.35px currentColor,
+    0 0 0.35px currentColor;
+}
+
+
+/* =========================================================
+   SERVICES — SLIDE IN ON SCROLL
+   ========================================================= */
+
+.services-slider-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.services-slide {
+  opacity: 0;
+  will-change: transform, opacity;
+  transition:
+    transform 900ms cubic-bezier(.16,1,.3,1),
+    opacity 700ms ease;
+}
+
+.services-slide-right {
+  transform: translateX(90px);
+}
+
+.services-slide-left {
+  transform: translateX(-90px);
+}
+
+.services-slide.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.services-slide-left {
+  transition-delay: 90ms;
+}
+
+@media (max-width: 900px) {
+  .services-slider-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .services-slide-right,
+  .services-slide-left {
+    transform: translateY(60px);
+  }
+
+  .services-slide.is-visible {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .services-slide,
+  .services-slide-right,
+  .services-slide-left {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+
+/* =========================================================
+   GLASS SERVICES
+   ========================================================= */
+
+.services-glass-card {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.96),
+      rgba(244,247,251,.82)
+    );
+  border: 1px solid rgba(160,170,185,.28);
+  box-shadow:
+    0 24px 70px rgba(31, 47, 72, .09),
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 -1px 0 rgba(120,130,145,.08);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.services-glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 82% 14%,
+      rgba(242,140,40,.18),
+      transparent 26%
+    ),
+    linear-gradient(
+      120deg,
+      rgba(255,255,255,.65),
+      transparent 42%,
+      rgba(210,216,225,.16)
+    );
+  pointer-events: none;
+}
+
+.services-glass-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.services-glass-card h3,
+.services-glass-card h4 {
+  color: #172033;
+  -webkit-text-stroke: .22px currentColor;
+  text-shadow:
+    0 0 .3px currentColor;
+}
+
+.services-glass-card p {
+  color: rgba(23,32,51,.68);
+  -webkit-text-stroke: .1px currentColor;
+}
+
+.services-glass-card .text-\[\#F28C28\] {
+  color: #D77A24 !important;
+}
+
+.services-glass-card .services-item > div:first-child {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),
+    0 8px 20px rgba(18,87,214,.08);
+}
+
+/* اللمسة البرتقالية */
+.services-glass-card::after {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  top: -90px;
+  left: -80px;
+  border-radius: 999px;
+  background: rgba(242,140,40,.10);
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   SERVICES — BOLD BLUE / ORANGE DIAGONAL CARDS
+   ========================================================= */
+
+.services-glass-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(255,255,255,.22);
+  box-shadow:
+    0 24px 65px rgba(18,87,214,.15),
+    inset 0 1px 0 rgba(255,255,255,.35);
+}
+
+.services-blue-orange {
+  background:
+    linear-gradient(
+      126deg,
+      #1257D6 0%,
+      #1257D6 40%,
+      #2A66D8 50%,
+      #E98B42 69%,
+      #F28C28 100%
+    ) !important;
+}
+
+.services-orange-blue {
+  background:
+    linear-gradient(
+      126deg,
+      #F28C28 0%,
+      #EA914B 31%,
+      #2A66D8 55%,
+      #1257D6 70%,
+      #1257D6 100%
+    ) !important;
+}
+
+/* طبقة زجاج خفيفة فوق الألوان */
+.services-glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.18),
+      transparent 32%,
+      rgba(255,255,255,.06) 58%,
+      rgba(255,255,255,.12)
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* لمعان صغير على الحافة */
+.services-glass-card::after {
+  content: "";
+  position: absolute;
+  top: -35%;
+  right: -12%;
+  width: 220px;
+  height: 220px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.10);
+  filter: blur(35px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* كل المحتوى فوق الخلفية */
+.services-glass-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* حبر العناوين */
+.services-glass-card h3,
+.services-glass-card h4 {
+  color: #fff !important;
+  font-weight: 900 !important;
+  -webkit-text-stroke: .42px currentColor;
+  text-shadow:
+    0 1px 0 rgba(0,0,0,.16),
+    0 1px 2px rgba(0,0,0,.14);
+}
+
+/* حبر النصوص */
+.services-glass-card p {
+  color: rgba(255,255,255,.92) !important;
+  font-weight: 700 !important;
+  -webkit-text-stroke: .14px currentColor;
+  text-shadow: 0 1px 1px rgba(0,0,0,.10);
+}
+
+/* العناوين الصغيرة */
+.services-glass-card > div > div:first-child {
+  color: rgba(255,255,255,.82) !important;
+  font-weight: 800 !important;
+}
+
+/* الخطوط الفاصلة */
+.services-glass-card .border-t,
+.services-glass-card .border-b {
+  border-color: rgba(255,255,255,.22) !important;
+}
+
+/* الأيقونات تبقى واضحة */
+.services-glass-card .services-item > div:first-child {
+  background: rgba(255,255,255,.16) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.28),
+    0 8px 18px rgba(0,0,0,.08);
+}
+
+/* =========================================================
+   MAP + CTA SPLIT
+   ========================================================= */
+
+.location-map-cta-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 24px;
+  align-items: stretch;
+  margin-top: 28px;
+}
+
+.location-map-card {
+  min-width: 0;
+}
+
+.location-map-card > div {
+  height: 100%;
+}
+
+.location-map-card iframe {
+  min-height: 500px;
+}
+
+.location-cta-card {
+  height: 100%;
+}
+
+@media (max-width: 900px) {
+  .location-map-cta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .location-map-card iframe {
+    min-height: 420px;
+  }
+
+  .location-cta-card {
+    min-height: 360px;
+  }
+}
+
+
+/* =========================================================
+   INTRO — BLUE + ORANGE SLIDER CARDS
+   ========================================================= */
+
+.intro-orange-card {
+  background:
+    linear-gradient(
+      135deg,
+      #F28C28 0%,
+      #F28C28 62%,
+      #E77D20 100%
+    );
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow:
+    0 24px 65px rgba(242,140,40,.18),
+    inset 0 1px 0 rgba(255,255,255,.24);
+  overflow: hidden;
+  position: relative;
+}
+
+.intro-orange-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.16),
+      transparent 35%,
+      rgba(255,255,255,.06)
+    );
+  pointer-events: none;
+}
+
+.intro-orange-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.intro-orange-card h2,
+.intro-orange-card h3,
+.intro-orange-card p {
+  color: #fff !important;
+  -webkit-text-stroke: .3px currentColor;
+  text-shadow:
+    0 1px 1px rgba(0,0,0,.12);
+}
+
+.intro-orange-card h2,
+.intro-orange-card h3 {
+  font-weight: 900 !important;
+}
+
+.intro-orange-card p {
+  font-weight: 800 !important;
+}
+
+/* الأزرق بنفس قوة البرتقالي */
+.intro-blue-card h3,
+.intro-blue-card p {
+  -webkit-text-stroke: .3px currentColor;
+  text-shadow:
+    0 1px 1px rgba(0,0,0,.14);
+}
+
+.intro-blue-card h3 {
+  font-weight: 900 !important;
+}
+
+.intro-blue-card p {
+  font-weight: 800 !important;
+}
+
+/* دخول الكارتين من الخارج */
+.services-slide {
+  opacity: 0;
+  will-change: transform, opacity;
+  transition:
+    transform 950ms cubic-bezier(.16,1,.3,1),
+    opacity 700ms ease;
+}
+
+.services-slide-right {
+  transform: translateX(130px);
+}
+
+.services-slide-left {
+  transform: translateX(-130px);
+}
+
+.services-slide.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.services-slide-left {
+  transition-delay: 100ms;
+}
+
+@media (max-width: 900px) {
+  .services-slide-right,
+  .services-slide-left {
+    transform: translateY(70px);
+  }
+
+  .services-slide.is-visible {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .services-slide,
+  .services-slide-right,
+  .services-slide-left {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+
+/* INTRO CARDS — SCROLL */
+.intro-card {
+  opacity: 0;
+  will-change: transform, opacity;
+  transition:
+    transform 900ms cubic-bezier(.16,1,.3,1),
+    opacity 650ms ease;
+}
+
+.intro-card-right {
+  transform: translateX(130px);
+}
+
+.intro-card-left {
+  transform: translateX(-130px);
+}
+
+.intro-card.intro-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (max-width: 900px) {
+  .intro-card-right,
+  .intro-card-left {
+    transform: translateY(65px);
+  }
+
+  .intro-card.intro-visible {
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================================================
+   FINAL INTRO SLIDER FIX
+   ========================================================= */
+
+.intro-card {
+  opacity: 0 !important;
+  visibility: hidden;
+  will-change: transform, opacity;
+  transition:
+    transform 950ms cubic-bezier(.16,1,.3,1),
+    opacity 700ms ease,
+    visibility 0s linear 950ms;
+}
+
+.intro-card-right {
+  transform: translateX(140px) !important;
+}
+
+.intro-card-left {
+  transform: translateX(-140px) !important;
+}
+
+.intro-card.intro-visible {
+  opacity: 1 !important;
+  visibility: visible;
+  transform: translateX(0) !important;
+  transition:
+    transform 950ms cubic-bezier(.16,1,.3,1),
+    opacity 700ms ease,
+    visibility 0s linear 0s;
+}
+
+@media (max-width: 900px) {
+  .intro-card-right,
+  .intro-card-left {
+    transform: translateY(70px) !important;
+  }
+
+  .intro-card.intro-visible {
+    transform: translateY(0) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-card,
+  .intro-card.intro-visible {
+    opacity: 1 !important;
+    visibility: visible;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* =========================================================
+   ORANGE INTRO CARD - WHITE GLASS SHINE
+   ========================================================= */
+
+.intro-orange-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    linear-gradient(
+      135deg,
+      #F28C28 0%,
+      #F28C28 62%,
+      #E67D20 100%
+    ) !important;
+}
+
+.intro-orange-card::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background:
+    linear-gradient(
+      120deg,
+      transparent 25%,
+      rgba(255,255,255,.22) 42%,
+      rgba(255,255,255,.10) 49%,
+      transparent 63%
+    );
+  transform: translateX(-70%) rotate(7deg);
+  pointer-events: none;
+  z-index: 1;
+  animation: orange-card-shine 5.5s ease-in-out infinite;
+}
+
+.intro-orange-card::after {
+  content: "";
+  position: absolute;
+  top: -70px;
+  right: -55px;
+  width: 210px;
+  height: 210px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.13);
+  filter: blur(38px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.intro-orange-card > * {
+  position: relative;
+  z-index: 3;
+}
+
+@keyframes orange-card-shine {
+  0%, 48% {
+    transform: translateX(-75%) rotate(7deg);
+    opacity: 0;
+  }
+  56% {
+    opacity: 1;
+  }
+  72%, 100% {
+    transform: translateX(75%) rotate(7deg);
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+   INTRO SLIDE — make motion obvious on entry
+   ========================================================= */
+
+.intro-card {
+  opacity: 0 !important;
+  visibility: hidden;
+  will-change: transform, opacity;
+  transition:
+    transform 1200ms cubic-bezier(.16,1,.3,1),
+    opacity 800ms ease,
+    visibility 0s linear 1200ms;
+}
+
+.intro-card-right {
+  transform: translateX(220px) !important;
+}
+
+.intro-card-left {
+  transform: translateX(-220px) !important;
+}
+
+.intro-card.intro-visible {
+  opacity: 1 !important;
+  visibility: visible;
+  transform: translateX(0) !important;
+  transition:
+    transform 1200ms cubic-bezier(.16,1,.3,1),
+    opacity 800ms ease,
+    visibility 0s linear 0s;
+}
+
+@media (max-width: 900px) {
+  .intro-card-right {
+    transform: translateY(90px) !important;
+  }
+
+  .intro-card-left {
+    transform: translateY(90px) !important;
+  }
+
+  .intro-card.intro-visible {
+    transform: translateY(0) !important;
+  }
+}
+
+/* =========================================================
+   AL SAADA — PREMIUM HOMEPAGE FINAL POLISH
+   ========================================================= */
+
+:root {
+  --asaada-blue: #1257D6;
+  --asaada-blue-dark: #0B3F9D;
+  --asaada-orange: #F28C28;
+  --asaada-ink: #172033;
+  --asaada-soft: #F5F8FD;
+}
+
+/* ---------- PAGE ---------- */
+
+main {
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f8faff 42%,
+      #f5f8fd 100%
+    ) !important;
+}
+
+section {
+  position: relative;
+}
+
+/* ---------- HERO ---------- */
+
+section:first-of-type {
+  background:
+    radial-gradient(
+      circle at 82% 18%,
+      rgba(18,87,214,.10),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 18% 75%,
+      rgba(242,140,40,.07),
+      transparent 24%
+    ),
+    #fff !important;
+}
+
+section:first-of-type h1 {
+  font-weight: 900 !important;
+  letter-spacing: -2.2px !important;
+  line-height: 1.18 !important;
+  color: #17345F !important;
+}
+
+section:first-of-type h1 span {
+  display: inline-block;
+  color: var(--asaada-blue) !important;
+  background:
+    linear-gradient(
+      90deg,
+      #1257D6,
+      #477BE0
+    );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+section:first-of-type p {
+  color: rgba(23,32,51,.62) !important;
+  font-weight: 600 !important;
+  line-height: 2 !important;
+}
+
+/* Hero eyebrow */
+section:first-of-type .text-\[\#F28C28\] {
+  font-weight: 900 !important;
+  letter-spacing: 1px !important;
+}
+
+/* Hero buttons */
+.hero-hire-button {
+  border-radius: 16px !important;
+  min-width: 220px !important;
+  height: 60px !important;
+  font-weight: 900 !important;
+  box-shadow:
+    0 15px 35px rgba(18,87,214,.18),
+    inset 0 1px 0 rgba(255,255,255,.18) !important;
+}
+
+.hero-hire-button + .hero-hire-button {
+  background:
+    linear-gradient(
+      135deg,
+      #F28C28,
+      #E97C1A
+    ) !important;
+  box-shadow:
+    0 15px 35px rgba(242,140,40,.20),
+    inset 0 1px 0 rgba(255,255,255,.20) !important;
+}
+
+.hero-hire-button + .hero-hire-button:hover {
+  background: #df7416 !important;
+}
+
+/* Hero photos */
+section:first-of-type img {
+  filter: saturate(.96) contrast(1.02);
+}
+
+section:first-of-type img:hover {
+  filter: saturate(1.03) contrast(1.04);
+}
+
+section:first-of-type .rounded-\[32px\],
+section:first-of-type .rounded-\[30px\],
+section:first-of-type .rounded-\[25px\] {
+  box-shadow:
+    0 25px 65px rgba(18,87,214,.12);
+}
+
+section:first-of-type .rounded-\[30px\] {
+  border-color: rgba(255,255,255,.92) !important;
+}
+
+section:first-of-type .rounded-\[25px\] {
+  box-shadow:
+    0 20px 55px rgba(18,87,214,.18);
+}
+
+/* Hero floating card */
+section:first-of-type .z-20 {
+  border-radius: 18px !important;
+  box-shadow:
+    0 18px 50px rgba(18,87,214,.12),
+    0 5px 16px rgba(0,0,0,.06) !important;
+}
+
+/* Hero stats */
+section:first-of-type .text-xl {
+  font-size: 22px !important;
+  font-weight: 900 !important;
+  color: var(--asaada-ink) !important;
+}
+
+/* ---------- TRUST STRIP ---------- */
+
+main > section:nth-of-type(2) {
+  background: #fff !important;
+}
+
+main > section:nth-of-type(2) > div {
+  border-radius: 22px;
+}
+
+main > section:nth-of-type(2) .text-\[11px\] {
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  color: var(--asaada-ink) !important;
+}
+
+main > section:nth-of-type(2) .text-\[9px\] {
+  color: rgba(23,32,51,.44) !important;
+}
+
+/* ---------- SECTION HEADINGS ---------- */
+
+main h2 {
+  font-weight: 900 !important;
+  color: var(--asaada-ink) !important;
+}
+
+main h2 + p {
+  color: rgba(23,32,51,.52) !important;
+}
+
+/* ---------- SERVICES ---------- */
+
+.services-slider-grid {
+  gap: 28px !important;
+}
+
+.services-glass-card {
+  border-radius: 32px !important;
+  box-shadow:
+    0 25px 70px rgba(18,87,214,.13),
+    inset 0 1px 0 rgba(255,255,255,.22) !important;
+  transition:
+    transform .4s ease,
+    box-shadow .4s ease;
+}
+
+.services-glass-card:hover {
+  transform: translateY(-7px);
+  box-shadow:
+    0 30px 80px rgba(18,87,214,.18),
+    inset 0 1px 0 rgba(255,255,255,.24) !important;
+}
+
+.services-glass-card h3 {
+  font-size: clamp(26px, 3vw, 34px) !important;
+  line-height: 1.35 !important;
+}
+
+.services-glass-card h4 {
+  line-height: 1.5 !important;
+}
+
+.services-glass-card p {
+  line-height: 2 !important;
+}
+
+/* ---------- LOCATION ---------- */
+
+.location-map-cta-grid {
+  gap: 28px !important;
+}
+
+.location-map-card > div {
+  border-radius: 30px !important;
+  box-shadow:
+    0 25px 70px rgba(18,87,214,.10) !important;
+}
+
+.location-cta-card {
+  border-radius: 30px !important;
+  box-shadow:
+    0 25px 70px rgba(18,87,214,.15) !important;
+}
+
+.location-cta-card h2 {
+  color: #fff !important;
+  font-weight: 900 !important;
+}
+
+.location-cta-card h2 span {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+.location-cta-card p {
+  color: rgba(255,255,255,.68) !important;
+}
+
+.location-cta-card a {
+  font-weight: 900 !important;
+  border-radius: 14px !important;
+  padding: 15px 28px !important;
+}
+
+/* ---------- REVIEWS ---------- */
+
+.review-marquee {
+  padding-inline: 12px;
+}
+
+.review-track > div {
+  border-radius: 26px !important;
+  box-shadow:
+    0 15px 45px rgba(18,87,214,.06) !important;
+  transition:
+    transform .35s ease,
+    box-shadow .35s ease;
+}
+
+.review-track > div:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 22px 55px rgba(18,87,214,.11) !important;
+}
+
+.review-track p {
+  line-height: 2 !important;
+}
+
+/* ---------- FOOTER ---------- */
+
+footer {
+  background:
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(242,140,40,.18),
+      transparent 25%
+    ),
+    linear-gradient(
+      135deg,
+      #0B3F9D,
+      #1257D6 60%,
+      #0E4AB8
+    ) !important;
+}
+
+footer > div {
+  padding-top: 70px !important;
+  padding-bottom: 28px !important;
+}
+
+footer .text-\[16px\] {
+  font-size: 19px !important;
+  font-weight: 900 !important;
+}
+
+footer .text-\[7px\] {
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.5px !important;
+  color: rgba(255,255,255,.72) !important;
+}
+
+footer p {
+  color: rgba(255,255,255,.68) !important;
+  line-height: 2 !important;
+}
+
+footer h4 {
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  letter-spacing: 1.5px !important;
+}
+
+footer a,
+footer span {
+  transition: color .25s ease, opacity .25s ease;
+}
+
+footer .h-9.w-9 {
+  border-color: rgba(255,255,255,.18) !important;
+  background: rgba(255,255,255,.06);
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 900px) {
+  section:first-of-type h1 {
+    font-size: 42px !important;
+    letter-spacing: -1.5px !important;
+  }
+
+  .hero-hire-button {
+    width: 100% !important;
+  }
+
+  .services-glass-card:hover {
+    transform: none;
+  }
+
+  .review-track > div:hover {
+    transform: none;
+  }
+}
+
+/* ---------- REDUCED MOTION ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .services-glass-card,
+  .review-track > div {
+    transition: none !important;
+  }
+}
+
+/* =========================================================
+   AL SAADA — MODERN AMBIENT BACKGROUND
+   ========================================================= */
+
+main {
+  position: relative;
+  isolation: isolate;
+  background: #f7f9fc !important;
+}
+
+/* طبقة الإضاءة العامة */
+main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 8% 8%,
+      rgba(18,87,214,.085) 0,
+      rgba(18,87,214,.045) 13%,
+      transparent 31%
+    ),
+    radial-gradient(
+      circle at 92% 17%,
+      rgba(242,140,40,.075) 0,
+      rgba(242,140,40,.035) 12%,
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 20% 48%,
+      rgba(18,87,214,.055) 0,
+      transparent 27%
+    ),
+    radial-gradient(
+      circle at 84% 67%,
+      rgba(242,140,40,.045) 0,
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 50% 92%,
+      rgba(18,87,214,.045) 0,
+      transparent 30%
+    );
+
+  opacity: 1;
+}
+
+/* شبكة دقيقة جدًا تعطي عمق للصفحة */
+main::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(
+      rgba(18,87,214,.028) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(18,87,214,.028) 1px,
+      transparent 1px
+    );
+
+  background-size: 64px 64px;
+
+  mask-image:
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,.80),
+      rgba(0,0,0,.24) 38%,
+      rgba(0,0,0,.12) 72%,
+      transparent 100%
+    );
+
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,.80),
+      rgba(0,0,0,.24) 38%,
+      rgba(0,0,0,.12) 72%,
+      transparent 100%
+    );
+}
+
+/* نخفف الخلفيات البيضاء الصريحة لبعض الأقسام
+   حتى تظهر الطبقات الخلفية بينها */
+main > section {
+  background-color: transparent;
+}
+
+/* HERO — ضوء أهدأ وأغنى */
+main > section:first-of-type {
+  background:
+    radial-gradient(
+      circle at 76% 24%,
+      rgba(18,87,214,.095),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 18% 78%,
+      rgba(242,140,40,.055),
+      transparent 26%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.96),
+      rgba(248,251,255,.88)
+    ) !important;
+}
+
+/* شريط الثقة */
+main > section:nth-of-type(2) {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.95),
+      rgba(255,255,255,.78)
+    ) !important;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* SERVICES */
+main > section[id="services"] {
+  background:
+    radial-gradient(
+      circle at 15% 35%,
+      rgba(18,87,214,.035),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 88% 72%,
+      rgba(242,140,40,.035),
+      transparent 22%
+    ),
+    rgba(255,255,255,.60) !important;
+}
+
+/* LOCATION */
+main > section:has(.location-map-cta-grid) {
+  background:
+    radial-gradient(
+      circle at 82% 20%,
+      rgba(18,87,214,.06),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 12% 72%,
+      rgba(242,140,40,.045),
+      transparent 22%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(247,249,252,.82),
+      rgba(242,246,252,.95)
+    ) !important;
+}
+
+/* REVIEWS */
+main > section:has(.review-marquee) {
+  background:
+    radial-gradient(
+      circle at 10% 30%,
+      rgba(18,87,214,.045),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 90% 75%,
+      rgba(242,140,40,.045),
+      transparent 24%
+    ),
+    rgba(247,249,252,.88) !important;
+}
+
+/* لمسة ضوء متحركة هادئة جدًا */
+@keyframes asaadaAmbientFloat {
+  0%,
+  100% {
+    transform: translate3d(0,0,0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(0,-12px,0) scale(1.015);
+  }
+}
+
+main > section:first-of-type::after {
+  content: "";
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  left: -180px;
+  top: 120px;
+  border-radius: 999px;
+  background: rgba(18,87,214,.035);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: -1;
+  animation: asaadaAmbientFloat 9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main > section:first-of-type::after {
+    animation: none;
+  }
+}
+
+/* الموبايل */
+@media (max-width: 900px) {
+  main::after {
+    background-size: 48px 48px;
+    opacity: .55;
+  }
+}
+
+/* =========================================================
+   AL SAADA — SUBTLE GLASS EDGE
+   لا يغيّر لون الصناديق، فقط يضيف رونق زجاجي خفيف
+   ========================================================= */
+
+.services-glass-card,
+.review-track > div,
+.location-map-card > div,
+.location-cta-card {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid rgba(255,255,255,.20) !important;
+
+  box-shadow:
+    0 18px 45px rgba(18,87,214,.08),
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -1px 0 rgba(0,0,0,.035) !important;
+}
+
+/* خط زجاجي ناعم على الحافة */
+.services-glass-card::before,
+.review-track > div::before,
+.location-map-card > div::before,
+.location-cta-card::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.13),
+      transparent 22%,
+      transparent 72%,
+      rgba(255,255,255,.055)
+    );
+
+  z-index: 0;
+}
+
+/* لمعة صغيرة جدًا في الركن */
+.services-glass-card::after,
+.review-track > div::after,
+.location-map-card > div::after {
+  content: "";
+  position: absolute;
+  width: 330px;
+  height: 110px;
+  top: -55px;
+  right: -45px;
+  border-radius: 999px;
+
+  background: rgba(255,255,255,.055);
+  filter: blur(18px);
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* المحتوى فوق اللمعة */
+.services-glass-card > *,
+.review-track > div > *,
+.location-map-card > div > *,
+.location-cta-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* حواف أرق وأنعم عند المرور */
+.services-glass-card:hover,
+.review-track > div:hover,
+.location-map-card > div:hover {
+  border-color: rgba(255,255,255,.30) !important;
+
+  box-shadow:
+    0 24px 55px rgba(18,87,214,.11),
+    inset 0 1px 0 rgba(255,255,255,.28),
+    inset 0 -1px 0 rgba(0,0,0,.035) !important;
+}
+
+@media (max-width: 900px) {
+  .services-glass-card:hover,
+  .review-track > div:hover,
+  .location-map-card > div:hover {
+    transform: none;
+  }
+}
+
+/* =========================================================
+   MAP + CTA — SAME HEIGHT
+   ========================================================= */
+
+.location-map-cta-grid {
+  align-items: stretch !important;
+  grid-auto-rows: 500px !important;
+}
+
+.location-map-card,
+.location-cta-card {
+  height: 500px !important;
+  min-height: 500px !important;
+  max-height: 500px !important;
+  margin: 0 !important;
+}
+
+.location-map-card > div,
+.location-map-card iframe {
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+.location-cta-card {
+  display: flex !important;
+  flex-direction: column;
+}
+
+.location-cta-card > div.relative {
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .location-map-cta-grid {
+    grid-auto-rows: auto !important;
+  }
+
+  .location-map-card,
+  .location-cta-card {
+    height: auto !important;
+    min-height: 420px !important;
+    max-height: none !important;
+  }
+
+  .location-map-card iframe {
+    height: 420px !important;
+  }
+}
+
+/* =========================================================
+   AL SAADA — COLORED GLASS / SOFT PREMIUM
+   لا يغير حجم أو ارتفاع الصناديق
+   ========================================================= */
+
+.services-glass-card,
+.location-cta-card,
+.review-track > div {
+  position: relative;
+  isolation: isolate;
+
+  border: 1px solid rgba(255,255,255,.22) !important;
+
+  box-shadow:
+    0 18px 45px rgba(7, 35, 82, .16),
+    inset 0 1px 0 rgba(255,255,255,.20),
+    inset 0 -1px 0 rgba(0,0,0,.08) !important;
+
+  backdrop-filter: blur(10px) saturate(125%);
+  -webkit-backdrop-filter: blur(10px) saturate(125%);
+}
+
+/* طبقة زجاج ملونة خفيفة */
+.services-glass-card::before,
+.location-cta-card::before,
+.review-track > div::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.12) 0%,
+      transparent 24%,
+      transparent 62%,
+      rgba(0,0,0,.06) 100%
+    );
+}
+
+/* هالة زرقاء هادئة */
+.services-glass-card::after,
+.location-cta-card::after {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  top: -75px;
+  right: -55px;
+  z-index: 0;
+
+  border-radius: 999px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,.11) 0%,
+      rgba(255,255,255,.025) 42%,
+      transparent 72%
+    );
+
+  filter: blur(16px);
+  pointer-events: none;
+}
+
+/* لمسة مختلفة للحواف */
+.services-blue-orange,
+.services-orange-blue {
+  border-radius: 34px !important;
+  outline: 1px solid rgba(255,255,255,.06);
+  outline-offset: -6px;
+}
+
+/* حافة برتقالية ناعمة لبعض البوكسات */
+.services-orange-blue {
+  box-shadow:
+    0 20px 50px rgba(242,140,40,.14),
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 0 rgba(0,0,0,.08) !important;
+}
+
+/* حافة زرقاء ناعمة */
+.services-blue-orange {
+  box-shadow:
+    0 20px 50px rgba(18,87,214,.18),
+    inset 0 1px 0 rgba(255,255,255,.20),
+    inset 0 -1px 0 rgba(0,0,0,.08) !important;
+}
+
+/* البوكسات تتحرك حركة بسيطة جدًا */
+.services-glass-card,
+.review-track > div,
+.location-cta-card {
+  transition:
+    transform .35s ease,
+    box-shadow .35s ease,
+    border-color .35s ease;
+}
+
+.services-glass-card:hover,
+.review-track > div:hover,
+.location-cta-card:hover {
+  border-color: rgba(255,255,255,.30) !important;
+
+  box-shadow:
+    0 24px 58px rgba(7,35,82,.20),
+    inset 0 1px 0 rgba(255,255,255,.24),
+    inset 0 -1px 0 rgba(0,0,0,.08) !important;
+}
+
+@media (max-width: 900px) {
+  .services-glass-card:hover,
+  .review-track > div:hover,
+  .location-cta-card:hover {
+    transform: none;
+  }
+}
+
+
+/* =========================================================
+   SIX SERVICE CARDS — ICON TOP RIGHT
+   ========================================================= */
+
+.services-six-card {
+  position: relative !important;
+  min-height: 300px;
+}
+
+.services-six-icon {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 46px;
+  height: 46px;
+
+  border-radius: 14px;
+
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.18);
+
+  color: #fff;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.20),
+    0 8px 18px rgba(0,0,0,.08);
+}
+
+.services-six-content {
+  padding-top: 58px;
+  padding-right: 4px;
+}
+
+@media (max-width: 900px) {
+  .services-six-card {
+    min-height: 280px;
+  }
+
+  .services-six-icon {
+    top: 24px;
+    right: 24px;
+  }
+
+  .services-six-content {
+    padding-top: 54px;
+  }
+}
+
+
+/* =========================================================
+   AL SAADA — ABOUT WAVE DESIGN
+   ========================================================= */
+
+.about-wave-page {
+  background: #f7f9fc;
+}
+
+/* HERO */
+.about-wave-hero {
+  overflow: hidden;
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f7faff 54%,
+      #e9f0fb 100%
+    );
+}
+
+.about-wave-hero::after {
+  content: "";
+  position: absolute;
+  left: -12%;
+  right: -12%;
+  bottom: -180px;
+  height: 360px;
+  border-radius: 50% 50% 0 0;
+  background: #1257D6;
+  opacity: .09;
+  filter: blur(2px);
+}
+
+.about-wave-blob {
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+  filter: blur(75px);
+}
+
+.about-wave-blob-blue {
+  width: 480px;
+  height: 480px;
+  right: -180px;
+  top: 80px;
+  background: rgba(18,87,214,.13);
+}
+
+.about-wave-blob-orange {
+  width: 320px;
+  height: 320px;
+  left: -90px;
+  bottom: 50px;
+  background: rgba(242,140,40,.09);
+}
+
+.about-blue-text {
+  color: #1257D6;
+}
+
+/* Hero image */
+.about-hero-image-shell {
+  padding: 8px;
+  border-radius: 36px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.88),
+      rgba(255,255,255,.28)
+    );
+  border: 1px solid rgba(255,255,255,.90);
+  box-shadow:
+    0 30px 80px rgba(18,87,214,.14),
+    inset 0 1px 0 rgba(255,255,255,.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.about-hero-float {
+  position: absolute;
+  right: 24px;
+  bottom: -22px;
+  padding: 16px 22px;
+  border-radius: 20px;
+  background: rgba(255,255,255,.78);
+  border: 1px solid rgba(255,255,255,.92);
+  box-shadow:
+    0 18px 45px rgba(18,87,214,.12),
+    inset 0 1px 0 rgba(255,255,255,.95);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* White area */
+.about-white-section,
+.about-wave-white-section {
+  background:
+    radial-gradient(
+      circle at 10% 30%,
+      rgba(18,87,214,.04),
+      transparent 24%
+    ),
+    #ffffff;
+}
+
+/* Story cards */
+.about-soft-card {
+  position: relative;
+  padding: 30px;
+  border-radius: 28px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.86),
+      rgba(244,248,253,.72)
+    );
+  border: 1px solid rgba(224,232,242,.9);
+  box-shadow:
+    0 18px 50px rgba(18,87,214,.06),
+    inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+.about-soft-card-accent {
+  background:
+    radial-gradient(
+      circle at 88% 10%,
+      rgba(242,140,40,.10),
+      transparent 28%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.88),
+      rgba(241,246,252,.72)
+    );
+}
+
+/* Blue wave sections */
+.about-blue-wave-section {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(242,140,40,.16),
+      transparent 24%
+    ),
+    linear-gradient(
+      135deg,
+      #0B3F9D 0%,
+      #1257D6 58%,
+      #1761DB 100%
+    );
+}
+
+.about-blue-wave-section::before {
+  content: "";
+  position: absolute;
+  left: -12%;
+  right: -12%;
+  top: -150px;
+  height: 290px;
+  border-radius: 50%;
+  background: #f7f9fc;
+  opacity: .18;
+}
+
+.about-blue-wave-section::after {
+  content: "";
+  position: absolute;
+  right: -14%;
+  left: -14%;
+  bottom: -150px;
+  height: 280px;
+  border-radius: 50%;
+  background: #ffffff;
+  opacity: .08;
+}
+
+.about-wave-light {
+  position: absolute;
+  width: 470px;
+  height: 470px;
+  left: -190px;
+  top: 80px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.045);
+  filter: blur(65px);
+}
+
+.about-wave-light-second {
+  right: -170px;
+  left: auto;
+  top: auto;
+  bottom: 20px;
+  background: rgba(242,140,40,.065);
+}
+
+/* Blue cards */
+.about-blue-card,
+.about-service-card {
+  position: relative;
+  min-height: 235px;
+  padding: 28px;
+  border-radius: 28px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.11),
+      rgba(255,255,255,.045)
+    );
+  border: 1px solid rgba(255,255,255,.17);
+  box-shadow:
+    0 20px 55px rgba(0,0,0,.08),
+    inset 0 1px 0 rgba(255,255,255,.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    transform .35s ease,
+    border-color .35s ease,
+    box-shadow .35s ease;
+}
+
+.about-blue-card:hover,
+.about-service-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255,255,255,.28);
+  box-shadow:
+    0 28px 65px rgba(0,0,0,.13),
+    inset 0 1px 0 rgba(255,255,255,.15);
+}
+
+.about-card-icon,
+.about-service-icon {
+  display: flex;
+  width: 45px;
+  height: 45px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.17);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+/* Numbers */
+.about-white-blue-section {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.92),
+      rgba(245,248,252,.88)
+    );
+}
+
+.about-number-card {
+  padding: 22px 20px;
+  border-radius: 24px;
+  background: rgba(255,255,255,.75);
+  border: 1px solid #e5ebf3;
+  box-shadow:
+    0 15px 35px rgba(18,87,214,.045),
+    inset 0 1px 0 rgba(255,255,255,.95);
+}
+
+/* Steps */
+.about-step-card {
+  min-height: 245px;
+  padding: 26px;
+  border-radius: 26px;
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f3f7fc
+    );
+  border: 1px solid #e0e7f0;
+  box-shadow:
+    0 18px 45px rgba(18,87,214,.055);
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease;
+}
+
+.about-step-card:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 25px 55px rgba(18,87,214,.09);
+}
+
+.about-step-number {
+  display: flex;
+  width: 46px;
+  height: 46px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: rgba(18,87,214,.08);
+  color: #1257D6;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+/* Services six cards */
+.about-services-section {
+  background:
+    radial-gradient(
+      circle at 15% 28%,
+      rgba(255,255,255,.06),
+      transparent 23%
+    ),
+    linear-gradient(
+      135deg,
+      #0A3C95,
+      #1257D6 55%,
+      #155FD8
+    );
+}
+
+.about-service-card {
+  min-height: 260px;
+}
+
+/* CTA */
+.about-cta-section {
+  background:
+    radial-gradient(
+      circle at 88% 18%,
+      rgba(18,87,214,.05),
+      transparent 25%
+    ),
+    #ffffff;
+}
+
+/* FAQ */
+.about-faq-section {
+  background:
+    radial-gradient(
+      circle at 10% 18%,
+      rgba(18,87,214,.045),
+      transparent 24%
+    ),
+    #f6f9fd;
+}
+
+.about-faq-item {
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid #e1e8f1;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.92),
+      rgba(247,250,254,.82)
+    );
+  box-shadow:
+    0 12px 34px rgba(18,87,214,.045);
+}
+
+.about-faq-item summary {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  list-style: none;
+  padding: 22px 24px;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.about-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.about-faq-number {
+  display: flex;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  background: rgba(18,87,214,.08);
+  color: #1257D6;
+  font-size: 9px;
+  font-weight: 900;
+}
+
+.about-faq-plus {
+  display: flex;
+  width: 31px;
+  height: 31px;
+  min-width: 31px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(242,140,40,.10);
+  color: #F28C28;
+  font-size: 18px;
+  transition: transform .25s ease;
+}
+
+.about-faq-item[open] .about-faq-plus {
+  transform: rotate(45deg);
+}
+
+.about-faq-answer {
+  padding: 0 24px 24px 73px;
+  color: rgba(23,32,51,.56);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 2;
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+  .about-wave-hero {
+    padding-top: 110px;
+  }
+
+  .about-wave-hero::after {
+    bottom: -210px;
+  }
+
+  .about-wave-blob-blue {
+    width: 340px;
+    height: 340px;
+    right: -150px;
+  }
+
+  .about-wave-blob-orange {
+    width: 250px;
+    height: 250px;
+    left: -120px;
+  }
+
+  .about-hero-image-shell img {
+    height: 430px;
+  }
+
+  .about-blue-card:hover,
+  .about-service-card:hover,
+  .about-step-card:hover {
+    transform: none;
+  }
+
+  .about-faq-answer {
+    padding-right: 22px;
+    padding-left: 22px;
+  }
+}
+
+
+/* =========================================================
+   ABOUT NEW HERO
+   ========================================================= */
+
+.about-new-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 720px;
+  overflow: hidden;
+  margin-top: 0;
+  background: #fff;
+}
+
+.about-new-hero-image {
+  position: relative;
+  min-height: 720px;
+  overflow: hidden;
+}
+
+.about-new-hero-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.about-new-hero-blue {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+
+  background:
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(242,140,40,.13),
+      transparent 25%
+    ),
+    linear-gradient(
+      135deg,
+      #0B3F9D 0%,
+      #1257D6 58%,
+      #1762DD 100%
+    );
+}
+
+.about-new-wave {
+  position: absolute;
+  top: -12%;
+  bottom: -12%;
+  left: -13%;
+  width: 34%;
+
+  background: #dceefa;
+
+  border-radius: 0 55% 55% 0 / 0 50% 50% 0;
+
+  transform: rotate(7deg);
+  filter: blur(.2px);
+
+  z-index: 1;
+}
+
+.about-new-wave::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 58px;
+  width: 45px;
+
+  background: rgba(255,255,255,.16);
+
+  border-radius: 50%;
+  filter: blur(18px);
+}
+
+.about-new-hero-content {
+    padding: 70px 24px 70px 24px;
+  }
+
+  .about-new-hero-content h1 {
+    font-size: 42px !important;
+  }
+
+/* FORCE HERO "في دبي" TO WHITE */
+.about-new-hero-content h1 span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  text-shadow: 0 2px 5px rgba(0,0,0,.10);
+}
+
+/* =========================================================
+   RESTORE HOMEPAGE DESIGN
+   ========================================================= */
+
+/* الرئيسية بعرض المتصفح */
+body {
+  overflow-x: hidden;
+}
+
+.home-page > section {
+  width: 100% !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+}
+
+/* محتوى الأقسام يظل منظمًا داخل max-w الموجود في JSX */
+.home-page > section > div {
+  width: 100%;
+}
+
+/* =========================================================
+   HERO BLUE WAVE
+   ========================================================= */
+
+.home-page > section:first-of-type {
+  position: relative !important;
+  overflow: hidden !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f8fbff 58%,
+      #eef4fc 100%
+    ) !important;
+}
+
+/* موجة صغيرة في يمين الهيرو */
+.home-page > section:first-of-type::after {
+  content: "";
+  position: absolute;
+
+  top: 0;
+  right: 0;
+
+  width: 14% !important;
+  height: 100% !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      #0B3F9D 0%,
+      #1257D6 55%,
+      #1762DD 100%
+    ) !important;
+
+  border-radius: 55% 0 0 55% !important;
+
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* انحناءة بيضاء بسيطة داخل الموجة */
+.home-page > section:first-of-type::before {
+  content: "";
+  position: absolute;
+
+  top: 8%;
+  right: 12%;
+
+  width: 4%;
+  height: 84%;
+
+  background: rgba(255,255,255,.82) !important;
+
+  border-radius: 50%;
+
+  transform: rotate(4deg);
+
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* محتوى الهيرو فوق الموجة */
+.home-page > section:first-of-type > div {
+  position: relative;
+  z-index: 3;
+}
+
+/* =========================================================
+   SIX HOMEPAGE CARDS — ALL BLUE
+   ========================================================= */
+
+#services .services-six-card,
+#services .services-blue-orange,
+#services .services-orange-blue {
+  background:
+    linear-gradient(
+      135deg,
+      #0B3F9D 0%,
+      #1257D6 55%,
+      #1762DD 100%
+    ) !important;
+
+  box-shadow:
+    0 22px 55px rgba(18,87,214,.17),
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 -1px 0 rgba(0,0,0,.06) !important;
+}
+
+/* لا تختفي الصناديق بسبب Animation القديمة */
+#services .services-six-card {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+
+/* =========================================================
+   ABOUT — SAME WIDTH AS NAVBAR
+   ========================================================= */
+
+.about-wave-page > section,
+.about-wave-page > footer {
+  width: calc(100% - 32px);
+  max-width: 1320px;
+  margin-inline: auto;
+}
+
+@media (min-width: 1400px) {
+  .about-wave-page > section,
+  .about-wave-page > footer {
+    width: 1320px;
+  }
+}
+
+@media (max-width: 900px) {
+  .about-wave-page > section,
+  .about-wave-page > footer {
+    width: calc(100% - 16px);
+  }
+}
+
+/* =========================================================
+   HERO SPACING — BALANCED
+   ========================================================= */
+
+.home-page > section:first-of-type {
+  padding-top: 105px !important;
+  padding-bottom: 58px !important;
+}
+
+@media (min-width: 768px) {
+  .home-page > section:first-of-type {
+    padding-top: 118px !important;
+    padding-bottom: 68px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-page > section:first-of-type {
+    padding-top: 125px !important;
+    padding-bottom: 72px !important;
+  }
+}
+
+/* HOMEPAGE HERO — REMOVE EXCESS TOP SPACE */
+.home-page > section:first-of-type {
+  padding-top: 82px !important;
+  padding-bottom: 45px !important;
+}
+
+@media (min-width: 768px) {
+  .home-page > section:first-of-type {
+    padding-top: 92px !important;
+    padding-bottom: 52px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-page > section:first-of-type {
+    padding-top: 98px !important;
+    padding-bottom: 58px !important;
+  }
+}
+
+/* HOMEPAGE HERO — BALANCED SPACING */
+main > section:first-of-type {
+  padding-top: 105px !important;
+  padding-bottom: 58px !important;
+}
+
+@media (min-width: 768px) {
+  main > section:first-of-type {
+    padding-top: 118px !important;
+    padding-bottom: 68px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  main > section:first-of-type {
+    padding-top: 125px !important;
+    padding-bottom: 72px !important;
+  }
+}
+
+/* HOMEPAGE HERO — MOVE CONTENT UP */
+.home-page > section:first-of-type {
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.home-page > section:first-of-type .grid {
+  align-items: start !important;
+}
+
+.home-page > section:first-of-type .order-2 {
+  align-self: start !important;
+  padding-top: 35px !important;
+}
+
+@media (min-width: 1024px) {
+  .home-page > section:first-of-type .order-2 {
+    padding-top: 45px !important;
+  }
+}
+
+/* =========================================================
+   HOMEPAGE — EVERYTHING MATCHES NAVBAR FRAME
+   ========================================================= */
+
+.home-page {
+  width: calc(100% - 32px) !important;
+  max-width: 1320px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  overflow: hidden !important;
+}
+
+/* كل أقسام الرئيسية داخل نفس الإطار */
+.home-page > section,
+.home-page > footer {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* الموجة لا تخرج من إطار الرئيسية */
+.home-page > section:first-of-type {
+  overflow: hidden !important;
+}
+
+/* الموجة الزرقاء نفسها داخل الإطار */
+.home-page > section:first-of-type::after {
+  right: 0 !important;
+  max-width: 14% !important;
+  transform: none !important;
+}
+
+/* المحتوى الداخلي يبقى منظمًا */
+.home-page > section > div {
+  width: 100%;
+}
+
+/* سطح الشاشة لا يمدد عناصر الرئيسية خارج الإطار */
+.home-page {
+  box-sizing: border-box;
+}
+
+@media (min-width: 1400px) {
+  .home-page {
+    width: 1320px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .home-page {
+    width: calc(100% - 16px) !important;
+  }
+}
+
+/* HOMEPAGE HERO — REMOVE LARGE TOP GAP */
+.home-page > section:first-of-type {
+  padding-top: 62px !important;
+  padding-bottom: 42px !important;
+}
+
+@media (min-width: 768px) {
+  .home-page > section:first-of-type {
+    padding-top: 68px !important;
+    padding-bottom: 48px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-page > section:first-of-type {
+    padding-top: 72px !important;
+    padding-bottom: 52px !important;
+  }
+}
+
+/* =========================================================
+   HOMEPAGE HERO — FIX EXCESSIVE EMPTY SPACE
+   ========================================================= */
+
+main > section:first-of-type {
+  min-height: 0 !important;
+  height: auto !important;
+
+  padding-top: 82px !important;
+  padding-bottom: 38px !important;
+
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* الحاوية الداخلية */
+main > section:first-of-type > div {
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+/* شبكة الهيرو */
+main > section:first-of-type .grid {
+  min-height: 0 !important;
+  height: auto !important;
+  align-items: center !important;
+}
+
+/* الصور نفسها لا تفرض ارتفاعًا زائدًا */
+main > section:first-of-type .relative.h-\[440px\] {
+  height: 410px !important;
+}
+
+@media (min-width: 640px) {
+  main > section:first-of-type {
+    padding-top: 88px !important;
+    padding-bottom: 45px !important;
+  }
+
+  main > section:first-of-type .relative.h-\[440px\] {
+    height: 470px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  main > section:first-of-type {
+    padding-top: 92px !important;
+    padding-bottom: 50px !important;
+  }
+
+  main > section:first-of-type .relative.h-\[440px\] {
+    height: 510px !important;
+  }
+}
+
+@media (max-width: 639px) {
+  main > section:first-of-type {
+    padding-top: 78px !important;
+    padding-bottom: 32px !important;
+  }
+
+  main > section:first-of-type .relative.h-\[440px\] {
+    height: 410px !important;
+  }
+}
+
+/* HOMEPAGE HERO — BALANCED SPACING */
+main > section:first-of-type {
+  padding-top: 105px !important;
+  padding-bottom: 58px !important;
+}
+
+@media (min-width: 768px) {
+  main > section:first-of-type {
+    padding-top: 118px !important;
+    padding-bottom: 68px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  main > section:first-of-type {
+    padding-top: 125px !important;
+    padding-bottom: 72px !important;
+  }
+}
+
+/* HOMEPAGE HERO — MORE TOP SPACE */
+main > section:first-of-type {
+  padding-top: 145px !important;
+  padding-bottom: 58px !important;
+}
+
+@media (min-width: 768px) {
+  main > section:first-of-type {
+    padding-top: 155px !important;
+    padding-bottom: 68px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  main > section:first-of-type {
+    padding-top: 165px !important;
+    padding-bottom: 72px !important;
+  }
+}
+
+/* HOMEPAGE HERO — BUTTONS SIDE BY SIDE */
+main > section:first-of-type .mb-10.flex {
+  flex-wrap: nowrap !important;
+  gap: 10px !important;
+}
+
+main > section:first-of-type .hero-hire-button {
+  min-width: 0 !important;
+  width: 195px !important;
+  height: 52px !important;
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+  border-radius: 13px !important;
+  font-size: 13px !important;
+  gap: 10px !important;
+}
+
+@media (max-width: 640px) {
+  main > section:first-of-type .mb-10.flex {
+    flex-wrap: wrap !important;
+  }
+
+  main > section:first-of-type .hero-hire-button {
+    width: 100% !important;
+  }
+}
+
+/* HOMEPAGE — SMALLER SIX SERVICE CARDS */
+#services .services-six-card {
+  min-height: 235px !important;
+  padding: 24px !important;
+  border-radius: 25px !important;
+}
+
+#services .services-six-icon {
+  top: 22px !important;
+  right: 22px !important;
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 12px !important;
+}
+
+#services .services-six-content {
+  padding-top: 52px !important;
+  padding-right: 0 !important;
+}
+
+#services .services-six-content h3 {
+  font-size: 20px !important;
+  line-height: 1.45 !important;
+  margin-bottom: 12px !important;
+}
+
+#services .services-six-content p {
+  font-size: 11px !important;
+  line-height: 1.9 !important;
+}
+
+#services {
+  padding-top: 72px !important;
+  padding-bottom: 72px !important;
+}
+
+#services .grid {
+  gap: 18px !important;
+}
+
+/* =========================================================
+   SIX CARDS — HERO STYLE CYAN WAVE
+   ========================================================= */
+
+#services .services-six-card {
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate;
+}
+
+/* موجة سماوية واضحة بنفس روح Hero */
+#services .services-six-card::after {
+  content: "";
+  position: absolute;
+
+  top: -35%;
+  left: -14%;
+
+  width: 42%;
+  height: 170%;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(120,220,255,.32),
+      rgba(78,190,240,.20)
+    );
+
+  border-radius:
+    0 58% 58% 0 /
+    0 50% 50% 0;
+
+  transform: rotate(6deg);
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* انحناءة بيضاء/شفافة صغيرة داخل الموجة */
+#services .services-six-card::before {
+  content: "";
+  position: absolute;
+
+  top: -10%;
+  left: 20%;
+
+  width: 9%;
+  height: 120%;
+
+  background: rgba(255,255,255,.16);
+
+  border-radius: 50%;
+
+  transform: rotate(5deg);
+
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* المحتوى فوق الموجة */
+#services .services-six-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================================================
+   SIX CARDS — EDGE ONLY 3D GLASS
+   الزخرفة على الأطراف فقط وتبتعد عن النص
+   ========================================================= */
+
+#services .services-six-card {
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate;
+}
+
+/* تأثير علوي */
+#services .services-six-card:nth-child(1)::after,
+#services .services-six-card:nth-child(4)::after {
+  content: "";
+  position: absolute;
+
+  top: -32px;
+  left: -10px;
+
+  width: 62%;
+  height: 70px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.94),
+      rgba(215,247,255,.80),
+      rgba(100,205,245,.18),
+      transparent
+    );
+
+  border-radius:
+    0 0 65% 25% / 0 0 90% 35%;
+
+  transform: rotate(-4deg);
+
+  filter: blur(.4px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* تأثير سفلي */
+#services .services-six-card:nth-child(2)::after,
+#services .services-six-card:nth-child(5)::after {
+  content: "";
+  position: absolute;
+
+  bottom: -34px;
+  right: -10px;
+
+  width: 62%;
+  height: 72px;
+
+  background:
+    linear-gradient(
+      135deg,
+      transparent,
+      rgba(100,205,245,.18),
+      rgba(215,247,255,.80),
+      rgba(255,255,255,.92)
+    );
+
+  border-radius:
+    65% 0 25% 0 / 90% 0 35% 0;
+
+  transform: rotate(-4deg);
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* تأثير جانبي */
+#services .services-six-card:nth-child(3)::after,
+#services .services-six-card:nth-child(6)::after {
+  content: "";
+  position: absolute;
+
+  top: -10px;
+  right: -28px;
+
+  width: 72px;
+  height: 72%;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.90),
+      rgba(215,247,255,.72),
+      rgba(100,205,245,.12),
+      transparent
+    );
+
+  border-radius:
+    0 0 0 65%;
+
+  transform: rotate(4deg);
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* لمعة رفيعة جدًا على الحافة */
+#services .services-six-card:nth-child(1)::before,
+#services .services-six-card:nth-child(2)::before,
+#services .services-six-card:nth-child(3)::before,
+#services .services-six-card:nth-child(4)::before,
+#services .services-six-card:nth-child(5)::before,
+#services .services-six-card:nth-child(6)::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* المحتوى فوق كل الزخارف */
+#services .services-six-card > * {
+  position: relative;
+  z-index: 3;
+}
+
+/* مساحة آمنة للنص */
+#services .services-six-content {
+  position: relative;
+  z-index: 4;
+}
+
+
+/* =========================================================
+   GET MAIDS — DISTINCT HERO
+   مختلف عن Hero الرئيسية
+   ========================================================= */
+
+.maids-page {
+  position: relative;
+}
+
+.maids-page > section:first-of-type {
+  background:
+    radial-gradient(
+      circle at 14% 18%,
+      rgba(242,140,40,.10),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 88% 20%,
+      rgba(18,87,214,.10),
+      transparent 28%
+    ),
+    linear-gradient(
+      180deg,
+      #F8FAFD 0%,
+      #EDF4FB 100%
+    ) !important;
+
+  padding-top: 145px !important;
+  padding-bottom: 65px !important;
+}
+
+/* دوائر زخرفية مختلفة عن Hero الرئيسية */
+.maids-page > section:first-of-type::before {
+  content: "";
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  left: -90px;
+  top: 90px;
+  border-radius: 50%;
+  border: 1px solid rgba(18,87,214,.08);
+  box-shadow:
+    0 0 0 28px rgba(18,87,214,.025),
+    0 0 0 58px rgba(18,87,214,.018);
+  pointer-events: none;
+}
+
+.maids-page > section:first-of-type::after {
+  content: "";
+  position: absolute;
+  width: 340px;
+  height: 100px;
+  right: -60px;
+  bottom: 65px;
+  border-radius: 50%;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(242,140,40,.12)
+    );
+  transform: rotate(-10deg);
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+.maids-page > section:first-of-type > div {
+  position: relative;
+  z-index: 2;
+}
+
+.maids-page > section:first-of-type h1 {
+  font-weight: 900 !important;
+  letter-spacing: -2.2px !important;
+}
+
+.maids-page > section:first-of-type h1 span {
+  color: #1257D6 !important;
+}
+
+/* صورة الهيرو */
+.maids-page > section:first-of-type .rounded-\[38px\] {
+  background: #1257D6 !important;
+  padding: 8px !important;
+  border: 0 !important;
+  box-shadow:
+    0 28px 70px rgba(18,87,214,.17) !important;
+}
+
+/* فلتر الصفحة */
+.maids-page #maids {
+  scroll-margin-top: 105px;
+}
+
+@media (max-width: 900px) {
+  .maids-page > section:first-of-type {
+    padding-top: 120px !important;
+    padding-bottom: 48px !important;
+  }
+}
+
+
+/* =========================================================
+   GET MAIDS — MODERN WHITE + TALL BLUE WAVE
+   ========================================================= */
+
+
+/* =========================================================
+   GET MAIDS — MODERN HERO / FILTER
+   ========================================================= */
+
+
+/* =========================================================
+   GET MAIDS — FINAL HERO
+   ========================================================= */
+
+.maids-modern-top {
+  position: relative !important;
+  width: calc(100% - 32px) !important;
+  max-width: 1320px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  background: #fff !important;
+}
+
+/* بدون فراغ بين الناف بار والهيرو */
+.maids-page > nav,
+.maids-page > header {
+  margin-bottom: 0 !important;
+}
+
+.maids-modern-top > div.relative {
+  position: relative !important;
+  z-index: 5 !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 55px !important;
+}
+
+/* =========================================
+   LIQUID WAVES
+   ========================================= */
+
+.maids-liquid-waves {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+}
+
+.maids-wave-svg {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+}
+
+.maids-wave-blue-layer {
+  transform: scale(1.03) !important;
+}
+
+.maids-wave-cyan-layer {
+  transform: scale(1.025) translateY(12px) !important;
+  opacity: .9 !important;
+}
+
+.maids-wave-white-layer {
+  transform: scale(1.02) translateY(25px) !important;
+}
+
+/* =========================================
+   TWO BOXES — SAME SIZE
+   ========================================= */
+
+.maids-modern-top > div.relative > div.grid {
+  position: relative !important;
+  z-index: 10 !important;
+  margin: 0 !important;
+  top: auto !important;
+  transform: none !important;
+
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 28px !important;
+  align-items: stretch !important;
+  width: 100% !important;
+}
+
+.maids-modern-top > div.relative > div.grid > div {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 680px !important;
+  height: 680px !important;
+  box-sizing: border-box !important;
+}
+
+/* FILTER */
+.maids-modern-top > div.relative > div.grid > div.order-2 {
+  background: #fff !important;
+  border: 1px solid #dde6f0 !important;
+}
+
+/* BLUE HERO */
+.maids-modern-top .maids-contact-card {
+  position: relative !important;
+  z-index: 20 !important;
+  min-height: 680px !important;
+  background: linear-gradient(
+    145deg,
+    #0b3f9d 0%,
+    #1257d6 48%,
+    #176be8 72%,
+    #0d8fd0 100%
+  ) !important;
+  color: #fff !important;
+  overflow: hidden !important;
+}
+
+/* liquid highlight inside blue box */
+.maids-modern-top .maids-contact-card::before {
+  content: "" !important;
+  position: absolute !important;
+  width: 500px !important;
+  height: 220px !important;
+  right: -140px !important;
+  top: -80px !important;
+  background: #57d8ff !important;
+  border-radius: 60% 40% 65% 35% / 42% 58% 42% 58% !important;
+  transform: rotate(-10deg) !important;
+  opacity: .25 !important;
+  pointer-events: none !important;
+}
+
+.maids-modern-top .maids-contact-card > .relative {
+  position: relative !important;
+  z-index: 5 !important;
+  height: auto !important;
+  min-height: 100% !important;
+}
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 1023px) {
+  .maids-modern-top {
+    width: calc(100% - 16px) !important;
+  }
+
+  .maids-modern-top > div.relative > div.grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .maids-modern-top > div.relative > div.grid > div {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+}
+
+@media (min-width: 1400px) {
+  .maids-modern-top {
+    width: 1320px !important;
+  }
+}
+
+/* =========================================
+   GET MAIDS — REMOVE WAVES
+   ========================================= */
+
+.maids-liquid-waves,
+.maids-wave-svg,
+.maids-wave-blue-layer,
+.maids-wave-cyan-layer,
+.maids-wave-white-layer {
+  display: none !important;
+}
+
+/* =========================================
+   EMPTY STATE — REMOVE GAP
+   ========================================= */
+
+/* أي قسم يأتي مباشرة بعد هيرو العاملات */
+.maids-modern-top + section {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* الهيرو نفسه لا يترك فراغًا من الأسفل */
+.maids-modern-top {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* تقليل أي مسافة علوية للقسم الذي يحتوي لا توجد عاملات */
+.maids-page section:has(h2) {
+  scroll-margin-top: 0 !important;
+}
+
+/* لو كان Empty State له class مستقل */
+.maids-page [class*="empty"],
+.maids-page [class*="Empty"] {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+
+/* =========================================
+   RESTORE SPACE BETWEEN NAVBAR AND BOXES
+   ========================================= */
+
+.maids-modern-top > div.relative {
+  padding-top: 110px !important;
+  padding-bottom: 70px !important;
+}
+
+/* إلغاء أي رفع سابق للمربعين */
+.maids-modern-top > div.relative > div.grid {
+  margin-top: 0 !important;
+  top: auto !important;
+  transform: none !important;
+}
+
+@media (min-width: 768px) {
+  .maids-modern-top > div.relative {
+    padding-top: 130px !important;
+  }
+}
+
+
+/* =========================================================
+   UAE PAGE — WAVY HERO IMAGE
+   ========================================================= */
+
+/* حاوية الصورة */
+.uae-photo {
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+}
+
+/* الصورة نفسها — شكل منحني وليس مستطيلًا */
+.uae-photo > img {
+  object-fit: cover !important;
+  object-position: center !important;
+
+  clip-path: ellipse(
+    90% 100% at 45% 50%
+  );
+
+  transform: scale(1.04);
+}
+
+/* طبقة موجية أمام الصورة */
+.uae-photo::after {
+  content: "";
+  position: absolute;
+
+  top: -8%;
+  right: -4%;
+
+  width: 28%;
+  height: 116%;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.96),
+      rgba(255,255,255,.82) 42%,
+      rgba(87,216,255,.22) 78%,
+      rgba(87,216,255,0) 100%
+    );
+
+  border-radius:
+    70% 0 0 70% /
+    48% 0 0 52%;
+
+  transform: rotate(3deg);
+
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* موجة ثانية أنعم عند حافة الصورة */
+.uae-photo::before {
+  content: "";
+  position: absolute;
+
+  top: -4%;
+  right: 19%;
+
+  width: 8%;
+  height: 108%;
+
+  background: rgba(255,255,255,.45);
+
+  border-radius: 50%;
+
+  transform: rotate(5deg);
+
+  filter: blur(3px);
+
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* البطاقة أسفل الصورة تظل فوق التأثير */
+.uae-photo .uae-photo-badge {
+  z-index: 6 !important;
+}
+
+/* =========================================================
+   UAE HERO — TITLE ALWAYS WHITE
+   ========================================================= */
+
+.uae-blue-panel h1,
+.uae-blue-panel h1 span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .uae-photo > img {
+    clip-path: ellipse(
+      105% 92% at 50% 50%
+    );
+  }
+
+  .uae-photo::after {
+    width: 22%;
+  }
+}
+
+/* =========================================================
+   UAE HERO — ORGANIC WAVY CARDS + ENTRANCE ANIMATION
+   ========================================================= */
+
+/* الحاوية */
+.uae-hero {
+  perspective: 1400px !important;
+}
+
+/* المربعين */
+.uae-hero-grid {
+  position: relative !important;
+  overflow: visible !important;
+  gap: 18px !important;
+}
+
+/* =========================================
+   IMAGE CARD
+   ========================================= */
+
+.uae-photo {
+  position: relative !important;
+  overflow: hidden !important;
+
+  border-radius:
+    42px 58px 46px 62px /
+    52px 42px 62px 48px !important;
+
+  box-shadow:
+    0 24px 55px rgba(18, 61, 120, .13),
+    0 8px 20px rgba(18, 61, 120, .06) !important;
+
+  animation: uaePhotoReveal .95s cubic-bezier(.18,.8,.25,1) both;
+  transform-origin: right center;
+}
+
+/* موجة على الحافة الداخلية للصورة */
+.uae-photo::after {
+  content: "" !important;
+  position: absolute !important;
+
+  top: -4% !important;
+  right: -2% !important;
+
+  width: 58px !important;
+  height: 108% !important;
+
+  background:
+    radial-gradient(
+      ellipse at 100% 12%,
+      #fff 0 38%,
+      transparent 40%
+    ),
+    radial-gradient(
+      ellipse at 100% 38%,
+      #fff 0 38%,
+      transparent 40%
+    ),
+    radial-gradient(
+      ellipse at 100% 64%,
+      #fff 0 38%,
+      transparent 40%
+    ),
+    radial-gradient(
+      ellipse at 100% 90%,
+      #fff 0 38%,
+      transparent 40%
+    );
+
+  opacity: .88 !important;
+  z-index: 5 !important;
+  pointer-events: none !important;
+
+  filter: blur(.2px) !important;
+}
+
+/* =========================================
+   BLUE CARD
+   ========================================= */
+
+.uae-blue-panel {
+  position: relative !important;
+  overflow: hidden !important;
+
+  border-radius:
+    58px 42px 62px 46px /
+    42px 56px 48px 62px !important;
+
+  box-shadow:
+    0 28px 65px rgba(18, 87, 214, .22),
+    0 8px 22px rgba(18, 87, 214, .10) !important;
+
+  animation: uaeBlueReveal 1.05s cubic-bezier(.18,.8,.25,1) .08s both;
+  transform-origin: left center;
+}
+
+/* موجة حقيقية خفيفة على حافة الأزرق */
+.uae-blue-panel::after {
+  content: "" !important;
+  position: absolute !important;
+
+  left: -1px !important;
+  top: 0 !important;
+
+  width: 52px !important;
+  height: 100% !important;
+
+  background:
+    radial-gradient(
+      ellipse 70px 120px at 0 8%,
+      rgba(255,255,255,.95) 0 34%,
+      transparent 37%
+    ),
+    radial-gradient(
+      ellipse 70px 120px at 0 32%,
+      rgba(255,255,255,.95) 0 34%,
+      transparent 37%
+    ),
+    radial-gradient(
+      ellipse 70px 120px at 0 56%,
+      rgba(255,255,255,.95) 0 34%,
+      transparent 37%
+    ),
+    radial-gradient(
+      ellipse 70px 120px at 0 80%,
+      rgba(255,255,255,.95) 0 34%,
+      transparent 37%
+    );
+
+  opacity: .12 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+}
+
+/* المحتوى فوق الموجات */
+.uae-blue-panel > div {
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* =========================================
+   REAL WAVY GLOW BEHIND THE CARDS
+   ========================================= */
+
+.uae-hero-grid::before {
+  content: "" !important;
+  position: absolute !important;
+
+  inset: 10px -8px -8px -8px !important;
+
+  background:
+    radial-gradient(
+      ellipse at 25% 35%,
+      rgba(87,216,255,.22),
+      transparent 32%
+    ),
+    radial-gradient(
+      ellipse at 75% 65%,
+      rgba(18,87,214,.15),
+      transparent 34%
+    );
+
+  border-radius: 70px !important;
+
+  filter: blur(22px) !important;
+
+  z-index: -1 !important;
+  pointer-events: none !important;
+}
+
+/* =========================================
+   ENTRANCE ANIMATIONS
+   ========================================= */
+
+@keyframes uaePhotoReveal {
+  0% {
+    opacity: 0;
+    transform:
+      translateX(70px)
+      rotateY(-7deg)
+      scale(.96);
+  }
+
+  55% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+    transform:
+      translateX(0)
+      rotateY(0)
+      scale(1);
+  }
+}
+
+@keyframes uaeBlueReveal {
+  0% {
+    opacity: 0;
+    transform:
+      translateX(-70px)
+      rotateY(7deg)
+      scale(.96);
+  }
+
+  55% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+    transform:
+      translateX(0)
+      rotateY(0)
+      scale(1);
+  }
+}
+
+/* عنوان ومحتوى الأزرق يظهران بتدرج */
+.uae-blue-panel .relative.z-10 > * {
+  animation: uaeContentReveal .7s ease both;
+}
+
+.uae-blue-panel .relative.z-10 > *:nth-child(1) {
+  animation-delay: .25s;
+}
+
+.uae-blue-panel .relative.z-10 > *:nth-child(2) {
+  animation-delay: .34s;
+}
+
+.uae-blue-panel .relative.z-10 > *:nth-child(3) {
+  animation-delay: .44s;
+}
+
+.uae-blue-panel .relative.z-10 > *:nth-child(4) {
+  animation-delay: .54s;
+}
+
+@keyframes uaeContentReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* حركة محترمة عند hover */
+@media (min-width: 901px) {
+  .uae-photo,
+  .uae-blue-panel {
+    transition:
+      transform .45s cubic-bezier(.2,.75,.25,1),
+      box-shadow .45s ease;
+  }
+
+  .uae-photo:hover {
+    transform: translateY(-5px) rotate(-.25deg);
+    box-shadow:
+      0 30px 70px rgba(18, 61, 120, .17);
+  }
+
+  .uae-blue-panel:hover {
+    transform: translateY(-5px) rotate(.25deg);
+    box-shadow:
+      0 34px 78px rgba(18, 87, 214, .27);
+  }
+}
+
+/* موبايل */
+@media (max-width: 900px) {
+  .uae-hero-grid {
+    gap: 14px !important;
+  }
+
+  .uae-photo,
+  .uae-blue-panel {
+    border-radius: 30px !important;
+    animation: uaeMobileReveal .75s ease both;
+  }
+
+  .uae-blue-panel {
+    animation-delay: .08s;
+  }
+
+  .uae-photo::after,
+  .uae-blue-panel::after {
+    opacity: .07 !important;
+  }
+}
+
+@keyframes uaeMobileReveal {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* احترام تقليل الحركة */
+@media (prefers-reduced-motion: reduce) {
+  .uae-photo,
+  .uae-blue-panel,
+  .uae-blue-panel .relative.z-10 > * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* مسافة واضحة بين Navbar وHero الصفحة الرئيسية */
+.home-page > section:first-of-type {
+  margin-top: 90px !important;
+}
+
+@media (min-width: 768px) {
+  .home-page > section:first-of-type {
+    margin-top: 105px !important;
+  }
+}
+
+
+/* رفع Hero توظيف عاملة قليلًا */
+.maids-modern-top > div.relative {
+  padding-top: 75px !important;
+}
+
+@media (min-width: 768px) {
+  .maids-modern-top > div.relative {
+    padding-top: 90px !important;
+  }
+}
+
+
+/* رفع Hero توظيف عاملة بمقدار مضاعف */
+.maids-modern-top > div.relative {
+  padding-top: 40px !important;
+}
+
+@media (min-width: 768px) {
+  .maids-modern-top > div.relative {
+    padding-top: 50px !important;
+  }
+}
+
+
+/* رفع Hero توظيف عاملة مرتين إضافيتين */
+.maids-modern-top > div.relative {
+  padding-top: 0 !important;
+}
+
+@media (min-width: 768px) {
+  .maids-modern-top > div.relative {
+    padding-top: 0 !important;
+  }
+}
+
+
+/* رفع Hero توظيف عاملة مرة إضافية */
+.maids-modern-top {
+  transform: translateY(-45px) !important;
+}
+
+
+/* تقليل المسافة بين Hero وكروت العاملات */
+.maids-modern-top + section {
+  margin-top: -35px !important;
+  padding-top: 45px !important;
+}
+
+
+/* تقريب قسم العاملات أكثر من Hero + بداية ناعمة */
+.maids-modern-top + section {
+  position: relative !important;
+  margin-top: -105px !important;
+  padding-top: 125px !important;
+
+  border-top: 0 !important;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(246,249,253,0) 0%,
+      #F6F9FD 90px
+    ) !important;
+
+  border-radius: 42px 42px 0 0 !important;
+}
+
+
+/* إصلاح قسم العاملات: حرّك المحتوى نفسه وليس حد القسم */
+.maids-modern-top + section {
+  margin-top: 0 !important;
+  padding-top: 40px !important;
+
+  border-top: 0 !important;
+  border-radius: 0 !important;
+
+  background: #F6F9FD !important;
+  position: relative !important;
+}
+
+.maids-modern-top + section::before {
+  content: "";
+  position: absolute;
+  top: -70px;
+  left: 0;
+  right: 0;
+  height: 110px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(246,249,253,0),
+    #F6F9FD
+  );
+
+  pointer-events: none;
+}
+
+.maids-modern-top + section > div {
+  position: relative !important;
+  z-index: 2 !important;
+
+  transform: translateY(-70px) !important;
+}
+
+
+
+/* =========================================================
+   HIRE MAIDS — FINAL CONTAINER
+   ========================================================= */
+
+.maids-soft-waves {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 24px !important;
+  padding-bottom: 24px !important;
+  background:
+    linear-gradient(
+      145deg,
+      #f7fbff 0%,
+      #eef8ff 46%,
+      #f4faff 100%
+    ) !important;
+  border: 1px solid rgba(169, 213, 242, .45) !important;
+  box-shadow: 0 18px 50px rgba(60, 120, 170, .08) !important;
+}
+
+.maids-soft-waves::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at 18% 20%,
+      rgba(191, 226, 249, .42),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at 82% 45%,
+      rgba(155, 205, 239, .26),
+      transparent 46%
+    );
+}
+
+.maids-soft-waves > div.relative.z-10 {
+  transform: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.maids-soft-waves > div.relative.z-10 > div.grid {
+  width: 100% !important;
+}
+
+.maids-modern-top + .maids-soft-waves {
+  margin-top: 0 !important;
+  padding-top: 24px !important;
+}
+
+
+/* =========================================================
+   GET MAIDS — FINAL SPACING
+   ========================================================= */
+
+/* إلغاء الرفع القديم وجعل الهيرو يبدأ طبيعيًا تحت الـNavbar */
+.maids-modern-top {
+  margin-top: 0 !important;
+  transform: none !important;
+}
+
+/* مسافة صغيرة فقط بين الـNavbar والـHero */
+.maids-modern-top > div.relative {
+  padding-top: 28px !important;
+}
+
+@media (min-width: 768px) {
+  .maids-modern-top > div.relative {
+    padding-top: 38px !important;
+  }
+}
+
+/* تقليل المسافة بين Hero وقسم العاملات */
+.maids-modern-top + .maids-soft-waves {
+  margin-top: -18px !important;
+}
+
+/* =========================================================
+   AVAILABLE MAIDS — CALM BLUE CARD
+   ========================================================= */
+
+.maids-soft-waves .mb-6.flex.justify-center {
+  margin-bottom: 18px !important;
+}
+
+.maids-soft-waves .mb-6.flex.justify-center > div {
+  position: relative !important;
+
+  min-width: 190px !important;
+
+  justify-content: center !important;
+
+  padding: 10px 28px !important;
+
+  border: 1px solid rgba(119, 177, 219, .48) !important;
+
+  border-radius: 16px !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(226, 243, 255, .95),
+      rgba(198, 228, 249, .88)
+    ) !important;
+
+  box-shadow:
+    0 8px 24px rgba(73, 139, 194, .10),
+    inset 0 1px 0 rgba(255,255,255,.75) !important;
+
+  backdrop-filter: blur(12px) !important;
+}
+
+.maids-soft-waves .mb-6.flex.justify-center > div::before {
+  content: "" !important;
+
+  position: absolute !important;
+
+  right: 12px !important;
+  top: 50% !important;
+
+  width: 4px !important;
+  height: 22px !important;
+
+  transform: translateY(-50%) !important;
+
+  border-radius: 999px !important;
+
+  background: linear-gradient(
+    180deg,
+    #9DD0F2,
+    #5DA4D6
+  ) !important;
+
+  opacity: .75 !important;
+}
+
+.maids-soft-waves .mb-6.flex.justify-center h2 {
+  margin: 0 !important;
+
+  font-size: 16px !important;
+
+  font-weight: 900 !important;
+
+  line-height: 1.2 !important;
+
+  color: #397EA9 !important;
+}
+
+
+/* AVAILABLE MAIDS — أكبر وأعلى */
+.maids-soft-waves .mb-6.flex.justify-center {
+  margin-bottom: 10px !important;
+  transform: translateY(-10px) !important;
+}
+
+.maids-soft-waves .mb-6.flex.justify-center > div {
+  min-width: 215px !important;
+  padding: 12px 32px !important;
+  border-radius: 17px !important;
+}
+
+.maids-soft-waves .mb-6.flex.justify-center h2 {
+  font-size: 18px !important;
+}
+
+
+/* الكارت نفسه — رفع واضح + تكبير واضح */
+.maids-soft-waves .mb-6.flex.justify-center {
+  position: relative !important;
+  z-index: 30 !important;
+  margin-bottom: 0 !important;
+  transform: translateY(-45px) !important;
+}
+
+.maids-soft-waves .mb-6.flex.justify-center > div {
+  min-width: 260px !important;
+  padding: 16px 38px !important;
+  border-radius: 20px !important;
+}
+
+.maids-soft-waves .mb-6.flex.justify-center h2 {
+  font-size: 22px !important;
+}
+
+
+.maids-soft-waves .mb-6.flex.justify-center {
+  transform: translateY(-20px) !important;
+}
+
