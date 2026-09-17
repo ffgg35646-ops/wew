@@ -1,5 +1,9 @@
  "use client"
 
+import SiteImage from "@/components/SiteImage"
+
+import PhoneContactButton from "@/components/PhoneContactButton";
+
 import Link from "next/link"
 import Navbar from "@/components/Navbar"
 import { useEffect, useState } from "react"
@@ -157,15 +161,14 @@ export default function NationalitiesPage() {
             {/* CTA */}
             <div className="mt-8 flex flex-wrap gap-3">
 
-              <a
-                href="tel:+97148985444"
+              <PhoneContactButton
                 className="inline-flex items-center gap-3 rounded-[14px] bg-[#1257D6] px-6 py-4 text-[12px] font-black text-white shadow-[0_12px_30px_rgba(18,87,214,.18)]"
               >
                 <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current" strokeWidth="2">
                   <path d="M6.6 3.8 9.1 3c.7-.2 1.4.2 1.7.8l1.3 3.1c.2.5.1 1.1-.3 1.5L10.2 10c1 2 2.6 3.5 4.6 4.6l1.6-1.6c.4-.4 1-.5 1.5-.3l3.1 1.3c.6.3 1 .9.8 1.7l-.8 2.5c-.3.9-1.1 1.5-2.1 1.5C11 19.6 4.4 13 4.4 5.9c0-1 .6-1.8 1.5-2.1Z"/>
                 </svg>
                 اتصل الآن
-              </a>
+              </PhoneContactButton>
 
               <a
                 href="https://wa.me/97148985444"
@@ -293,12 +296,11 @@ export default function NationalitiesPage() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href="tel:+97148985444"
+              <PhoneContactButton
                 className="rounded-[14px] bg-[#F6B56F] px-7 py-4 text-[12px] font-black text-white"
               >
                 اتصل الآن
-              </a>
+              </PhoneContactButton>
 
               <a
                 href="https://wa.me/97148985444"

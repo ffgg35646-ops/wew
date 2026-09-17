@@ -1,5 +1,9 @@
 "use client"
 
+import SiteImage from "./SiteImage"
+
+import PhoneContactButton from "./PhoneContactButton";
+
 import { useEffect, useState } from "react"
 import Link from "next/link"
 
@@ -57,8 +61,8 @@ export default function Footer() {
 
           <div>
             <Link href="/" className="inline-flex items-center gap-3">
-              <img
-                src="/images/saada/logo.svg"
+              <SiteImage
+                page="shared" slot={1} fallbackSrc="/images/saada/logo.svg"
                 alt="Al Saada"
                 className="h-11 w-auto max-w-[180px] object-contain"
               />
@@ -137,15 +141,15 @@ export default function Footer() {
                 <span>تواصل عبر واتساب</span>
               </a>
 
-              <a
-                href={phone}
+              <PhoneContactButton
+                phone={contact.phone}
                 className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-[12px] font-black text-white transition hover:-translate-y-0.5 hover:bg-white/10"
               >
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10">
                   <PhoneIcon />
                 </span>
                 <span>اتصل بنا</span>
-              </a>
+              </PhoneContactButton>
 
             </div>
           </div>

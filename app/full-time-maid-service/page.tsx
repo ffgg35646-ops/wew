@@ -1,5 +1,7 @@
 "use client"
 
+import SiteImage from "@/components/SiteImage"
+
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
@@ -99,8 +101,8 @@ export default function FullTimeMaidServicePage() {
 
           {/* IMAGE */}
           <div className="uae-photo">
-            <Image
-              src="/images/maid-1.jpg"
+            <SiteImage
+              page="full-time-maid-service" slot={4} fallbackSrc="/images/maid-1.jpg"
               alt="عاملات الإمارات"
               fill
               priority
@@ -228,19 +230,18 @@ export default function FullTimeMaidServicePage() {
       </section>
 
       {/* INTRO */}
-      <section className="mx-auto w-[calc(100%-28px)] max-w-[1320px] py-16 md:py-20">
-        <div className="grid gap-8 lg:grid-cols-[.75fr_1.25fr] lg:items-center">
-          <div>
-            <div className="text-[10px] font-black tracking-[3px] text-[#F28C28]">
-              AL SAADA
-            </div>
-            <h2 className="mt-3 text-3xl font-black leading-[1.25] md:text-5xl">
-              خدمة عاملات منزلية
-              <span className="text-[#1257D6]"> في جميع الإمارات</span>
-            </h2>
+      <section className="mx-auto w-[calc(100%-28px)] max-w-[1100px] py-16 text-center md:py-20">
+        <div>
+          <div className="text-[10px] font-black tracking-[3px] text-[#F28C28]">
+            AL SAADA
           </div>
 
-          <p className="text-[13px] font-semibold leading-9 text-slate-500 md:text-[15px]">
+          <h2 className="mx-auto mt-3 max-w-[850px] text-3xl font-black leading-[1.25] md:text-5xl mx-auto w-fit max-w-full rounded-full px-5 py-2.5 backdrop-blur-md transition-all duration-300 border border-[#8EDDF5]/45 bg-[#DDF7FF]/80 shadow-[0_10px_30px_rgba(87,216,255,.14)] section-title-glass">
+            خدمة عاملات منزلية
+            <span className="text-[#1257D6]"> في جميع الإمارات</span>
+          </h2>
+
+          <p className="mx-auto mt-6 max-w-[900px] text-[13px] font-semibold leading-9 text-slate-500 md:text-[15px]">
             نساعد العائلات على الوصول إلى العاملة المناسبة بطريقة واضحة ومنظمة،
             بداية من اختيار الإمارة والجنسية ونوع العمل، وصولًا إلى الاختيار
             والإجراءات المناسبة. الهدف هو الوصول إلى الحل الأقرب لاحتياجات
@@ -255,7 +256,7 @@ export default function FullTimeMaidServicePage() {
           <div className="text-[10px] font-black tracking-[3px] text-[#1257D6]">
             WHY AL SAADA
           </div>
-          <h2 className="mt-2 text-3xl font-black md:text-4xl">
+          <h2 className="mt-2 text-3xl font-black md:text-4xl mx-auto w-fit max-w-full rounded-full px-5 py-2.5 backdrop-blur-md transition-all duration-300 border border-[#8EDDF5]/45 bg-[#DDF7FF]/80 shadow-[0_10px_30px_rgba(87,216,255,.14)] section-title-glass">
             لماذا تختار خدمة منظمة؟
           </h2>
         </div>
@@ -290,7 +291,7 @@ export default function FullTimeMaidServicePage() {
             SERVICES
           </div>
 
-          <h2 className="mt-2 text-3xl font-black md:text-4xl">
+          <h2 className="mt-2 text-3xl font-black md:text-4xl mx-auto w-fit max-w-full rounded-full px-5 py-2.5 backdrop-blur-md transition-all duration-300 border border-[#8EDDF5]/45 bg-[#DDF7FF]/80 shadow-[0_10px_30px_rgba(87,216,255,.14)] section-title-glass">
             خدمات حسب طبيعة احتياجك
           </h2>
 
@@ -341,7 +342,7 @@ export default function FullTimeMaidServicePage() {
               FULL TIME
             </div>
 
-            <h2 className="mt-3 text-3xl font-black">
+            <h2 className="mt-3 text-3xl font-black mx-auto w-fit max-w-full rounded-full px-5 py-2.5 backdrop-blur-md transition-all duration-300 border border-[#8EDDF5]/45 bg-[#DDF7FF]/80 shadow-[0_10px_30px_rgba(87,216,255,.14)] section-title-glass">
               عاملة منزلية بدوام كامل
             </h2>
 
@@ -372,7 +373,7 @@ export default function FullTimeMaidServicePage() {
               PART TIME
             </div>
 
-            <h2 className="mt-3 text-3xl font-black">
+            <h2 className="mt-3 text-3xl font-black mx-auto w-fit max-w-full rounded-full px-5 py-2.5 backdrop-blur-md transition-all duration-300 border border-[#8EDDF5]/45 bg-[#DDF7FF]/80 shadow-[0_10px_30px_rgba(87,216,255,.14)] section-title-glass">
               عاملة منزلية بدوام جزئي
             </h2>
 
@@ -412,7 +413,7 @@ export default function FullTimeMaidServicePage() {
                 HOW IT WORKS
               </div>
 
-              <h2 className="mt-3 text-3xl font-black">
+              <h2 className="mt-3 text-3xl font-black mx-auto w-fit max-w-full rounded-full px-5 py-2.5 backdrop-blur-md transition-all duration-300 border border-[#8EDDF5]/45 bg-[#DDF7FF]/80 shadow-[0_10px_30px_rgba(87,216,255,.14)] section-title-glass">
                 كيف تبدأ؟
               </h2>
 
@@ -453,7 +454,7 @@ export default function FullTimeMaidServicePage() {
             FAQ
           </div>
 
-          <h2 className="mt-3 text-3xl font-black md:text-4xl">
+          <h2 className="mt-3 text-3xl font-black md:text-4xl mx-auto w-fit max-w-full rounded-full px-5 py-2.5 backdrop-blur-md transition-all duration-300 border border-[#8EDDF5]/45 bg-[#DDF7FF]/80 shadow-[0_10px_30px_rgba(87,216,255,.14)] section-title-glass">
             الأسئلة الشائعة
           </h2>
         </div>
@@ -493,7 +494,7 @@ export default function FullTimeMaidServicePage() {
               AL SAADA
             </div>
 
-            <h2 className="mt-3 text-3xl font-black md:text-4xl">
+            <h2 className="mt-3 text-3xl font-black md:text-4xl mx-auto w-fit max-w-full rounded-full px-5 py-2.5 backdrop-blur-md transition-all duration-300 border border-[#8EDDF5]/45 bg-[#DDF7FF]/80 shadow-[0_10px_30px_rgba(87,216,255,.14)] section-title-glass">
               ابدأ طلب عاملتك في {selected}
             </h2>
 

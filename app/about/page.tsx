@@ -1,6 +1,9 @@
 "use client"
 
-import Image from "next/image"
+import SiteImage from "@/components/SiteImage"
+
+import PhoneContactButton from "@/components/PhoneContactButton";
+
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import Navbar from "@/components/Navbar"
@@ -117,8 +120,8 @@ export default function AboutPage() {
           <div className="about-new-hero-content relative">
               <div className="mt-8 overflow-hidden rounded-[28px] border border-white/15 bg-white/10 shadow-[0_25px_70px_rgba(0,0,0,.16)]">
                 <div className="relative h-[280px] w-full md:h-[360px]">
-                  <Image
-                    src="/images/saada/hero/about-hero.jpg"
+                  <SiteImage
+                    page="about" slot={1} fallbackSrc="/images/saada/hero/about-hero.jpg"
                     alt="من نحن"
                     fill
                     priority
@@ -145,37 +148,37 @@ export default function AboutPage() {
               إجراءات واضحة، ومتابعة مستمرة من البداية حتى بدء الخدمة.
             </p>
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            <div className="mt-8 grid grid-cols-1 gap-3">
 
               <div className="about-new-mini-card">
                 <span>01</span>
                 <div>
-                  <strong>اختيار موثوق</strong>
-                  <small>حسب الخبرة والمهارات واحتياجات منزلك.</small>
+                  <strong className="text-[15px] font-black text-white md:text-[17px]">اختيار موثوق</strong>
+                  <small className="mt-1 block text-[11px] font-semibold leading-6 text-white/75 md:text-[12px]">حسب الخبرة والمهارات واحتياجات منزلك.</small>
                 </div>
               </div>
 
               <div className="about-new-mini-card">
                 <span>02</span>
                 <div>
-                  <strong>إجراءات واضحة</strong>
-                  <small>نتابع المستندات والتأشيرة والخطوات المطلوبة.</small>
+                  <strong className="text-[15px] font-black text-white md:text-[17px]">إجراءات واضحة</strong>
+                  <small className="mt-1 block text-[11px] font-semibold leading-6 text-white/75 md:text-[12px]">نتابع المستندات والتأشيرة والخطوات المطلوبة.</small>
                 </div>
               </div>
 
               <div className="about-new-mini-card">
                 <span>03</span>
                 <div>
-                  <strong>دعم مستمر</strong>
-                  <small>نواصل مساعدتك حتى بعد بدء الخدمة.</small>
+                  <strong className="text-[15px] font-black text-white md:text-[17px]">دعم مستمر</strong>
+                  <small className="mt-1 block text-[11px] font-semibold leading-6 text-white/75 md:text-[12px]">نواصل مساعدتك حتى بعد بدء الخدمة.</small>
                 </div>
               </div>
 
               <div className="about-new-mini-card">
                 <span>04</span>
                 <div>
-                  <strong>تجربة منظمة</strong>
-                  <small>حلول منزلية مصممة لتكون أبسط وأوضح.</small>
+                  <strong className="text-[15px] font-black text-white md:text-[17px]">تجربة منظمة</strong>
+                  <small className="mt-1 block text-[11px] font-semibold leading-6 text-white/75 md:text-[12px]">حلول منزلية مصممة لتكون أبسط وأوضح.</small>
                 </div>
               </div>
 
@@ -210,15 +213,15 @@ export default function AboutPage() {
                   تواصل عبر واتساب
                 </a>
 
-                <a
-                  href={phoneHref}
+                <PhoneContactButton
+                  phone={contact.phone}
                   className="flex items-center justify-center gap-3 rounded-[16px] bg-[#F6B56F] px-5 py-4 text-[12px] font-black text-white shadow-[0_12px_30px_rgba(246,181,111,.20)] transition hover:-translate-y-0.5"
                 >
                   <span className="text-[16px]">
                     ☎
                   </span>
                   اتصل بنا
-                </a>
+                </PhoneContactButton>
               </div>
             </div>
 

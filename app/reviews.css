@@ -20,11 +20,11 @@
 }
 
 .review-track-right {
-  animation: reviewsRight 42s linear infinite;
+  animation: reviewsRight 1050s linear infinite;
 }
 
 .review-track-left {
-  animation: reviewsLeft 46s linear infinite;
+  animation: reviewsLeft 1150s linear infinite;
 }
 
 .review-marquee:hover .review-track {
@@ -53,11 +53,11 @@
 
 @media (max-width: 768px) {
   .review-track-right {
-    animation-duration: 34s;
+    animation-duration: 850s;
   }
 
   .review-track-left {
-    animation-duration: 38s;
+    animation-duration: 950s;
   }
 }
 

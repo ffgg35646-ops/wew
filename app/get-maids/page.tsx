@@ -1,5 +1,7 @@
  "use client"
 
+import PhoneContactButton from "@/components/PhoneContactButton";
+
 import Image from "next/image"
 import Link from "next/link"
 import Navbar from "@/components/Navbar"
@@ -1240,13 +1242,13 @@ export default function GetMaidsPage() {
                   )}
 
                   {contact.phone && (
-                    <a
-                      href={`tel:${contact.phone}`}
+                    <PhoneContactButton
+                      phone={contact.phone}
                       className="flex items-center justify-center gap-3 rounded-[16px] bg-[#1257D6] px-6 py-4 text-[12px] font-black text-white shadow-lg shadow-blue-100 transition hover:-translate-y-0.5"
                     >
                       ☎
                       اتصل بنا
-                    </a>
+                    </PhoneContactButton>
                   )}
 
                   <Link

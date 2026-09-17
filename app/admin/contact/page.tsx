@@ -6,6 +6,7 @@ import Link from "next/link"
 export default function AdminContactPage() {
   const [whatsapp, setWhatsapp] = useState("")
   const [phone, setPhone] = useState("")
+  const [location, setLocation] = useState("")
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState("")
@@ -26,6 +27,8 @@ export default function AdminContactPage() {
 
         setWhatsapp(data.whatsapp ?? "")
         setPhone(data.phone ?? "")
+        setLocation(data.location ?? "")
+        setLocation(data.location ?? "")
       } catch {
         setMessage("تعذر تحميل بيانات الاتصال")
       } finally {
@@ -46,7 +49,11 @@ export default function AdminContactPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ whatsapp, phone }),
+        body: JSON.stringify({
+          whatsapp,
+          phone,
+          location,
+        }),
       })
 
       const data = await response.json()
@@ -120,6 +127,34 @@ export default function AdminContactPage() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="971501234567"
+                  dir="ltr"
+                  className="h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-left text-sm font-bold outline-none focus:border-[#1257D6] focus:bg-white"
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-black">
+                  رابط الموقع
+                </label>
+
+                <input
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="https://www.google.com/maps/..."
+                  dir="ltr"
+                  className="h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-left text-sm font-bold outline-none focus:border-[#1257D6] focus:bg-white"
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-black">
+                  رابط الموقع
+                </label>
+
+                <input
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="https://www.google.com/maps/..."
                   dir="ltr"
                   className="h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-left text-sm font-bold outline-none focus:border-[#1257D6] focus:bg-white"
                 />

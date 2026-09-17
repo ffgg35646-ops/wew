@@ -20,6 +20,12 @@ const sections = [
     href: "/admin/economic-license",
     icon: "📄",
   },
+  {
+    title: "صور الموقع",
+    description: "رفع واستبدال صور صفحات الموقع من مكان واحد.",
+    href: "/admin/site-images",
+    icon: "🖼️",
+  },
 ]
 
 

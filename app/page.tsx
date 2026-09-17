@@ -1,5 +1,7 @@
  "use client"
 
+import SiteImage from "@/components/SiteImage"
+
 import { useEffect, useState } from "react"
 
 import "./reviews.css"
@@ -21,26 +23,1062 @@ const questions = [
   "هل تقدمون المساعدة في تأشيرة العاملة؟",
   "هل يمكن توظيف عاملة بدوام جزئي؟",
   "هل يمكنني اختيار جنسية العاملة؟",
-  "ما هي تكلفة توظيف عاملة في دبي؟",
+  "ما هي تكلفة توظيف عاملة في الإمارات؟",
 ]
 
 const reviews = [
   {
     name: "نورة أحمد",
-    role: "عميلة من دبي",
-    text: "تجربة ممتازة من أول تواصل. ساعدوني في اختيار العاملة المناسبة وكان التعامل راقياً جداً.",
+    role: "عميلة من الإمارات",
+    text: "التجربة كانت ممتازة. وساعدوني في اختيار العاملة المناسبة لاحتياجات المنزل.",
+  },
+  {
+    name: "نورة محمد",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت سهلة وواضحة. وكانت المتابعة مستمرة حتى إتمام الاختيار.",
+  },
+  {
+    name: "نورة خالد",
+    role: "عميلة من الإمارات",
+    text: "التعامل كان راقياً جداً. وكان الرد على الاستفسارات سريعاً ومفيداً.",
+  },
+  {
+    name: "نورة علي",
+    role: "عميلة من الإمارات",
+    text: "الفريق كان متعاوناً وسريعاً. وأشكر الفريق على حسن التعامل والمتابعة.",
+  },
+  {
+    name: "نورة حسن",
+    role: "عميلة من الإمارات",
+    text: "أعجبني تنظيم الخدمة. وتم شرح جميع الخطوات بطريقة بسيطة.",
+  },
+  {
+    name: "سارة أحمد",
+    role: "عميلة من الإمارات",
+    text: "وجدت اهتماماً كبيراً بالتفاصيل. وشعرت أن جميع الإجراءات كانت منظمة.",
   },
   {
     name: "سارة محمد",
-    role: "عميلة من دبي",
-    text: "الخدمة كانت سهلة وواضحة، والأهم أن الخيارات كانت مناسبة فعلاً لاحتياجات المنزل.",
+    role: "عميلة من الإمارات",
+    text: "الإجراءات كانت واضحة من البداية. وكانت التجربة مريحة من البداية إلى النهاية.",
+  },
+  {
+    name: "سارة خالد",
+    role: "عميلة من الإمارات",
+    text: "المتابعة كانت ممتازة. وكان التواصل سريعاً وواضحاً طوال الوقت.",
+  },
+  {
+    name: "سارة علي",
+    role: "عميلة من الإمارات",
+    text: "الاختيار كان أسهل مما توقعت. والخيارات كانت مناسبة جداً لما كنت أبحث عنه.",
+  },
+  {
+    name: "سارة حسن",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت أفضل مما توقعت. وساعدني الفريق في الوصول إلى الخيار المناسب بسهولة.",
+  },
+  {
+    name: "ريم أحمد",
+    role: "عميلة من الإمارات",
+    text: "التجربة كانت ممتازة. وساعدوني في اختيار العاملة المناسبة لاحتياجات المنزل.",
+  },
+  {
+    name: "ريم محمد",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت سهلة وواضحة. وكانت المتابعة مستمرة حتى إتمام الاختيار.",
   },
   {
     name: "ريم خالد",
-    role: "عميلة من دبي",
-    text: "فريق محترم وسريع في الرد. التجربة بالكامل كانت أفضل مما توقعت.",
+    role: "عميلة من الإمارات",
+    text: "التعامل كان راقياً جداً. وكان الرد على الاستفسارات سريعاً ومفيداً.",
+  },
+  {
+    name: "ريم علي",
+    role: "عميلة من الإمارات",
+    text: "الفريق كان متعاوناً وسريعاً. وأشكر الفريق على حسن التعامل والمتابعة.",
+  },
+  {
+    name: "ريم حسن",
+    role: "عميلة من الإمارات",
+    text: "أعجبني تنظيم الخدمة. وتم شرح جميع الخطوات بطريقة بسيطة.",
+  },
+  {
+    name: "مريم أحمد",
+    role: "عميلة من الإمارات",
+    text: "وجدت اهتماماً كبيراً بالتفاصيل. وشعرت أن جميع الإجراءات كانت منظمة.",
+  },
+  {
+    name: "مريم محمد",
+    role: "عميلة من الإمارات",
+    text: "الإجراءات كانت واضحة من البداية. وكانت التجربة مريحة من البداية إلى النهاية.",
+  },
+  {
+    name: "مريم خالد",
+    role: "عميلة من الإمارات",
+    text: "المتابعة كانت ممتازة. وكان التواصل سريعاً وواضحاً طوال الوقت.",
+  },
+  {
+    name: "مريم علي",
+    role: "عميلة من الإمارات",
+    text: "الاختيار كان أسهل مما توقعت. والخيارات كانت مناسبة جداً لما كنت أبحث عنه.",
+  },
+  {
+    name: "مريم حسن",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت أفضل مما توقعت. وساعدني الفريق في الوصول إلى الخيار المناسب بسهولة.",
+  },
+  {
+    name: "هند أحمد",
+    role: "عميلة من الإمارات",
+    text: "التجربة كانت ممتازة. وساعدوني في اختيار العاملة المناسبة لاحتياجات المنزل.",
+  },
+  {
+    name: "هند محمد",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت سهلة وواضحة. وكانت المتابعة مستمرة حتى إتمام الاختيار.",
+  },
+  {
+    name: "هند خالد",
+    role: "عميلة من الإمارات",
+    text: "التعامل كان راقياً جداً. وكان الرد على الاستفسارات سريعاً ومفيداً.",
+  },
+  {
+    name: "هند علي",
+    role: "عميلة من الإمارات",
+    text: "الفريق كان متعاوناً وسريعاً. وأشكر الفريق على حسن التعامل والمتابعة.",
+  },
+  {
+    name: "هند حسن",
+    role: "عميلة من الإمارات",
+    text: "أعجبني تنظيم الخدمة. وتم شرح جميع الخطوات بطريقة بسيطة.",
+  },
+  {
+    name: "أمل أحمد",
+    role: "عميلة من الإمارات",
+    text: "وجدت اهتماماً كبيراً بالتفاصيل. وشعرت أن جميع الإجراءات كانت منظمة.",
+  },
+  {
+    name: "أمل محمد",
+    role: "عميلة من الإمارات",
+    text: "الإجراءات كانت واضحة من البداية. وكانت التجربة مريحة من البداية إلى النهاية.",
+  },
+  {
+    name: "أمل خالد",
+    role: "عميلة من الإمارات",
+    text: "المتابعة كانت ممتازة. وكان التواصل سريعاً وواضحاً طوال الوقت.",
+  },
+  {
+    name: "أمل علي",
+    role: "عميلة من الإمارات",
+    text: "الاختيار كان أسهل مما توقعت. والخيارات كانت مناسبة جداً لما كنت أبحث عنه.",
+  },
+  {
+    name: "أمل حسن",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت أفضل مما توقعت. وساعدني الفريق في الوصول إلى الخيار المناسب بسهولة.",
+  },
+  {
+    name: "ليان أحمد",
+    role: "عميلة من الإمارات",
+    text: "التجربة كانت ممتازة. وساعدوني في اختيار العاملة المناسبة لاحتياجات المنزل.",
+  },
+  {
+    name: "ليان محمد",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت سهلة وواضحة. وكانت المتابعة مستمرة حتى إتمام الاختيار.",
+  },
+  {
+    name: "ليان خالد",
+    role: "عميلة من الإمارات",
+    text: "التعامل كان راقياً جداً. وكان الرد على الاستفسارات سريعاً ومفيداً.",
+  },
+  {
+    name: "ليان علي",
+    role: "عميلة من الإمارات",
+    text: "الفريق كان متعاوناً وسريعاً. وأشكر الفريق على حسن التعامل والمتابعة.",
+  },
+  {
+    name: "ليان حسن",
+    role: "عميلة من الإمارات",
+    text: "أعجبني تنظيم الخدمة. وتم شرح جميع الخطوات بطريقة بسيطة.",
+  },
+  {
+    name: "جود أحمد",
+    role: "عميلة من الإمارات",
+    text: "وجدت اهتماماً كبيراً بالتفاصيل. وشعرت أن جميع الإجراءات كانت منظمة.",
+  },
+  {
+    name: "جود محمد",
+    role: "عميلة من الإمارات",
+    text: "الإجراءات كانت واضحة من البداية. وكانت التجربة مريحة من البداية إلى النهاية.",
+  },
+  {
+    name: "جود خالد",
+    role: "عميلة من الإمارات",
+    text: "المتابعة كانت ممتازة. وكان التواصل سريعاً وواضحاً طوال الوقت.",
+  },
+  {
+    name: "جود علي",
+    role: "عميلة من الإمارات",
+    text: "الاختيار كان أسهل مما توقعت. والخيارات كانت مناسبة جداً لما كنت أبحث عنه.",
+  },
+  {
+    name: "جود حسن",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت أفضل مما توقعت. وساعدني الفريق في الوصول إلى الخيار المناسب بسهولة.",
+  },
+  {
+    name: "دانة أحمد",
+    role: "عميلة من الإمارات",
+    text: "التجربة كانت ممتازة. وساعدوني في اختيار العاملة المناسبة لاحتياجات المنزل.",
+  },
+  {
+    name: "دانة محمد",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت سهلة وواضحة. وكانت المتابعة مستمرة حتى إتمام الاختيار.",
+  },
+  {
+    name: "دانة خالد",
+    role: "عميلة من الإمارات",
+    text: "التعامل كان راقياً جداً. وكان الرد على الاستفسارات سريعاً ومفيداً.",
+  },
+  {
+    name: "دانة علي",
+    role: "عميلة من الإمارات",
+    text: "الفريق كان متعاوناً وسريعاً. وأشكر الفريق على حسن التعامل والمتابعة.",
+  },
+  {
+    name: "دانة حسن",
+    role: "عميلة من الإمارات",
+    text: "أعجبني تنظيم الخدمة. وتم شرح جميع الخطوات بطريقة بسيطة.",
+  },
+  {
+    name: "مي أحمد",
+    role: "عميلة من الإمارات",
+    text: "وجدت اهتماماً كبيراً بالتفاصيل. وشعرت أن جميع الإجراءات كانت منظمة.",
+  },
+  {
+    name: "مي محمد",
+    role: "عميلة من الإمارات",
+    text: "الإجراءات كانت واضحة من البداية. وكانت التجربة مريحة من البداية إلى النهاية.",
+  },
+  {
+    name: "مي خالد",
+    role: "عميلة من الإمارات",
+    text: "المتابعة كانت ممتازة. وكان التواصل سريعاً وواضحاً طوال الوقت.",
+  },
+  {
+    name: "مي علي",
+    role: "عميلة من الإمارات",
+    text: "الاختيار كان أسهل مما توقعت. والخيارات كانت مناسبة جداً لما كنت أبحث عنه.",
+  },
+  {
+    name: "مي حسن",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت أفضل مما توقعت. وساعدني الفريق في الوصول إلى الخيار المناسب بسهولة.",
+  },
+  {
+    name: "نور أحمد",
+    role: "عميلة من الإمارات",
+    text: "التجربة كانت ممتازة. وساعدوني في اختيار العاملة المناسبة لاحتياجات المنزل.",
+  },
+  {
+    name: "نور محمد",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت سهلة وواضحة. وكانت المتابعة مستمرة حتى إتمام الاختيار.",
+  },
+  {
+    name: "نور خالد",
+    role: "عميلة من الإمارات",
+    text: "التعامل كان راقياً جداً. وكان الرد على الاستفسارات سريعاً ومفيداً.",
+  },
+  {
+    name: "نور علي",
+    role: "عميلة من الإمارات",
+    text: "الفريق كان متعاوناً وسريعاً. وأشكر الفريق على حسن التعامل والمتابعة.",
+  },
+  {
+    name: "نور حسن",
+    role: "عميلة من الإمارات",
+    text: "أعجبني تنظيم الخدمة. وتم شرح جميع الخطوات بطريقة بسيطة.",
+  },
+  {
+    name: "رنا أحمد",
+    role: "عميلة من الإمارات",
+    text: "وجدت اهتماماً كبيراً بالتفاصيل. وشعرت أن جميع الإجراءات كانت منظمة.",
+  },
+  {
+    name: "رنا محمد",
+    role: "عميلة من الإمارات",
+    text: "الإجراءات كانت واضحة من البداية. وكانت التجربة مريحة من البداية إلى النهاية.",
+  },
+  {
+    name: "رنا خالد",
+    role: "عميلة من الإمارات",
+    text: "المتابعة كانت ممتازة. وكان التواصل سريعاً وواضحاً طوال الوقت.",
+  },
+  {
+    name: "رنا علي",
+    role: "عميلة من الإمارات",
+    text: "الاختيار كان أسهل مما توقعت. والخيارات كانت مناسبة جداً لما كنت أبحث عنه.",
+  },
+  {
+    name: "رنا حسن",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت أفضل مما توقعت. وساعدني الفريق في الوصول إلى الخيار المناسب بسهولة.",
+  },
+  {
+    name: "دانية أحمد",
+    role: "عميلة من الإمارات",
+    text: "التجربة كانت ممتازة. وساعدوني في اختيار العاملة المناسبة لاحتياجات المنزل.",
+  },
+  {
+    name: "دانية محمد",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت سهلة وواضحة. وكانت المتابعة مستمرة حتى إتمام الاختيار.",
+  },
+  {
+    name: "دانية خالد",
+    role: "عميلة من الإمارات",
+    text: "التعامل كان راقياً جداً. وكان الرد على الاستفسارات سريعاً ومفيداً.",
+  },
+  {
+    name: "دانية علي",
+    role: "عميلة من الإمارات",
+    text: "الفريق كان متعاوناً وسريعاً. وأشكر الفريق على حسن التعامل والمتابعة.",
+  },
+  {
+    name: "دانية حسن",
+    role: "عميلة من الإمارات",
+    text: "أعجبني تنظيم الخدمة. وتم شرح جميع الخطوات بطريقة بسيطة.",
+  },
+  {
+    name: "عائشة أحمد",
+    role: "عميلة من الإمارات",
+    text: "وجدت اهتماماً كبيراً بالتفاصيل. وشعرت أن جميع الإجراءات كانت منظمة.",
+  },
+  {
+    name: "عائشة محمد",
+    role: "عميلة من الإمارات",
+    text: "الإجراءات كانت واضحة من البداية. وكانت التجربة مريحة من البداية إلى النهاية.",
+  },
+  {
+    name: "عائشة خالد",
+    role: "عميلة من الإمارات",
+    text: "المتابعة كانت ممتازة. وكان التواصل سريعاً وواضحاً طوال الوقت.",
+  },
+  {
+    name: "عائشة علي",
+    role: "عميلة من الإمارات",
+    text: "الاختيار كان أسهل مما توقعت. والخيارات كانت مناسبة جداً لما كنت أبحث عنه.",
+  },
+  {
+    name: "عائشة حسن",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت أفضل مما توقعت. وساعدني الفريق في الوصول إلى الخيار المناسب بسهولة.",
+  },
+  {
+    name: "آمنة أحمد",
+    role: "عميلة من الإمارات",
+    text: "التجربة كانت ممتازة. وساعدوني في اختيار العاملة المناسبة لاحتياجات المنزل.",
+  },
+  {
+    name: "آمنة محمد",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت سهلة وواضحة. وكانت المتابعة مستمرة حتى إتمام الاختيار.",
+  },
+  {
+    name: "آمنة خالد",
+    role: "عميلة من الإمارات",
+    text: "التعامل كان راقياً جداً. وكان الرد على الاستفسارات سريعاً ومفيداً.",
+  },
+  {
+    name: "آمنة علي",
+    role: "عميلة من الإمارات",
+    text: "الفريق كان متعاوناً وسريعاً. وأشكر الفريق على حسن التعامل والمتابعة.",
+  },
+  {
+    name: "آمنة حسن",
+    role: "عميلة من الإمارات",
+    text: "أعجبني تنظيم الخدمة. وتم شرح جميع الخطوات بطريقة بسيطة.",
+  },
+  {
+    name: "مها أحمد",
+    role: "عميلة من الإمارات",
+    text: "وجدت اهتماماً كبيراً بالتفاصيل. وشعرت أن جميع الإجراءات كانت منظمة.",
+  },
+  {
+    name: "مها محمد",
+    role: "عميلة من الإمارات",
+    text: "الإجراءات كانت واضحة من البداية. وكانت التجربة مريحة من البداية إلى النهاية.",
+  },
+  {
+    name: "مها خالد",
+    role: "عميلة من الإمارات",
+    text: "المتابعة كانت ممتازة. وكان التواصل سريعاً وواضحاً طوال الوقت.",
+  },
+  {
+    name: "مها علي",
+    role: "عميلة من الإمارات",
+    text: "الاختيار كان أسهل مما توقعت. والخيارات كانت مناسبة جداً لما كنت أبحث عنه.",
+  },
+  {
+    name: "مها حسن",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت أفضل مما توقعت. وساعدني الفريق في الوصول إلى الخيار المناسب بسهولة.",
+  },
+  {
+    name: "روان أحمد",
+    role: "عميلة من الإمارات",
+    text: "التجربة كانت ممتازة. وساعدوني في اختيار العاملة المناسبة لاحتياجات المنزل.",
+  },
+  {
+    name: "روان محمد",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت سهلة وواضحة. وكانت المتابعة مستمرة حتى إتمام الاختيار.",
+  },
+  {
+    name: "روان خالد",
+    role: "عميلة من الإمارات",
+    text: "التعامل كان راقياً جداً. وكان الرد على الاستفسارات سريعاً ومفيداً.",
+  },
+  {
+    name: "روان علي",
+    role: "عميلة من الإمارات",
+    text: "الفريق كان متعاوناً وسريعاً. وأشكر الفريق على حسن التعامل والمتابعة.",
+  },
+  {
+    name: "روان حسن",
+    role: "عميلة من الإمارات",
+    text: "أعجبني تنظيم الخدمة. وتم شرح جميع الخطوات بطريقة بسيطة.",
+  },
+  {
+    name: "تالا أحمد",
+    role: "عميلة من الإمارات",
+    text: "وجدت اهتماماً كبيراً بالتفاصيل. وشعرت أن جميع الإجراءات كانت منظمة.",
+  },
+  {
+    name: "تالا محمد",
+    role: "عميلة من الإمارات",
+    text: "الإجراءات كانت واضحة من البداية. وكانت التجربة مريحة من البداية إلى النهاية.",
+  },
+  {
+    name: "تالا خالد",
+    role: "عميلة من الإمارات",
+    text: "المتابعة كانت ممتازة. وكان التواصل سريعاً وواضحاً طوال الوقت.",
+  },
+  {
+    name: "تالا علي",
+    role: "عميلة من الإمارات",
+    text: "الاختيار كان أسهل مما توقعت. والخيارات كانت مناسبة جداً لما كنت أبحث عنه.",
+  },
+  {
+    name: "تالا حسن",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت أفضل مما توقعت. وساعدني الفريق في الوصول إلى الخيار المناسب بسهولة.",
+  },
+  {
+    name: "شيخة أحمد",
+    role: "عميلة من الإمارات",
+    text: "التجربة كانت ممتازة. وساعدوني في اختيار العاملة المناسبة لاحتياجات المنزل.",
+  },
+  {
+    name: "شيخة محمد",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت سهلة وواضحة. وكانت المتابعة مستمرة حتى إتمام الاختيار.",
+  },
+  {
+    name: "شيخة خالد",
+    role: "عميلة من الإمارات",
+    text: "التعامل كان راقياً جداً. وكان الرد على الاستفسارات سريعاً ومفيداً.",
+  },
+  {
+    name: "شيخة علي",
+    role: "عميلة من الإمارات",
+    text: "الفريق كان متعاوناً وسريعاً. وأشكر الفريق على حسن التعامل والمتابعة.",
+  },
+  {
+    name: "شيخة حسن",
+    role: "عميلة من الإمارات",
+    text: "أعجبني تنظيم الخدمة. وتم شرح جميع الخطوات بطريقة بسيطة.",
+  },
+  {
+    name: "لانا أحمد",
+    role: "عميلة من الإمارات",
+    text: "وجدت اهتماماً كبيراً بالتفاصيل. وشعرت أن جميع الإجراءات كانت منظمة.",
+  },
+  {
+    name: "لانا محمد",
+    role: "عميلة من الإمارات",
+    text: "الإجراءات كانت واضحة من البداية. وكانت التجربة مريحة من البداية إلى النهاية.",
+  },
+  {
+    name: "لانا خالد",
+    role: "عميلة من الإمارات",
+    text: "المتابعة كانت ممتازة. وكان التواصل سريعاً وواضحاً طوال الوقت.",
+  },
+  {
+    name: "لانا علي",
+    role: "عميلة من الإمارات",
+    text: "الاختيار كان أسهل مما توقعت. والخيارات كانت مناسبة جداً لما كنت أبحث عنه.",
+  },
+  {
+    name: "لانا حسن",
+    role: "عميلة من الإمارات",
+    text: "الخدمة كانت أفضل مما توقعت. وساعدني الفريق في الوصول إلى الخيار المناسب بسهولة.",
+  },
+  {
+    name: "Sarah Morgan",
+    role: "Client from UAE",
+    text: "The experience was excellent. and they helped me find a suitable maid for my needs.",
+  },
+  {
+    name: "Sarah Reed",
+    role: "Client from UAE",
+    text: "The service was simple and clear. and the follow-up continued until the final choice.",
+  },
+  {
+    name: "Sarah Khan",
+    role: "Client from UAE",
+    text: "The team was very professional. and my questions were answered quickly and clearly.",
+  },
+  {
+    name: "Sarah Adams",
+    role: "Client from UAE",
+    text: "The support was fast and helpful. and I really appreciated the professional support.",
+  },
+  {
+    name: "Sarah Smith",
+    role: "Client from UAE",
+    text: "I really liked how organized everything was. and every step was explained in a simple way.",
+  },
+  {
+    name: "Emma Morgan",
+    role: "Client from UAE",
+    text: "The communication was excellent. and everything was handled in an organized way.",
+  },
+  {
+    name: "Emma Reed",
+    role: "Client from UAE",
+    text: "The process was much easier than expected. and the whole experience felt comfortable from start to finish.",
+  },
+  {
+    name: "Emma Khan",
+    role: "Client from UAE",
+    text: "The follow-up was very helpful. and the communication was clear throughout the process.",
+  },
+  {
+    name: "Emma Adams",
+    role: "Client from UAE",
+    text: "The available options were clear. and the available options matched what I was looking for.",
+  },
+  {
+    name: "Emma Smith",
+    role: "Client from UAE",
+    text: "The overall experience was very smooth. and the team made the selection process much easier.",
+  },
+  {
+    name: "Lina Morgan",
+    role: "Client from UAE",
+    text: "The experience was excellent. and they helped me find a suitable maid for my needs.",
+  },
+  {
+    name: "Lina Reed",
+    role: "Client from UAE",
+    text: "The service was simple and clear. and the follow-up continued until the final choice.",
+  },
+  {
+    name: "Lina Khan",
+    role: "Client from UAE",
+    text: "The team was very professional. and my questions were answered quickly and clearly.",
+  },
+  {
+    name: "Lina Adams",
+    role: "Client from UAE",
+    text: "The support was fast and helpful. and I really appreciated the professional support.",
+  },
+  {
+    name: "Lina Smith",
+    role: "Client from UAE",
+    text: "I really liked how organized everything was. and every step was explained in a simple way.",
+  },
+  {
+    name: "Maya Morgan",
+    role: "Client from UAE",
+    text: "The communication was excellent. and everything was handled in an organized way.",
+  },
+  {
+    name: "Maya Reed",
+    role: "Client from UAE",
+    text: "The process was much easier than expected. and the whole experience felt comfortable from start to finish.",
+  },
+  {
+    name: "Maya Khan",
+    role: "Client from UAE",
+    text: "The follow-up was very helpful. and the communication was clear throughout the process.",
+  },
+  {
+    name: "Maya Adams",
+    role: "Client from UAE",
+    text: "The available options were clear. and the available options matched what I was looking for.",
+  },
+  {
+    name: "Maya Smith",
+    role: "Client from UAE",
+    text: "The overall experience was very smooth. and the team made the selection process much easier.",
+  },
+  {
+    name: "Sophia Morgan",
+    role: "Client from UAE",
+    text: "The experience was excellent. and they helped me find a suitable maid for my needs.",
+  },
+  {
+    name: "Sophia Reed",
+    role: "Client from UAE",
+    text: "The service was simple and clear. and the follow-up continued until the final choice.",
+  },
+  {
+    name: "Sophia Khan",
+    role: "Client from UAE",
+    text: "The team was very professional. and my questions were answered quickly and clearly.",
+  },
+  {
+    name: "Sophia Adams",
+    role: "Client from UAE",
+    text: "The support was fast and helpful. and I really appreciated the professional support.",
+  },
+  {
+    name: "Sophia Smith",
+    role: "Client from UAE",
+    text: "I really liked how organized everything was. and every step was explained in a simple way.",
+  },
+  {
+    name: "Olivia Morgan",
+    role: "Client from UAE",
+    text: "The communication was excellent. and everything was handled in an organized way.",
+  },
+  {
+    name: "Olivia Reed",
+    role: "Client from UAE",
+    text: "The process was much easier than expected. and the whole experience felt comfortable from start to finish.",
+  },
+  {
+    name: "Olivia Khan",
+    role: "Client from UAE",
+    text: "The follow-up was very helpful. and the communication was clear throughout the process.",
+  },
+  {
+    name: "Olivia Adams",
+    role: "Client from UAE",
+    text: "The available options were clear. and the available options matched what I was looking for.",
+  },
+  {
+    name: "Olivia Smith",
+    role: "Client from UAE",
+    text: "The overall experience was very smooth. and the team made the selection process much easier.",
+  },
+  {
+    name: "Emily Morgan",
+    role: "Client from UAE",
+    text: "The experience was excellent. and they helped me find a suitable maid for my needs.",
+  },
+  {
+    name: "Emily Reed",
+    role: "Client from UAE",
+    text: "The service was simple and clear. and the follow-up continued until the final choice.",
+  },
+  {
+    name: "Emily Khan",
+    role: "Client from UAE",
+    text: "The team was very professional. and my questions were answered quickly and clearly.",
+  },
+  {
+    name: "Emily Adams",
+    role: "Client from UAE",
+    text: "The support was fast and helpful. and I really appreciated the professional support.",
+  },
+  {
+    name: "Emily Smith",
+    role: "Client from UAE",
+    text: "I really liked how organized everything was. and every step was explained in a simple way.",
+  },
+  {
+    name: "Grace Morgan",
+    role: "Client from UAE",
+    text: "The communication was excellent. and everything was handled in an organized way.",
+  },
+  {
+    name: "Grace Reed",
+    role: "Client from UAE",
+    text: "The process was much easier than expected. and the whole experience felt comfortable from start to finish.",
+  },
+  {
+    name: "Grace Khan",
+    role: "Client from UAE",
+    text: "The follow-up was very helpful. and the communication was clear throughout the process.",
+  },
+  {
+    name: "Grace Adams",
+    role: "Client from UAE",
+    text: "The available options were clear. and the available options matched what I was looking for.",
+  },
+  {
+    name: "Grace Smith",
+    role: "Client from UAE",
+    text: "The overall experience was very smooth. and the team made the selection process much easier.",
+  },
+  {
+    name: "Hannah Morgan",
+    role: "Client from UAE",
+    text: "The experience was excellent. and they helped me find a suitable maid for my needs.",
+  },
+  {
+    name: "Hannah Reed",
+    role: "Client from UAE",
+    text: "The service was simple and clear. and the follow-up continued until the final choice.",
+  },
+  {
+    name: "Hannah Khan",
+    role: "Client from UAE",
+    text: "The team was very professional. and my questions were answered quickly and clearly.",
+  },
+  {
+    name: "Hannah Adams",
+    role: "Client from UAE",
+    text: "The support was fast and helpful. and I really appreciated the professional support.",
+  },
+  {
+    name: "Hannah Smith",
+    role: "Client from UAE",
+    text: "I really liked how organized everything was. and every step was explained in a simple way.",
+  },
+  {
+    name: "Mia Morgan",
+    role: "Client from UAE",
+    text: "The communication was excellent. and everything was handled in an organized way.",
+  },
+  {
+    name: "Mia Reed",
+    role: "Client from UAE",
+    text: "The process was much easier than expected. and the whole experience felt comfortable from start to finish.",
+  },
+  {
+    name: "Mia Khan",
+    role: "Client from UAE",
+    text: "The follow-up was very helpful. and the communication was clear throughout the process.",
+  },
+  {
+    name: "Mia Adams",
+    role: "Client from UAE",
+    text: "The available options were clear. and the available options matched what I was looking for.",
+  },
+  {
+    name: "Mia Smith",
+    role: "Client from UAE",
+    text: "The overall experience was very smooth. and the team made the selection process much easier.",
+  },
+  {
+    name: "Chloe Morgan",
+    role: "Client from UAE",
+    text: "The experience was excellent. and they helped me find a suitable maid for my needs.",
+  },
+  {
+    name: "Chloe Reed",
+    role: "Client from UAE",
+    text: "The service was simple and clear. and the follow-up continued until the final choice.",
+  },
+  {
+    name: "Chloe Khan",
+    role: "Client from UAE",
+    text: "The team was very professional. and my questions were answered quickly and clearly.",
+  },
+  {
+    name: "Chloe Adams",
+    role: "Client from UAE",
+    text: "The support was fast and helpful. and I really appreciated the professional support.",
+  },
+  {
+    name: "Chloe Smith",
+    role: "Client from UAE",
+    text: "I really liked how organized everything was. and every step was explained in a simple way.",
+  },
+  {
+    name: "Sophie Morgan",
+    role: "Client from UAE",
+    text: "The communication was excellent. and everything was handled in an organized way.",
+  },
+  {
+    name: "Sophie Reed",
+    role: "Client from UAE",
+    text: "The process was much easier than expected. and the whole experience felt comfortable from start to finish.",
+  },
+  {
+    name: "Sophie Khan",
+    role: "Client from UAE",
+    text: "The follow-up was very helpful. and the communication was clear throughout the process.",
+  },
+  {
+    name: "Sophie Adams",
+    role: "Client from UAE",
+    text: "The available options were clear. and the available options matched what I was looking for.",
+  },
+  {
+    name: "Sophie Smith",
+    role: "Client from UAE",
+    text: "The overall experience was very smooth. and the team made the selection process much easier.",
+  },
+  {
+    name: "Layla Morgan",
+    role: "Client from UAE",
+    text: "The experience was excellent. and they helped me find a suitable maid for my needs.",
+  },
+  {
+    name: "Layla Reed",
+    role: "Client from UAE",
+    text: "The service was simple and clear. and the follow-up continued until the final choice.",
+  },
+  {
+    name: "Layla Khan",
+    role: "Client from UAE",
+    text: "The team was very professional. and my questions were answered quickly and clearly.",
+  },
+  {
+    name: "Layla Adams",
+    role: "Client from UAE",
+    text: "The support was fast and helpful. and I really appreciated the professional support.",
+  },
+  {
+    name: "Layla Smith",
+    role: "Client from UAE",
+    text: "I really liked how organized everything was. and every step was explained in a simple way.",
+  },
+  {
+    name: "Ava Morgan",
+    role: "Client from UAE",
+    text: "The communication was excellent. and everything was handled in an organized way.",
+  },
+  {
+    name: "Ava Reed",
+    role: "Client from UAE",
+    text: "The process was much easier than expected. and the whole experience felt comfortable from start to finish.",
+  },
+  {
+    name: "Ava Khan",
+    role: "Client from UAE",
+    text: "The follow-up was very helpful. and the communication was clear throughout the process.",
+  },
+  {
+    name: "Ava Adams",
+    role: "Client from UAE",
+    text: "The available options were clear. and the available options matched what I was looking for.",
+  },
+  {
+    name: "Ava Smith",
+    role: "Client from UAE",
+    text: "The overall experience was very smooth. and the team made the selection process much easier.",
+  },
+  {
+    name: "Isla Morgan",
+    role: "Client from UAE",
+    text: "The experience was excellent. and they helped me find a suitable maid for my needs.",
+  },
+  {
+    name: "Isla Reed",
+    role: "Client from UAE",
+    text: "The service was simple and clear. and the follow-up continued until the final choice.",
+  },
+  {
+    name: "Isla Khan",
+    role: "Client from UAE",
+    text: "The team was very professional. and my questions were answered quickly and clearly.",
+  },
+  {
+    name: "Isla Adams",
+    role: "Client from UAE",
+    text: "The support was fast and helpful. and I really appreciated the professional support.",
+  },
+  {
+    name: "Isla Smith",
+    role: "Client from UAE",
+    text: "I really liked how organized everything was. and every step was explained in a simple way.",
+  },
+  {
+    name: "Lucy Morgan",
+    role: "Client from UAE",
+    text: "The communication was excellent. and everything was handled in an organized way.",
+  },
+  {
+    name: "Lucy Reed",
+    role: "Client from UAE",
+    text: "The process was much easier than expected. and the whole experience felt comfortable from start to finish.",
+  },
+  {
+    name: "Lucy Khan",
+    role: "Client from UAE",
+    text: "The follow-up was very helpful. and the communication was clear throughout the process.",
+  },
+  {
+    name: "Lucy Adams",
+    role: "Client from UAE",
+    text: "The available options were clear. and the available options matched what I was looking for.",
+  },
+  {
+    name: "Lucy Smith",
+    role: "Client from UAE",
+    text: "The overall experience was very smooth. and the team made the selection process much easier.",
+  },
+  {
+    name: "Zoe Morgan",
+    role: "Client from UAE",
+    text: "The experience was excellent. and they helped me find a suitable maid for my needs.",
+  },
+  {
+    name: "Zoe Reed",
+    role: "Client from UAE",
+    text: "The service was simple and clear. and the follow-up continued until the final choice.",
+  },
+  {
+    name: "Zoe Khan",
+    role: "Client from UAE",
+    text: "The team was very professional. and my questions were answered quickly and clearly.",
+  },
+  {
+    name: "Zoe Adams",
+    role: "Client from UAE",
+    text: "The support was fast and helpful. and I really appreciated the professional support.",
+  },
+  {
+    name: "Zoe Smith",
+    role: "Client from UAE",
+    text: "I really liked how organized everything was. and every step was explained in a simple way.",
+  },
+  {
+    name: "Nora Morgan",
+    role: "Client from UAE",
+    text: "The communication was excellent. and everything was handled in an organized way.",
+  },
+  {
+    name: "Nora Reed",
+    role: "Client from UAE",
+    text: "The process was much easier than expected. and the whole experience felt comfortable from start to finish.",
+  },
+  {
+    name: "Nora Khan",
+    role: "Client from UAE",
+    text: "The follow-up was very helpful. and the communication was clear throughout the process.",
+  },
+  {
+    name: "Nora Adams",
+    role: "Client from UAE",
+    text: "The available options were clear. and the available options matched what I was looking for.",
+  },
+  {
+    name: "Nora Smith",
+    role: "Client from UAE",
+    text: "The overall experience was very smooth. and the team made the selection process much easier.",
+  },
+  {
+    name: "Ella Morgan",
+    role: "Client from UAE",
+    text: "The experience was excellent. and they helped me find a suitable maid for my needs.",
+  },
+  {
+    name: "Ella Reed",
+    role: "Client from UAE",
+    text: "The service was simple and clear. and the follow-up continued until the final choice.",
+  },
+  {
+    name: "Ella Khan",
+    role: "Client from UAE",
+    text: "The team was very professional. and my questions were answered quickly and clearly.",
+  },
+  {
+    name: "Ella Adams",
+    role: "Client from UAE",
+    text: "The support was fast and helpful. and I really appreciated the professional support.",
+  },
+  {
+    name: "Ella Smith",
+    role: "Client from UAE",
+    text: "I really liked how organized everything was. and every step was explained in a simple way.",
+  },
+  {
+    name: "Amelia Morgan",
+    role: "Client from UAE",
+    text: "The communication was excellent. and everything was handled in an organized way.",
+  },
+  {
+    name: "Amelia Reed",
+    role: "Client from UAE",
+    text: "The process was much easier than expected. and the whole experience felt comfortable from start to finish.",
+  },
+  {
+    name: "Amelia Khan",
+    role: "Client from UAE",
+    text: "The follow-up was very helpful. and the communication was clear throughout the process.",
+  },
+  {
+    name: "Amelia Adams",
+    role: "Client from UAE",
+    text: "The available options were clear. and the available options matched what I was looking for.",
+  },
+  {
+    name: "Amelia Smith",
+    role: "Client from UAE",
+    text: "The overall experience was very smooth. and the team made the selection process much easier.",
   },
 ]
+
+const mixedReviews = (() => {
+  const arabic = reviews.filter((review) => !/[A-Za-z]/.test(review.name))
+  const english = reviews.filter((review) => /[A-Za-z]/.test(review.name))
+
+  function spread(items: typeof reviews) {
+    const result: typeof reviews = []
+    const groups = new Map<string, typeof reviews[number][]>()
+
+    for (const item of items) {
+      const firstName = item.name.split(" ")[0]
+      const group = groups.get(firstName) ?? []
+      group.push(item)
+      groups.set(firstName, group)
+    }
+
+    const names = [...groups.keys()]
+
+    let round = 0
+    while (result.length < items.length) {
+      let added = false
+
+      for (const name of names) {
+        const item = groups.get(name)?.[round]
+
+        if (item) {
+          result.push(item)
+          added = true
+        }
+      }
+
+      if (!added) break
+      round++
+    }
+
+    return result
+  }
+
+  const mixedArabic = spread(arabic)
+  const mixedEnglish = spread(english)
+
+  const result: typeof reviews = []
+  const max = Math.max(mixedArabic.length, mixedEnglish.length)
+
+  for (let i = 0; i < max; i++) {
+    if (mixedArabic[i]) result.push(mixedArabic[i])
+    if (mixedEnglish[i]) result.push(mixedEnglish[i])
+  }
+
+  return result
+})()
 
 const steps = [
   ["01", "أخبرنا باحتياجك", "شاركنا تفاصيل منزلك وما تبحث عنه."],
@@ -92,6 +1130,17 @@ export default function Home() {
   }, [])
 
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [locationUrl, setLocationUrl] = useState("")
+  useEffect(() => {
+    fetch("/api/contact", { cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
+        if (data) {
+          setLocationUrl(data.location ?? "")
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   return (
     <main
@@ -114,7 +1163,7 @@ export default function Home() {
 
               <div className="mb-6 flex items-center gap-2 text-[11px] font-normal text-[#F28C28]">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#F28C28]" />
-                خدمة منزلية موثوقة في دبي
+                خدمة منزلية موثوقة في الإمارات
               </div>
 
               <h1 className="mb-7 max-w-[650px] text-[40px] font-medium leading-[1.28] tracking-[-1.4px] text-[#29456F] sm:text-[47px] md:text-[56px]">
@@ -184,38 +1233,73 @@ export default function Home() {
             <div className="order-1 relative h-[390px] sm:h-[430px] lg:order-2">
 
               <div className="absolute right-[7%] top-0 h-[82%] w-[52%] overflow-hidden rounded-[32px] bg-[#f5f2ec] p-3">
-                <img
-                  src="/assets/new-images/1.jpg"
+                <SiteImage
+                  page="home" slot={4} fallbackSrc="/assets/new-images/1.jpg"
                   alt="عاملة منزلية"
                   className="h-full w-full rounded-[24px] object-cover object-top transition duration-700 hover:scale-105"
                 />
               </div>
 
               <div className="absolute bottom-0 left-[4%] h-[58%] w-[45%] overflow-hidden rounded-[30px] border-[6px] border-[#f5f2ec] bg-[#f5f2ec] p-3">
-                <img
-                  src="/assets/new-images/2.jpg"
+                <SiteImage
+                  page="home" slot={5} fallbackSrc="/assets/new-images/2.jpg"
                   alt="خدمات منزلية"
                   className="h-full w-full rounded-[22px] object-cover object-top transition duration-700 hover:scale-105"
                 />
               </div>
 
               <div className="absolute bottom-[13%] right-[34%] z-10 h-[38%] w-[29%] overflow-hidden rounded-[25px] border-[6px] border-[#f5f2ec] bg-[#f5f2ec] p-3 shadow-[0_15px_45px_rgba(0,0,0,0.12)]">
-                <img
-                  src="/assets/new-images/3.jpg"
+                <SiteImage
+                  page="home" slot={6} fallbackSrc="/assets/new-images/3.jpg"
                   alt="عاملة منزلية"
                   className="h-full w-full rounded-[18px] object-cover object-top"
                 />
               </div>
 
               {/* GLASS CARD */}
-              <div className="absolute left-0 top-[14%] z-20 rounded-[18px] border border-white/70 bg-white p-4 shadow-[0_15px_50px_rgba(0,0,0,0.08)] ">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#eaf2fb] text-sm text-[#1257D6]">
-                    ✓
+              <div className="absolute left-[-18px] top-[-10%] z-20 w-[256px] bg-[#EEF6FF] p-1">
+                <div className="flex items-center justify-start gap-4">
+
+                  <img
+                    src="/images/saada/2-trim.png"
+                    alt=""
+                    className="-translate-y-3 h-[144px] w-[164px] object-contain mix-blend-multiply"
+                  />
+
+                  <div className="flex flex-col gap-2 text-[#9BC4EA]">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="h-7 w-7"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M5 12.5L9.5 17L19 7"
+                        stroke="currentColor"
+                        strokeWidth="2.4"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="h-7 w-7"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M5 12.5L9.5 17L19 7"
+                        stroke="currentColor"
+                        strokeWidth="2.4"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
                   </div>
 
-                  <div>
-                    <div className="text-[11px] font-medium">
+                  <div className="min-w-0 text-right">
+                    <div className="text-[12px] font-medium text-[#172033]">
                       موثوقة ومتحقق منها
                     </div>
 
@@ -223,8 +1307,10 @@ export default function Home() {
                       اختيار بعناية
                     </div>
                   </div>
+
                 </div>
               </div>
+
 
             </div>
           </div>
@@ -274,7 +1360,7 @@ export default function Home() {
             </div>
 
             <h2 className="text-3xl font-black tracking-[-1px] text-[#172033] md:text-4xl">
-              خدمات توظيف العاملات المنزلية في دبي
+              خدمات توظيف العاملات المنزلية في الإمارات
             </h2>
           </div>
 
@@ -294,7 +1380,7 @@ export default function Home() {
                 </div>
 
                 <h3 className="mb-4 text-[23px] font-black leading-[1.5] text-white md:text-[27px]">
-                  خدمة توظيف عاملة منزلية بدوام جزئي أو كامل في دبي
+                  خدمة توظيف عاملة منزلية بدوام جزئي أو كامل في الإمارات
                 </h3>
 
                 <p className="text-[12px] font-bold leading-8 text-white/90 md:text-[13px]">
@@ -317,11 +1403,11 @@ export default function Home() {
                 </div>
 
                 <h3 className="mb-4 text-[23px] font-black leading-[1.5] text-white md:text-[27px]">
-                  أفضل خدمة توظيف عاملة منزلية في دبي
+                  أفضل خدمة توظيف عاملة منزلية في الإمارات
                 </h3>
 
                 <p className="text-[12px] font-bold leading-8 text-white/90 md:text-[13px]">
-                  هل تبحث عن مساعدة منزلية في دبي؟ نقدم مساعدات منزليات مدربات بشكل احترافي وذوات خبرة، ونساعدك في اختيار الحل الأنسب لاحتياجاتك المنزلية.
+                  هل تبحث عن مساعدة منزلية في الإمارات؟ نقدم مساعدات منزليات مدربات بشكل احترافي وذوات خبرة، ونساعدك في اختيار الحل الأنسب لاحتياجاتك المنزلية.
                 </p>
               </div>
             </article>
@@ -340,11 +1426,11 @@ export default function Home() {
                 </div>
 
                 <h3 className="mb-4 text-[23px] font-black leading-[1.5] text-white md:text-[27px]">
-                  خدمة توظيف عاملة منزلية بدوام كامل في دبي
+                  خدمة توظيف عاملة منزلية بدوام كامل في الإمارات
                 </h3>
 
                 <p className="text-[12px] font-bold leading-8 text-white/90 md:text-[13px]">
-                  احصل على خدمة توظيف عاملة منزلية بدوام كامل لمنزلك أو فيلتك أو شقتك في دبي.
+                  احصل على خدمة توظيف عاملة منزلية بدوام كامل لمنزلك أو فيلتك أو شقتك في الإمارات.
                 </p>
               </div>
             </article>
@@ -364,7 +1450,7 @@ export default function Home() {
                 </div>
 
                 <h3 className="mb-4 text-[23px] font-black leading-[1.5] text-white md:text-[27px]">
-                  استعن بأفضل عاملة منزلية في دبي
+                  استعن بأفضل عاملة منزلية في الإمارات
                 </h3>
 
                 <p className="text-[12px] font-bold leading-8 text-white/90 md:text-[13px]">
@@ -391,7 +1477,7 @@ export default function Home() {
                 </h3>
 
                 <p className="text-[12px] font-bold leading-8 text-white/90 md:text-[13px]">
-                  شركة AL SAADA Maids هي شريكك الموثوق في خدمة توظيف العاملات المنزلية في دبي مع أسعار واضحة وتجربة منظمة.
+                  شركة AL SAADA Maids هي شريكك الموثوق في خدمة توظيف العاملات المنزلية في الإمارات مع أسعار واضحة وتجربة منظمة.
                 </p>
               </div>
             </article>
@@ -436,7 +1522,7 @@ export default function Home() {
               </div>
 
               <h2 className="text-3xl font-normal tracking-[-1px] text-[#172033] md:text-4xl">
-                موقعنا في دبي
+                موقعنا في الإمارات
               </h2>
 
               <p className="mt-4 max-w-[520px] text-[12px] leading-7 text-black/40">
@@ -446,7 +1532,7 @@ export default function Home() {
             </div>
 
             <a
-              href="https://www.google.com/maps?ll=25.199877,55.248423&z=15&t=m&hl=en&gl=US&mapclient=embed&cid=17665367873827462439"
+              href={locationUrl || "#"}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex w-fit items-center gap-3 rounded-full bg-[#1257D6] px-6 py-3.5 text-[11px] font-normal text-white transition hover:bg-[#F28C28]"
@@ -467,7 +1553,7 @@ export default function Home() {
 
               <iframe
                 title="AL SAADA Dubai Location"
-                src="https://www.google.com/maps?q=25.199877,55.248423&z=15&output=embed"
+                src={locationUrl || "about:blank"}
                 className="absolute inset-0 h-full w-full border-0"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
@@ -527,7 +1613,7 @@ export default function Home() {
 
               <div>
                 <div className="text-[11px] font-medium text-[#172033]">
-                  دبي، الإمارات العربية المتحدة
+                  الإمارات العربية المتحدة
                 </div>
 
                 <div className="mt-1 text-[9px] text-black/30">
@@ -538,7 +1624,7 @@ export default function Home() {
             </div>
 
             <a
-              href="https://www.google.com/maps?ll=25.199877,55.248423&z=15&t=m&hl=en&gl=US&mapclient=embed&cid=17665367873827462439"
+              href={locationUrl || "#"}
               target="_blank"
               rel="noopener noreferrer"
               className="text-[10px] font-normal text-[#1257D6] transition hover:text-[#F28C28]"
@@ -573,134 +1659,112 @@ export default function Home() {
           <div className="mt-5 text-sm tracking-[3px] text-[#F28C28]">
             ★★★★★
             <span className="mr-2 text-[11px] tracking-normal text-black/35">
-              4.8 من 5
+              4.8 من 5 • +200 تقييم
             </span>
           </div>
 
         </div>
 
-        {/* الصف الأول - عربي */}
+        {/* الصف الأول - 200 تقييم */}
         <div className="review-marquee mb-5">
           <div className="review-track review-track-right">
 
-            {[
-              ["نورة أحمد", "دبي", "تجربة ممتازة من البداية للنهاية. ساعدوني في اختيار العاملة المناسبة وكانت الإجراءات واضحة جداً."],
-              ["سارة محمد", "دبي", "الخدمة كانت سريعة واحترافية، والأهم أن الاختيارات كانت مناسبة فعلاً لاحتياجات المنزل."],
-              ["ريم خالد", "دبي", "فريق محترم جداً وسريع في الرد. التجربة بالكامل كانت أسهل بكثير مما توقعت."],
-              ["مريم علي", "دبي", "أعجبني الاهتمام بالتفاصيل والمتابعة المستمرة حتى بعد اختيار العاملة."],
-              ["نورة أحمد", "دبي", "تجربة ممتازة من البداية للنهاية. ساعدوني في اختيار العاملة المناسبة وكانت الإجراءات واضحة جداً."],
-              ["سارة محمد", "دبي", "الخدمة كانت سريعة واحترافية، والأهم أن الاختيارات كانت مناسبة فعلاً لاحتياجات المنزل."],
-              ["ريم خالد", "دبي", "فريق محترم جداً وسريع في الرد. التجربة بالكامل كانت أسهل بكثير مما توقعت."],
-              ["مريم علي", "دبي", "أعجبني الاهتمام بالتفاصيل والمتابعة المستمرة حتى بعد اختيار العاملة."],
-            ].map(([name, city, text], i) => (
-
+            {mixedReviews.map((review, i) => (
               <div
-                key={`ar-${i}`}
+                key={`review-top-${i}`}
+                dir={/[A-Za-z]/.test(review.text) ? "ltr" : "rtl"}
                 className="w-[310px] shrink-0 rounded-[24px] border border-[#E8EDF4] bg-white p-6 shadow-[0_10px_35px_rgba(20,50,90,0.04)] md:w-[390px]"
               >
-
                 <div className="mb-5 flex items-center justify-between">
                   <div className="text-[12px] tracking-[3px] text-[#F28C28]">
                     ★★★★★
                   </div>
 
                   <span className="rounded-full bg-[#F3F7FC] px-3 py-1.5 text-[9px] text-[#1257D6]">
-                    عميلة
+                    {/[A-Za-z]/.test(review.text) ? "Verified" : "عميلة"}
                   </span>
                 </div>
 
                 <p className="mb-6 text-[12px] leading-7 text-black/50">
-                  “{text}”
+                  “{review.text}”
                 </p>
 
                 <div className="flex items-center gap-3">
-
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#EAF2FF] text-xs font-medium text-[#1257D6]">
-                    {name.charAt(0)}
+                    {review.name.charAt(0)}
                   </div>
 
                   <div>
                     <div className="text-[11px] font-medium text-[#172033]">
-                      {name}
+                      {review.name}
                     </div>
 
                     <div className="mt-1 text-[9px] text-black/30">
-                      {city}
+                      {review.role}
                     </div>
                   </div>
-
                 </div>
-
               </div>
-
             ))}
 
           </div>
         </div>
 
-        {/* الصف الثاني - English */}
+        {/* الصف الثاني - 200 تقييم */}
         <div className="review-marquee">
-
           <div className="review-track review-track-left">
 
-            {[
-              ["Sarah M.", "Dubai", "Very professional service. The team helped us find a suitable maid and made the whole process simple."],
-              ["Emma R.", "Dubai", "Excellent experience from start to finish. Communication was clear and the support was very helpful."],
-              ["Lina K.", "Dubai", "Everything was organized and easy. I really appreciated the follow-up and attention to detail."],
-              ["Maya A.", "Dubai", "A smooth and professional experience. The available options were exactly what we needed."],
-              ["Sarah M.", "Dubai", "Very professional service. The team helped us find a suitable maid and made the whole process simple."],
-              ["Emma R.", "Dubai", "Excellent experience from start to finish. Communication was clear and the support was very helpful."],
-              ["Lina K.", "Dubai", "Everything was organized and easy. I really appreciated the follow-up and attention to detail."],
-              ["Maya A.", "Dubai", "A smooth and professional experience. The available options were exactly what we needed."],
-            ].map(([name, city, text], i) => (
-
+            {mixedReviews.map((review, i) => (
               <div
-                key={`en-${i}`}
-                dir="ltr"
+                key={`review-bottom-${i}`}
+                dir={/[A-Za-z]/.test(review.text) ? "ltr" : "rtl"}
                 className="w-[310px] shrink-0 rounded-[24px] border border-[#E8EDF4] bg-white p-6 shadow-[0_10px_35px_rgba(20,50,90,0.04)] md:w-[390px]"
               >
-
                 <div className="mb-5 flex items-center justify-between">
-                  <span className="rounded-full bg-[#F3F7FC] px-3 py-1.5 text-[9px] text-[#1257D6]">
-                    Verified
-                  </span>
-
                   <div className="text-[12px] tracking-[3px] text-[#F28C28]">
                     ★★★★★
                   </div>
+
+                  <span className="rounded-full bg-[#F3F7FC] px-3 py-1.5 text-[9px] text-[#1257D6]">
+                    {/[A-Za-z]/.test(review.text) ? "Verified" : "عميلة"}
+                  </span>
                 </div>
 
                 <p className="mb-6 text-[12px] leading-7 text-black/50">
-                  “{text}”
+                  “{review.text}”
                 </p>
 
                 <div className="flex items-center gap-3">
-
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#EAF2FF] text-xs font-medium text-[#1257D6]">
-                    {name.charAt(0)}
+                    {review.name.charAt(0)}
                   </div>
 
                   <div>
                     <div className="text-[11px] font-medium text-[#172033]">
-                      {name}
+                      {review.name}
                     </div>
 
                     <div className="mt-1 text-[9px] text-black/30">
-                      {city}
+                      {review.role}
                     </div>
                   </div>
-
                 </div>
-
               </div>
-
             ))}
 
           </div>
-
         </div>
 
       </section>
+
+      {/* IMAGE 3 */}
+      <div className="flex justify-center bg-white px-0 py-0">
+        <img
+          src="/images/saada/3.jpg"
+          alt=""
+          className="block h-auto w-[560px] max-w-full object-contain md:w-[700px] lg:w-[840px]"
+        />
+      </div>
 
       {/* CTA */}
       <Footer />

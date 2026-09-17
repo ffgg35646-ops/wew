@@ -21,6 +21,7 @@ export async function GET() {
     return NextResponse.json({
       whatsapp: doc?.whatsapp ?? "",
       phone: doc?.phone ?? "",
+      location: doc?.location ?? "",
     })
   } catch (error) {
     console.error("ADMIN_CONTACT_GET_ERROR", error)
@@ -48,6 +49,9 @@ export async function PUT(request: Request) {
     const phone =
       typeof body.phone === "string" ? body.phone.trim() : ""
 
+    const location =
+      typeof body.location === "string" ? body.location.trim() : ""
+
     const client = await clientPromise
     const db = client.db("maidora")
 
@@ -57,6 +61,7 @@ export async function PUT(request: Request) {
         $set: {
           whatsapp,
           phone,
+          location,
           updatedAt: new Date(),
         },
         $setOnInsert: {
@@ -70,6 +75,7 @@ export async function PUT(request: Request) {
       ok: true,
       whatsapp,
       phone,
+      location,
     })
   } catch (error) {
     console.error("ADMIN_CONTACT_SAVE_ERROR", error)

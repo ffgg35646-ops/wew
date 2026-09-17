@@ -13,6 +13,7 @@ export async function GET() {
       {
         whatsapp: "",
         phone: "",
+        location: "",
       },
       { status: 200 }
     )

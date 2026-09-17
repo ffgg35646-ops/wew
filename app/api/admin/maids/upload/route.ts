@@ -4,6 +4,7 @@ import { promises as fs } from "fs"
 import os from "os"
 import path from "path"
 import { execFile } from "child_process"
+import ffmpegPath from "ffmpeg-static"
 import { promisify } from "util"
 import clientPromise from "@/lib/mongodb"
 import { requireAdmin } from "@/lib/admin-auth"
@@ -78,7 +79,7 @@ export async function POST(request: Request) {
       await fs.writeFile(tempInput, originalBuffer)
 
       try {
-        await execFileAsync("ffmpeg", [
+        await execFileAsync(ffmpegPath || "ffmpeg", [
           "-y",
           "-i",
           tempInput,

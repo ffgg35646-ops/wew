@@ -1,3 +1,4 @@
+import SiteImage from "@/components/SiteImage"
 import Image from "next/image"
 import Link from "next/link"
 import Navbar from "@/components/Navbar"
@@ -13,65 +14,52 @@ const includes = [
 
 const comparisonRows = [
   {
-    label: "تكلفة تأشيرة شاملة لمدة سنتين",
-    "AL SAADA": "8,500 درهم إماراتي و0 وديعة",
-    private: "17,000 درهم إماراتي و2,000 درهم وديعة",
-    agencies: "8,500 درهم إماراتي و5,000 درهم وديعة",
+    label: "أقل قيمة وديعة تأمين",
+    "AL SAADA": "أسهل وأقل التزام مالي.",
+    other: "مبالغ تأمين إضافية مرتفعة وعبء مالي أكبر.",
   },
   {
-    label: "عدد زيارات المركز",
-    "AL SAADA": "تتم جميع المعاملات 100% عبر الإنترنت",
-    private: "8 مكاتب ودوائر حكومية",
-    agencies: "زيارتان + 3 نماذج + 24 شيك",
+    label: "توصيل العاملة حتى باب منزلك",
+    "AL SAADA": "مجاناً لجميع الإمارات.",
+    other: "خدمة مأجورة ورسوم إضافية.",
   },
   {
-    label: "المستندات المطلوبة",
-    "AL SAADA": "فقط راسلنا على الواتساب",
-    private: "إيجاري، شيكات، راتب 25 ألف درهم وتصديقات الزواج",
-    agencies: "إيجاري، شيكات، الراتب وتصديقات الزواج",
+    label: "استرداد المبلغ في حال عدم الرغبة",
+    "AL SAADA": "استرجاع كامل المبلغ بكل شفافية.",
+    other: "خصومات واقتطاعات من الأجور.",
   },
   {
-    label: "تحويل الراتب",
-    "AL SAADA": "تحويل شهري تلقائي عبر نظام حماية الأجور",
-    private: "الدفع نقدًا",
-    agencies: "التحويل يدويًا كل شهر",
+    label: "استبدال العاملة خلال العقد",
+    "AL SAADA": "استبدال فوري بدون رسوم.",
+    other: "رسوم تبديل ومعاملات إضافية.",
   },
   {
-    label: "خدمات شهادة عدم الممانعة للسفر",
-    "AL SAADA": "مجاني + مساعدة في السفر",
-    private: "غير مطلوب",
-    agencies: "500 درهم + وديعة 30,000 درهم",
+    label: "فترة التجربة",
+    "AL SAADA": "تجربة مجانية تضمن ملاءمة العاملة.",
+    other: "فترة مدفوعة وغير مرنة.",
   },
   {
-    label: "خطط دفع مرنة ومخصصة",
-    "AL SAADA": "✔",
-    private: "✕",
-    agencies: "✕",
+    label: "إنجاز المعاملات والعقود",
+    "AL SAADA": "إلكترونياً 100% عبر الواتساب.",
+    other: "زيارات متعددة وانتظار طويل.",
   },
   {
-    label: "بطاقة الصراف الآلي وكشوف الرواتب",
-    "AL SAADA": "✔",
-    private: "✕",
-    agencies: "✕",
+    label: "دعم ومتابعة ما بعد الوصول",
+    "AL SAADA": "خدمة عملاء ومتابعة على مدار الساعة.",
+    other: "ينتهي الدعم فور استلام العاملة.",
   },
   {
-    label: "خدمات المعاملات الحكومية الحصرية",
-    "AL SAADA": "✔",
-    private: "✕",
-    agencies: "✕",
-  },
-  {
-    label: "دعم على مدار الساعة وتتبع التأشيرة",
-    "AL SAADA": "✔",
-    private: "✕",
-    agencies: "✕",
+    label: "الفحص الطبي والتدريب المسبق",
+    "AL SAADA": "عاملات مؤهلات ومفحوصات طبياً بعناية.",
+    other: "تدريب غير مضمون وتأخير بالفحوصات.",
   },
 ]
 
+
 const costBenefits = [
-  "8,500 درهم بدون أي إيداع",
+  "3,500 درهم إماراتي كحد أدنى",
   "خطة أقساط سهلة على 5 أشهر",
-  "2,300 درهم شهريًا خيار متاح",
+  "راتب العاملة 1,000 درهم شهريًا",
   "ضمان تأشيرة لمدة سنتين",
   "حل ميسّر وشفاف للتكلفة",
 ]
@@ -124,19 +112,19 @@ const visaSteps = [
 
 const faqs = [
   {
-    q: "كم تبلغ تكلفة تأشيرة العاملة المنزلية في دبي؟",
-    a: "السعر المعروض على الصفحة الأصلية هو 8,500 درهم، مع خطة تقسيط على خمسة أشهر. تختلف الإجراءات النهائية حسب الحالة والمتطلبات.",
+    q: "كم تبلغ تكلفة تأشيرة العاملة المنزلية في الإمارات؟",
+    a: "تبدأ تكلفة التأشيرة من 3,500 درهم إماراتي كحد أدنى، ويبلغ راتب العاملة 1,000 درهم شهريًا. تختلف الإجراءات النهائية حسب الحالة والمتطلبات.",
   },
   {
-    q: "هل يمكن لحامل التأشيرة الذهبية كفالة عاملة منزلية في دبي؟",
+    q: "هل يمكن لحامل التأشيرة الذهبية كفالة عاملة منزلية في الإمارات؟",
     a: "نعم، الصفحة الأصلية توضح توفر خدمات تأشيرة العاملات المنزلية لحاملي التأشيرة الذهبية، بما في ذلك خدمات التجديد.",
   },
   {
-    q: "كيف أحصل على تأشيرة عاملة منزلية في دبي؟",
+    q: "كيف أحصل على تأشيرة عاملة منزلية في الإمارات؟",
     a: "تبدأ بالتواصل مع الفريق وإرسال المستندات المطلوبة، ثم يتم التعامل مع إجراءات الطلب حتى إتمام المعاملة.",
   },
   {
-    q: "ما هي متطلبات تأشيرة العاملة المنزلية في دبي؟",
+    q: "ما هي متطلبات تأشيرة العاملة المنزلية في الإمارات؟",
     a: "المتطلبات تختلف حسب الحالة ونوع المعاملة. يتم توضيح المستندات المطلوبة أثناء بدء الطلب.",
   },
 ]
@@ -154,7 +142,7 @@ export default function MaidVisaPage() {
         <div className="mx-auto grid max-w-[1320px] items-center gap-10 lg:grid-cols-[1.05fr_.95fr]">
           <div>
             <div className="mb-5 inline-flex rounded-full border border-[#1257D6]/10 bg-[#1257D6]/[0.07] px-4 py-2 text-sm font-black text-[#1257D6]">
-              تأشيرة عاملة منزلية في دبي
+              تأشيرة عاملة منزلية في الإمارات
             </div>
 
             <h1 className="max-w-3xl text-4xl font-black leading-[1.12] tracking-[-1.5px] md:text-6xl">
@@ -166,7 +154,7 @@ export default function MaidVisaPage() {
             </h1>
 
             <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
-              ابتداءً من 1,950 درهم إماراتي شهريًا لمدة 5 أشهر فقط،
+              ابتداءً من 3,500 درهم إماراتي كحد أدنى، مع راتب شهري للعاملة قدره 1,000 درهم،
               مع خدمة متكاملة ومتابعة للإجراءات.
             </p>
 
@@ -219,8 +207,8 @@ export default function MaidVisaPage() {
             <div className="relative overflow-hidden rounded-[40px] bg-white p-3 shadow-[0_30px_80px_rgba(23,32,51,0.14)]">
               <div className="grid grid-cols-3 gap-2 rounded-[32px] bg-[#F7F9FC] p-3">
                 <div className="relative h-[420px] overflow-hidden rounded-3xl bg-white">
-                  <Image
-                    src="/images/saada/visa-main.png"
+                  <SiteImage
+                    page="maid-visa" slot={1} fallbackSrc="/images/saada/visa-main.png"
                     alt="عاملة منزلية"
                     fill
                     className="object-cover object-top"
@@ -228,8 +216,8 @@ export default function MaidVisaPage() {
                 </div>
 
                 <div className="relative mt-10 h-[380px] overflow-hidden rounded-3xl bg-white">
-                  <Image
-                    src="/assets/maid-visa/maid-3.png"
+                  <SiteImage
+                    page="maid-visa" slot={2} fallbackSrc="/assets/maid-visa/maid-3.png"
                     alt="عاملة منزلية"
                     fill
                     className="object-cover object-top"
@@ -237,8 +225,8 @@ export default function MaidVisaPage() {
                 </div>
 
                 <div className="relative h-[420px] overflow-hidden rounded-3xl bg-white">
-                  <Image
-                    src="/assets/maid-visa/maid-1.png"
+                  <SiteImage
+                    page="maid-visa" slot={3} fallbackSrc="/assets/maid-visa/maid-1.png"
                     alt="عاملة منزلية"
                     fill
                     className="object-cover object-top"
@@ -296,16 +284,13 @@ export default function MaidVisaPage() {
               <thead>
                 <tr className="border-b border-slate-200">
                   <th className="p-5 text-sm font-black text-slate-500">
-                    المقارنة
+                    الميزة والخدمة
                   </th>
                   <th className="bg-[#1257D6] p-5 text-sm font-black text-white">
-                    السعادة
+                    مكتب السعادة
                   </th>
                   <th className="p-5 text-sm font-black text-slate-700">
-                    الكفالة الخاصة
-                  </th>
-                  <th className="p-5 text-sm font-black text-slate-700">
-                    الوكالات الأخرى
+                    المكاتب والوكالات الأخرى
                   </th>
                 </tr>
               </thead>
@@ -321,15 +306,27 @@ export default function MaidVisaPage() {
                     </td>
 
                     <td className="bg-[#1257D6]/[0.04] p-5 align-top text-sm font-semibold text-slate-700">
-                      {row["AL SAADA"]}
+                      <div className="flex items-start gap-3">
+                        <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1257D6] text-xs font-black text-white">
+                          ✓
+                        </span>
+
+                        <span>
+                          {row["AL SAADA"]}
+                        </span>
+                      </div>
                     </td>
 
                     <td className="p-5 align-top text-sm leading-7 text-slate-500">
-                      {row.private}
-                    </td>
+                      <div className="flex items-start gap-3">
+                        <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-black text-slate-400">
+                          ✕
+                        </span>
 
-                    <td className="p-5 align-top text-sm leading-7 text-slate-500">
-                      {row.agencies}
+                        <span>
+                          {row.other}
+                        </span>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -343,9 +340,8 @@ export default function MaidVisaPage() {
             </p>
 
             <p className="mt-3 max-w-4xl text-sm font-bold leading-8 md:text-base">
-              مع السعادة، تحصل على أكثر من مجرد سعر رائع؛ تحصل على خدمة كاملة
-              وخالية من المتاعب مع شفافية تامة. لا رسوم خفية، لا مفاجآت، فقط
-              راحة البال.
+              تحرص في مكتب السعادة على تقديم تجربة استقدام استثنائية ترتكز على
+              المصداقية والراحة الكاملة لجميع عملائنا في مختلف إمارات الدولة.
             </p>
           </div>
         </div>
@@ -356,7 +352,7 @@ export default function MaidVisaPage() {
         <div className="mx-auto max-w-[1320px]">
           <div className="grid gap-6 lg:grid-cols-3">
             <FeatureCard
-              title="أقل تكلفة لتأشيرة عاملة في دبي"
+              title="أقل تكلفة لتأشيرة عاملة في الإمارات"
               items={costBenefits}
             />
 
@@ -382,11 +378,11 @@ export default function MaidVisaPage() {
             </p>
 
             <h2 className="mt-3 text-3xl font-black leading-tight md:text-4xl">
-              تأشيرة عاملة منزلية في دبي
+              تأشيرة عاملة منزلية في الإمارات
             </h2>
 
             <p className="mt-5 text-sm leading-8 text-slate-500 md:text-base">
-              تبحث عن أفضل خدمة إصدار تأشيرة عاملة منزلية في دبي؟ أنت في المكان
+              تبحث عن أفضل خدمة إصدار تأشيرة عاملة منزلية في الإمارات؟ أنت في المكان
               الصحيح. نوفر لك خدمة متكاملة لمعالجة التأشيرة مع فريق محترف
               يهتم بكل التفاصيل ويساعدك في إتمام الإجراءات.
             </p>
@@ -407,8 +403,8 @@ export default function MaidVisaPage() {
           </div>
 
           <div className="overflow-hidden rounded-[32px]">
-            <Image
-              src="/assets/maid-visa/get-maid-visa.webp"
+            <SiteImage
+              page="maid-visa" slot={4} fallbackSrc="/assets/maid-visa/get-maid-visa.webp"
               alt="احصل على تأشيرة عاملة منزلية"
               width={1000}
               height={560}
@@ -422,8 +418,8 @@ export default function MaidVisaPage() {
       <section className="bg-white px-5 py-16 md:px-8 md:py-24">
         <div className="mx-auto grid max-w-[1320px] items-center gap-10 lg:grid-cols-[.95fr_1.05fr]">
           <div className="overflow-hidden rounded-[32px]">
-            <Image
-              src="/assets/maid-visa/whatsapp-visa.webp"
+            <SiteImage
+              page="maid-visa" slot={5} fallbackSrc="/assets/maid-visa/whatsapp-visa.webp"
               alt="إرسال المستندات عبر واتساب"
               width={1000}
               height={560}
@@ -483,7 +479,7 @@ export default function MaidVisaPage() {
 
             <p className="mt-5 text-sm leading-8 text-slate-500 md:text-base">
               نوفر خدمات تأشيرة العاملات المنزلية لحاملي التأشيرة الذهبية في
-              دبي، بما في ذلك إجراءات التجديد والمتابعة.
+              الإمارات، بما في ذلك إجراءات التجديد والمتابعة.
             </p>
 
             <div className="mt-7 space-y-3">
@@ -514,9 +510,9 @@ export default function MaidVisaPage() {
           </div>
 
           <div className="overflow-hidden rounded-[32px]">
-            <Image
-              src="/assets/maid-visa/maid-visa-dubai.webp"
-              alt="تأشيرة عاملة منزلية في دبي"
+            <SiteImage
+              fallbackSrc="/assets/maid-visa/maid-visa-dubai.webp"
+              alt="تأشيرة عاملة منزلية في الإمارات"
               width={1000}
               height={560}
               className="h-auto w-full object-cover"
@@ -529,8 +525,8 @@ export default function MaidVisaPage() {
       <section className="bg-white px-5 py-16 md:px-8 md:py-24">
         <div className="mx-auto grid max-w-[1320px] items-center gap-10 lg:grid-cols-[1.05fr_.95fr]">
           <div className="overflow-hidden rounded-[32px]">
-            <Image
-              src="/assets/maid-visa/whatsapp-visa.webp"
+            <SiteImage
+              page="maid-visa" slot={5} fallbackSrc="/assets/maid-visa/whatsapp-visa.webp"
               alt="إرسال المستندات عبر واتساب"
               width={1000}
               height={560}
@@ -619,7 +615,7 @@ export default function MaidVisaPage() {
           </h2>
 
           <p className="mx-auto mt-5 max-w-3xl text-sm leading-8 text-white/80 md:text-base">
-            نوفر خدمات تأشيرة العاملة المنزلية في دبي للمواطنين وحاملي التأشيرة
+            نوفر خدمات تأشيرة العاملة المنزلية في الإمارات للمواطنين وحاملي التأشيرة
             الذهبية، مع إمكانية إتمام العديد من الخطوات عبر واتساب.
           </p>
 
