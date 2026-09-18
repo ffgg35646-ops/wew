@@ -1,13 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  
+  serverExternalPackages: ["ffmpeg-static"],
+
   outputFileTracingIncludes: {
     "/api/admin/maids/upload": [
-      "./node_modules/ffmpeg-static/**/*",
+      "./node_modules/ffmpeg-static/ffmpeg",
     ],
   },
-/* config options here */
 };
 
 export default nextConfig;
