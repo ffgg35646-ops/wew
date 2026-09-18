@@ -124,40 +124,46 @@ export async function POST(request: Request) {
       }
 
       try {
-        const result = await execFileAsync(ffmpegPath, [
-          "-y",
-          "-i",
-          tempInput,
+        const result = await execFileAsync(
+          ffmpegPath,
+          [
+            "-y",
+            "-i",
+            tempInput,
 
-          "-map",
-          "0:v:0",
+            "-map",
+            "0:v:0",
 
-          "-map",
-          "0:a:0?",
+            "-map",
+            "0:a:0?",
 
-          "-c:v",
-          "libx264",
+            "-c:v",
+            "libx264",
 
-          "-preset",
-          "veryfast",
+            "-preset",
+            "veryfast",
 
-          "-crf",
-          "23",
+            "-crf",
+            "23",
 
-          "-pix_fmt",
-          "yuv420p",
+            "-pix_fmt",
+            "yuv420p",
 
-          "-c:a",
-          "aac",
+            "-c:a",
+            "aac",
 
-          "-b:a",
-          "128k",
+            "-b:a",
+            "128k",
 
-          "-movflags",
-          "+faststart",
+            "-movflags",
+            "+faststart",
 
-          tempOutput,
-        ])
+            tempOutput,
+          ],
+          {
+            maxBuffer: 10 * 1024 * 1024,
+          }
+        )
 
         console.log("========== FFMPEG SUCCESS ==========")
         console.log("stdout:", result.stdout)
@@ -285,4 +291,3 @@ export async function POST(request: Request) {
     }
   }
 }
-```
