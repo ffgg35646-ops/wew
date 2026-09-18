@@ -1,3 +1,4 @@
+```ts
 import { NextResponse } from "next/server"
 import { GridFSBucket } from "mongodb"
 import { promises as fs } from "fs"
@@ -10,6 +11,7 @@ import clientPromise from "@/lib/mongodb"
 import { requireAdmin } from "@/lib/admin-auth"
 
 export const runtime = "nodejs"
+export const maxDuration = 300
 
 const execFileAsync = promisify(execFile)
 
@@ -73,51 +75,160 @@ export async function POST(request: Request) {
         path.join(os.tmpdir(), "maidora-video-")
       )
 
-      tempInput = path.join(tempDir, `input-${Date.now()}`)
-      tempOutput = path.join(tempDir, `output-${Date.now()}.mp4`)
+      tempInput = path.join(
+        tempDir,
+        `input-${Date.now()}`
+      )
+
+      tempOutput = path.join(
+        tempDir,
+        `output-${Date.now()}.mp4`
+      )
 
       await fs.writeFile(tempInput, originalBuffer)
 
+      let ffmpegExists = false
+      let ffmpegMode: number | null = null
+
       try {
-        await execFileAsync(ffmpegPath || "ffmpeg", [
-          "-y",
-          "-i",
-          tempInput,
-          "-map",
-          "0:v:0",
-          "-map",
-          "0:a:0?",
-          "-c:v",
-          "libx264",
-          "-preset",
-          "veryfast",
-          "-crf",
-          "23",
-          "-pix_fmt",
-          "yuv420p",
-          "-c:a",
-          "aac",
-          "-b:a",
-          "128k",
-          "-movflags",
-          "+faststart",
-          tempOutput,
-        ])
-      } catch (error) {
-        console.error("FFMPEG_VIDEO_CONVERSION_ERROR", error)
+        if (ffmpegPath) {
+          const stat = await fs.stat(ffmpegPath)
+          ffmpegExists = stat.isFile()
+          ffmpegMode = stat.mode
+        }
+      } catch {}
+
+      console.log("========== FFMPEG START ==========")
+      console.log("ffmpegPath:", ffmpegPath)
+      console.log("ffmpegExists:", ffmpegExists)
+      console.log("ffmpegMode:", ffmpegMode)
+      console.log("input:", tempInput)
+      console.log("output:", tempOutput)
+      console.log("originalFileName:", fileName)
+      console.log("originalSize:", originalBuffer.length)
+      console.log("contentType:", file.type)
+      console.log("===================================")
+
+      if (!ffmpegPath || !ffmpegExists) {
+        console.error("FFMPEG_BINARY_NOT_FOUND")
 
         return NextResponse.json(
           {
-            error:
-              "تعذر تحويل الفيديو إلى صيغة متوافقة مع المتصفح."
+            error: "FFmpeg binary not found",
+            code: "FFMPEG_BINARY_NOT_FOUND",
+            ffmpegPath: ffmpegPath ?? null,
+            ffmpegExists,
+            ffmpegMode,
+          },
+          { status: 500 }
+        )
+      }
+
+      try {
+        const result = await execFileAsync(ffmpegPath, [
+          "-y",
+          "-i",
+          tempInput,
+
+          "-map",
+          "0:v:0",
+
+          "-map",
+          "0:a:0?",
+
+          "-c:v",
+          "libx264",
+
+          "-preset",
+          "veryfast",
+
+          "-crf",
+          "23",
+
+          "-pix_fmt",
+          "yuv420p",
+
+          "-c:a",
+          "aac",
+
+          "-b:a",
+          "128k",
+
+          "-movflags",
+          "+faststart",
+
+          tempOutput,
+        ])
+
+        console.log("========== FFMPEG SUCCESS ==========")
+        console.log("stdout:", result.stdout)
+        console.log("stderr:", result.stderr)
+        console.log("====================================")
+      } catch (error) {
+        const err = error as {
+          code?: string | number
+          signal?: string
+          killed?: boolean
+          message?: string
+          stdout?: string
+          stderr?: string
+        }
+
+        console.error("========== FFMPEG ERROR ==========")
+        console.error("ffmpegPath:", ffmpegPath)
+        console.error("ffmpegExists:", ffmpegExists)
+        console.error("ffmpegMode:", ffmpegMode)
+        console.error("errorCode:", err.code)
+        console.error("signal:", err.signal)
+        console.error("killed:", err.killed)
+        console.error("errorMessage:", err.message)
+        console.error("stdout:", err.stdout)
+        console.error("stderr:", err.stderr)
+        console.error("===================================")
+
+        return NextResponse.json(
+          {
+            error: "FFmpeg conversion failed",
+            code: err.code ?? null,
+            signal: err.signal ?? null,
+            killed: err.killed ?? null,
+            message: err.message ?? null,
+            stderr: err.stderr ?? null,
+            stdout: err.stdout ?? null,
+            ffmpegExists,
+            ffmpegPath,
+            ffmpegMode,
+          },
+          { status: 400 }
+        )
+      }
+
+      try {
+        await fs.access(tempOutput)
+      } catch {
+        console.error(
+          "FFMPEG_OUTPUT_NOT_CREATED",
+          tempOutput
+        )
+
+        return NextResponse.json(
+          {
+            error: "FFmpeg finished but output file was not created",
+            code: "FFMPEG_OUTPUT_NOT_CREATED",
           },
           { status: 400 }
         )
       }
 
       uploadBuffer = await fs.readFile(tempOutput)
+
       uploadName = `${path.parse(fileName).name}.mp4`
       contentType = "video/mp4"
+
+      console.log(
+        "Converted video size:",
+        uploadBuffer.length
+      )
     } else {
       uploadBuffer = originalBuffer
     }
@@ -138,6 +249,7 @@ export async function POST(request: Request) {
         })
 
         upload.on("error", reject)
+
         upload.end(uploadBuffer)
       }
     )
@@ -151,7 +263,10 @@ export async function POST(request: Request) {
       contentType,
     })
   } finally {
-    const filesToDelete = [tempInput, tempOutput].filter(
+    const filesToDelete = [
+      tempInput,
+      tempOutput,
+    ].filter(
       (value): value is string => Boolean(value)
     )
 
@@ -171,3 +286,4 @@ export async function POST(request: Request) {
     }
   }
 }
+```
