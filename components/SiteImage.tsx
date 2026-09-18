@@ -11,7 +11,6 @@ type SiteImageProps = Omit<
   slot?: string | number
   fallbackSrc: string | number
 
-  // خصائص كانت موجودة في next/image
   fill?: boolean
   priority?: boolean
   sizes?: string
@@ -38,8 +37,13 @@ async function loadPageImages(page: string) {
   }
 
   const request: Promise<Record<number, string>> = fetch(
-    `/api/site-images?page=${encodeURIComponent(page)}`,
-    { cache: "no-store" }
+    `/api/site-images?page=${encodeURIComponent(page)}&_=${Date.now()}`,
+    {
+      cache: "no-store",
+      headers: {
+        "Cache-Control": "no-cache",
+      },
+    }
   )
     .then(async (response): Promise<Record<number, string>> => {
       if (!response.ok) {
@@ -79,14 +83,22 @@ export default function SiteImage({
   style,
   ...props
 }: SiteImageProps) {
-  const [src, setSrc] = useState(String(fallbackSrc))
+  const [src, setSrc] = useState<string | null>(null)
+  const [loading, setLoading] = useState(
+    page !== undefined && slot !== undefined
+  )
 
   useEffect(() => {
     if (page === undefined || slot === undefined) {
+      setSrc(String(fallbackSrc))
+      setLoading(false)
       return
     }
 
     let active = true
+
+    setLoading(true)
+    setSrc(null)
 
     loadPageImages(String(page)).then((images) => {
       if (!active) {
@@ -97,7 +109,11 @@ export default function SiteImage({
 
       if (newSrc) {
         setSrc(newSrc)
+      } else {
+        setSrc(String(fallbackSrc))
       }
+
+      setLoading(false)
     })
 
     return () => {
@@ -108,6 +124,16 @@ export default function SiteImage({
   const finalClassName = fill
     ? `absolute inset-0 h-full w-full ${className}`
     : className
+
+  if (loading || !src) {
+    return (
+      <div
+        className={finalClassName}
+        style={style}
+        aria-hidden="true"
+      />
+    )
+  }
 
   return (
     <img
