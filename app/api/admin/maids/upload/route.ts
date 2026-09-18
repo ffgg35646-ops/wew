@@ -1,4 +1,3 @@
-```ts
 import { NextResponse } from "next/server"
 import { GridFSBucket } from "mongodb"
 import { promises as fs } from "fs"
