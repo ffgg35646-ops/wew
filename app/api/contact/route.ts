@@ -14,6 +14,7 @@ export async function GET() {
         whatsapp: "",
         phone: "",
         location: "",
+        locationEmbed: "",
       },
       { status: 200 }
     )

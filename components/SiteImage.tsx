@@ -84,6 +84,7 @@ export default function SiteImage({
   ...props
 }: SiteImageProps) {
   const [src, setSrc] = useState<string | null>(null)
+
   const [loading, setLoading] = useState(
     page !== undefined && slot !== undefined
   )
@@ -98,6 +99,8 @@ export default function SiteImage({
     let active = true
 
     setLoading(true)
+
+    // لا نظهر الـfallback القديم أثناء انتظار صورة الأدمن
     setSrc(null)
 
     loadPageImages(String(page)).then((images) => {
@@ -110,6 +113,7 @@ export default function SiteImage({
       if (newSrc) {
         setSrc(newSrc)
       } else {
+        // فقط لو الأدمن ليس لديه صورة لهذا الـslot
         setSrc(String(fallbackSrc))
       }
 
@@ -125,6 +129,7 @@ export default function SiteImage({
     ? `absolute inset-0 h-full w-full ${className}`
     : className
 
+  // نفس مساحة الصورة بدون عرض الصورة القديمة
   if (loading || !src) {
     return (
       <div

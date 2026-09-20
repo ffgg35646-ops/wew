@@ -420,42 +420,97 @@ export default function Navbar() {
               </span>
             </summary>
 
-            <div className="absolute left-0 top-full z-[100] mt-2 w-[230px] overflow-hidden rounded-[18px] border border-[#DCE7F5] bg-white p-2 shadow-[0_18px_45px_rgba(20,50,90,.18)]">
+            <div className="absolute left-0 top-full z-[100] mt-2 w-[250px] overflow-hidden rounded-[20px] border border-[#DCE7F5] bg-white p-2 shadow-[0_18px_45px_rgba(20,50,90,.18)]">
 
+              {/* الرئيسية */}
               <Link
                 href="/"
-                className="block rounded-[13px] px-4 py-3 text-[12px] font-black text-[#172033] transition hover:bg-[#EAF5FF] hover:text-[#397EA9]"
+                className="flex items-center gap-3 rounded-[14px] px-3 py-3 text-[12px] font-black text-[#172033] transition hover:bg-[#EAF5FF] hover:text-[#397EA9]"
               >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[11px] bg-[#EAF5FF] text-[#397EA9]">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-[18px] w-[18px]"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                  >
+                    <path d="M3 10.5L12 3l9 7.5" />
+                    <path d="M5.5 9.5V21h13V9.5" />
+                    <path d="M9 21v-6h6v6" />
+                  </svg>
+                </span>
                 الرئيسية
               </Link>
 
-              <div className="my-1 border-t border-slate-100" />
-
+              {/* الحصول على خادمات */}
               <Link
                 href="/full-time-maid-service"
-                className="block rounded-[13px] px-4 py-3 text-[12px] font-black text-[#172033] transition hover:bg-[#EAF5FF] hover:text-[#397EA9]"
+                className="flex items-center gap-3 rounded-[14px] px-3 py-3 text-[12px] font-black text-[#172033] transition hover:bg-[#EAF5FF] hover:text-[#397EA9]"
               >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[11px] bg-[#F3F8FC] text-[#397EA9]">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-[18px] w-[18px]"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                  >
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                </span>
                 الحصول على خادمات
               </Link>
 
+              {/* تأشيرة */}
               <Link
                 href="/services/maid-visa"
-                className="block rounded-[13px] px-4 py-3 text-[12px] font-black text-[#172033] transition hover:bg-[#EAF5FF] hover:text-[#397EA9]"
+                className="flex items-center gap-3 rounded-[14px] px-3 py-3 text-[12px] font-black text-[#172033] transition hover:bg-[#EAF5FF] hover:text-[#397EA9]"
               >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[11px] bg-[#F3F8FC] text-[#397EA9]">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-[18px] w-[18px]"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                  >
+                    <rect x="3" y="4" width="18" height="16" rx="2" />
+                    <path d="M7 8h4M7 12h6M7 16h4" />
+                    <circle cx="17" cy="10" r="2" />
+                  </svg>
+                </span>
                 تأشيرة عاملة منزلية
               </Link>
 
-              <div className="my-1 border-t border-slate-100" />
+              <div className="my-1.5 border-t border-slate-100" />
 
+              {/* الترخيص */}
               <details className="group">
-                <summary className="flex cursor-pointer list-none items-center justify-between rounded-[13px] px-4 py-3 text-[12px] font-black text-[#172033] transition hover:bg-[#EAF5FF] hover:text-[#397EA9]">
-                  <span>ترخيص دائرة التنمية الاقتصادية</span>
+                <summary className="flex cursor-pointer list-none items-center justify-between rounded-[14px] px-3 py-3 text-[12px] font-black text-[#172033] transition hover:bg-[#EAF5FF] hover:text-[#397EA9]">
+                  <span className="flex items-center gap-3">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[11px] bg-[#FFF4E8] text-[#D68B43]">
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="h-[18px] w-[18px]"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                      >
+                        <path d="M6 3h12v18H6z" />
+                        <path d="M9 7h6M9 11h6M9 15h4" />
+                      </svg>
+                    </span>
+                    ترخيص دائرة التنمية الاقتصادية
+                  </span>
 
                   <svg
-                    className="h-4 w-4 shrink-0 transition-transform duration-200 group-open:rotate-180"
+                    className="h-4 w-4 text-slate-400 transition-transform duration-200 group-open:rotate-180"
                     viewBox="0 0 20 20"
                     fill="currentColor"
-                    aria-hidden="true"
                   >
                     <path
                       fillRule="evenodd"
@@ -470,35 +525,66 @@ export default function Navbar() {
                     href="/api/economic-license/file?type=view"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block rounded-[11px] px-4 py-2.5 text-[11px] font-bold text-slate-500 transition hover:bg-[#F1F8FD] hover:text-[#397EA9]"
+                    className="flex items-center gap-2 rounded-[11px] px-4 py-2.5 text-[11px] font-bold text-slate-500 transition hover:bg-[#F1F8FD] hover:text-[#397EA9]"
                   >
+                    <span>◉</span>
                     عرض الترخيص
                   </a>
 
                   <a
                     href="/api/economic-license/file?type=download"
-                    className="block rounded-[11px] px-4 py-2.5 text-[11px] font-bold text-slate-500 transition hover:bg-[#F1F8FD] hover:text-[#397EA9]"
+                    className="flex items-center gap-2 rounded-[11px] px-4 py-2.5 text-[11px] font-bold text-slate-500 transition hover:bg-[#F1F8FD] hover:text-[#397EA9]"
                   >
+                    <span>↓</span>
                     تحميل الترخيص
                   </a>
                 </div>
               </details>
 
+              {/* الجنسيات */}
               <Link
                 href="/nationalities"
-                className="block rounded-[13px] px-4 py-3 text-[12px] font-black text-[#172033] transition hover:bg-[#EAF5FF] hover:text-[#397EA9]"
+                className="flex items-center gap-3 rounded-[14px] px-3 py-3 text-[12px] font-black text-[#172033] transition hover:bg-[#EAF5FF] hover:text-[#397EA9]"
               >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[11px] bg-[#EAF5FF] text-[#397EA9]">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-[18px] w-[18px]"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                  >
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M3 12h18" />
+                    <path d="M12 3c3 2.4 4.5 5.4 4.5 9S15 18.6 12 21c-3-2.4-4.5-5.4-4.5-9S9 5.4 12 3Z" />
+                  </svg>
+                </span>
                 الجنسيات
               </Link>
 
+              {/* من نحن */}
               <Link
                 href="/about"
-                className="block rounded-[13px] px-4 py-3 text-[12px] font-black text-[#172033] transition hover:bg-[#EAF5FF] hover:text-[#397EA9]"
+                className="flex items-center gap-3 rounded-[14px] px-3 py-3 text-[12px] font-black text-[#172033] transition hover:bg-[#EAF5FF] hover:text-[#397EA9]"
               >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[11px] bg-[#F3F8FC] text-[#397EA9]">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-[18px] w-[18px]"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                  >
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M12 10v6" />
+                    <path d="M12 7h.01" />
+                  </svg>
+                </span>
                 من نحن
               </Link>
 
             </div>
+
           </details>
 
         </div>

@@ -14,7 +14,10 @@ export async function GET(request: Request) {
       {
         status: 400,
         headers: {
-          "Cache-Control": "no-store, no-cache, must-revalidate",
+          "Cache-Control":
+            "no-store, no-cache, must-revalidate, proxy-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
         },
       }
     )
@@ -36,12 +39,20 @@ export async function GET(request: Request) {
           slot: item.slot,
           url: `/api/maids/media?id=${encodeURIComponent(
             String(item.fileId)
+          )}&v=${encodeURIComponent(
+            String(
+              item.updatedAt ??
+                item.createdAt ??
+                item._id ??
+                Date.now()
+            )
           )}`,
         })),
       },
       {
         headers: {
-          "Cache-Control": "no-store, no-cache, must-revalidate",
+          "Cache-Control":
+            "no-store, no-cache, must-revalidate, proxy-revalidate",
           Pragma: "no-cache",
           Expires: "0",
         },

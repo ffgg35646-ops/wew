@@ -28,7 +28,6 @@ export default function AdminContactPage() {
         setWhatsapp(data.whatsapp ?? "")
         setPhone(data.phone ?? "")
         setLocation(data.location ?? "")
-        setLocation(data.location ?? "")
       } catch {
         setMessage("تعذر تحميل بيانات الاتصال")
       } finally {
@@ -94,8 +93,7 @@ export default function AdminContactPage() {
           </h1>
 
           <p className="mt-3 text-sm leading-7 text-slate-500">
-            أدخل رقم واتساب ورقم الهاتف مرة واحدة، وسيتم استخدامهما
-            في أماكن التواصل المرتبطة بالموقع.
+            أدخل بيانات التواصل ورابط موقعك على Google Maps.
           </p>
 
           {loading ? (
@@ -134,7 +132,7 @@ export default function AdminContactPage() {
 
               <div>
                 <label className="mb-2 block text-sm font-black">
-                  رابط الموقع
+                  رابط الموقع على Google Maps
                 </label>
 
                 <input
@@ -144,20 +142,11 @@ export default function AdminContactPage() {
                   dir="ltr"
                   className="h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-left text-sm font-bold outline-none focus:border-[#1257D6] focus:bg-white"
                 />
-              </div>
 
-              <div>
-                <label className="mb-2 block text-sm font-black">
-                  رابط الموقع
-                </label>
-
-                <input
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  placeholder="https://www.google.com/maps/..."
-                  dir="ltr"
-                  className="h-14 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 text-left text-sm font-bold outline-none focus:border-[#1257D6] focus:bg-white"
-                />
+                <p className="mt-2 text-xs leading-6 text-slate-400">
+                  ضع رابط Google Maps العادي فقط، وسيقوم النظام بتجهيز
+                  الخريطة تلقائيًا.
+                </p>
               </div>
 
               <button

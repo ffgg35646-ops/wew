@@ -2,6 +2,9 @@ import { NextResponse } from "next/server"
 import { GridFSBucket, ObjectId } from "mongodb"
 import clientPromise from "@/lib/mongodb"
 
+export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
@@ -60,8 +63,16 @@ export async function GET(request: Request) {
       headers: {
         "Content-Type":
           file.contentType || "application/octet-stream",
+
         "Content-Length": String(file.length),
-        "Cache-Control": "public, max-age=3600",
+
+        // ممنوع تخزين الصورة القديمة في هذا endpoint
+        "Cache-Control":
+          "no-store, no-cache, must-revalidate, proxy-revalidate",
+
+        Pragma: "no-cache",
+        Expires: "0",
+
         "Content-Disposition": `inline; filename="${String(
           file.filename || "file"
         ).replace(/"/g, "")}"`,
@@ -72,7 +83,12 @@ export async function GET(request: Request) {
 
     return NextResponse.json(
       { error: "تعذر تحميل الملف" },
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          "Cache-Control": "no-store",
+        },
+      }
     )
   }
 }

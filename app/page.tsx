@@ -2,7 +2,7 @@
 
 import SiteImage from "@/components/SiteImage"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import "./reviews.css"
 import Navbar from "@/components/Navbar"
@@ -1130,16 +1130,81 @@ export default function Home() {
   }, [])
 
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [logosVisible, setLogosVisible] = useState(false)
+  const logosRef = useRef<HTMLDivElement | null>(null)
   const [locationUrl, setLocationUrl] = useState("")
+  const [locationEmbed, setLocationEmbed] = useState("")
+
+
+  useEffect(() => {
+    const element = logosRef.current
+
+    if (!element) {
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setLogosVisible(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.2 }
+    )
+
+    observer.observe(element)
+
+    return () => observer.disconnect()
+  }, [])
+
   useEffect(() => {
     fetch("/api/contact", { cache: "no-store" })
       .then((response) => (response.ok ? response.json() : null))
       .then((data) => {
         if (data) {
           setLocationUrl(data.location ?? "")
+          setLocationEmbed(data.locationEmbed ?? "")
         }
       })
       .catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    const logos = document.querySelector(".company-logos-reveal")
+
+    if (!logos) {
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.remove(
+              "opacity-0",
+              "translate-y-6",
+              "scale-95"
+            )
+
+            entry.target.classList.add(
+              "opacity-100",
+              "translate-y-0",
+              "scale-100"
+            )
+
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      {
+        threshold: 0.25,
+      }
+    )
+
+    observer.observe(logos)
+
+    return () => observer.disconnect()
   }, [])
 
   return (
@@ -1151,22 +1216,22 @@ export default function Home() {
       <Navbar />
 
       {/* HERO */}
-      <section className="relative mt-8 overflow-hidden bg-white pb-12 pt-20 md:mt-10 md:pb-16 md:pt-24">
+      <section className="relative mt-4 overflow-hidden bg-white pb-8 pt-12 md:mt-10 md:pb-16 md:pt-24">
         <div className="pointer-events-none absolute -right-40 -top-32 h-[620px] w-[620px] rounded-full bg-[#1257D6]/10 blur-[110px]" />
         <div className="pointer-events-none absolute left-[15%] top-[18%] h-[360px] w-[360px] rounded-full bg-[#5B8DEF]/10 blur-[100px]" />
         <div className="pointer-events-none absolute bottom-[-180px] right-[35%] h-[420px] w-[420px] rounded-full bg-[#1257D6]/[0.06] blur-[100px]" />
-        <div className="mx-auto max-w-[1320px] px-5 md:px-8">
-          <div className="grid items-start gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+        <div className="mx-auto max-w-[1320px] px-4 md:px-8">
+          <div className="grid items-start gap-7 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
 
             {/* HERO TEXT */}
             <div className="order-2 pt-0 lg:order-1 lg:pt-0">
 
-              <div className="mb-6 flex items-center gap-2 text-[11px] font-normal text-[#F28C28]">
+              <div className="mb-4 flex items-center gap-2 text-[9px] sm:text-[10px] font-normal text-[#F28C28]">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#F28C28]" />
                 خدمة منزلية موثوقة في الإمارات
               </div>
 
-              <h1 className="mb-7 max-w-[650px] text-[40px] font-medium leading-[1.28] tracking-[-1.4px] text-[#29456F] sm:text-[47px] md:text-[56px]">
+              <h1 className="mb-5 max-w-[650px] text-[32px] font-medium sm:text-[38px] md:text-[56px] leading-[1.28] tracking-[-1.4px] text-[#29456F] sm:text-[47px] md:text-[56px]">
                 راحة منزلك تبدأ
                 <br />
                 <span className="text-[#53709A]">
@@ -1174,34 +1239,34 @@ export default function Home() {
                 </span>
               </h1>
 
-              <p className="mb-8 max-w-[530px] text-[14px] font-normal leading-[2.1] text-black/45 md:text-[16px]">
+              <p className="mb-6 max-w-[530px] text-[12px] sm:text-[13px] md:text-[16px] font-normal leading-[2.1] text-black/45 md:text-[16px]">
                 نساعدك في العثور على عاملة منزلية محترفة وموثوقة
                 تناسب احتياجات منزلك، مع متابعة وإجراءات واضحة
                 من البداية حتى اكتمال الخدمة.
               </p>
 
-              <div className="mb-10 flex flex-wrap gap-3">
+              <div className="mb-7 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-3">
 <a
                   href="/get-maids"
-                  className="hero-hire-button group relative inline-flex h-[58px] min-w-[235px] items-center justify-center gap-4 rounded-[14px] bg-[#1257D6] px-9 text-[15px] font-extrabold tracking-[-0.2px] text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.16)] shadow-[0_10px_30px_rgba(18,87,214,0.20)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#0d4dbf] hover:shadow-[0_15px_35px_rgba(18,87,214,0.25)]"
+                  className="hero-hire-button group relative inline-flex h-[50px] w-full min-w-0 sm:h-[56px] sm:w-auto sm:min-w-[220px] md:h-[58px] md:min-w-[235px] items-center justify-center gap-2.5 sm:gap-3 lg:gap-4 rounded-[14px] bg-[#1257D6] px-5 text-[13px] sm:px-7 sm:text-[14px] md:px-9 md:text-[15px] font-extrabold tracking-[-0.2px] text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.16)] shadow-[0_10px_30px_rgba(18,87,214,0.20)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#0d4dbf] hover:shadow-[0_15px_35px_rgba(18,87,214,0.25)]"
                 >
                   <span>
                     توظيف عاملة منزلية
                   </span>
 
-                  <span className="text-[18px] font-extrabold transition-transform duration-300 group-hover:-translate-x-1">
+                  <span className="text-[15px] font-extrabold sm:text-[17px] md:text-[18px] transition-transform duration-300 group-hover:-translate-x-1">
                     ←
                   </span>
                 </a>
 <a
                   href="/services/maid-visa"
-                  className="hero-hire-button group relative inline-flex h-[58px] min-w-[235px] items-center justify-center gap-4 rounded-[14px] bg-[#1257D6] px-9 text-[15px] font-extrabold tracking-[-0.2px] text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.16)] shadow-[0_10px_30px_rgba(18,87,214,0.20)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#0d4dbf] hover:shadow-[0_15px_35px_rgba(18,87,214,0.25)]"
+                  className="hero-hire-button group relative inline-flex h-[50px] w-full min-w-0 sm:h-[56px] sm:w-auto sm:min-w-[220px] md:h-[58px] md:min-w-[235px] items-center justify-center gap-2.5 sm:gap-3 lg:gap-4 rounded-[14px] bg-[#1257D6] px-5 text-[13px] sm:px-7 sm:text-[14px] md:px-9 md:text-[15px] font-extrabold tracking-[-0.2px] text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.16)] shadow-[0_10px_30px_rgba(18,87,214,0.20)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#0d4dbf] hover:shadow-[0_15px_35px_rgba(18,87,214,0.25)]"
                 >
                   <span>
                     احصل على تأشيرة الآن
                   </span>
 
-                  <span className="text-[18px] font-extrabold transition-transform duration-300 group-hover:-translate-x-1">
+                  <span className="text-[15px] font-extrabold sm:text-[17px] md:text-[18px] transition-transform duration-300 group-hover:-translate-x-1">
                     ←
                   </span>
                 </a>
@@ -1209,7 +1274,7 @@ export default function Home() {
 
               <div className="flex items-center gap-6 text-black/60">
                 <div>
-                  <div className="text-xl font-normal text-black">
+                  <div className="text-lg font-normal text-black md:text-xl">
                     3,980+
                   </div>
                   <div className="mt-1 text-[10px] text-black/35">
@@ -1219,7 +1284,7 @@ export default function Home() {
 
 
                 <div className="hidden sm:block">
-                  <div className="text-xl font-normal text-black">
+                  <div className="text-lg font-normal text-black md:text-xl">
                     10+
                   </div>
                   <div className="mt-1 text-[10px] text-black/35">
@@ -1230,7 +1295,7 @@ export default function Home() {
             </div>
 
             {/* HERO IMAGES */}
-            <div className="order-1 relative h-[390px] sm:h-[430px] lg:order-2">
+            <div className="order-1 relative h-[300px] sm:h-[370px] lg:h-[430px] lg:order-2">
 
               <div className="absolute right-[7%] top-0 h-[82%] w-[52%] overflow-hidden rounded-[32px] bg-[#f5f2ec] p-3">
                 <SiteImage
@@ -1256,60 +1321,7 @@ export default function Home() {
                 />
               </div>
 
-              {/* GLASS CARD */}
-              <div className="absolute left-[-18px] top-[-10%] z-20 w-[256px] bg-[#EEF6FF] p-1">
-                <div className="flex items-center justify-start gap-4">
 
-                  <img
-                    src="/images/saada/2-trim.png"
-                    alt=""
-                    className="-translate-y-3 h-[144px] w-[164px] object-contain mix-blend-multiply"
-                  />
-
-                  <div className="flex flex-col gap-2 text-[#9BC4EA]">
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="h-7 w-7"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M5 12.5L9.5 17L19 7"
-                        stroke="currentColor"
-                        strokeWidth="2.4"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="h-7 w-7"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M5 12.5L9.5 17L19 7"
-                        stroke="currentColor"
-                        strokeWidth="2.4"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
-
-                  <div className="min-w-0 text-right">
-                    <div className="text-[12px] font-medium text-[#172033]">
-                      موثوقة ومتحقق منها
-                    </div>
-
-                    <div className="mt-1 text-[9px] text-black/35">
-                      اختيار بعناية
-                    </div>
-                  </div>
-
-                </div>
-              </div>
 
 
             </div>
@@ -1319,7 +1331,7 @@ export default function Home() {
 
       {/* TRUST */}
       <section className="border-y border-black/[0.06] bg-white">
-        <div className="mx-auto max-w-[1320px] px-5 py-6 md:px-8">
+        <div className="mx-auto max-w-[1320px] px-4 py-4 md:px-8 md:py-6">
           <div className="grid grid-cols-2 md:grid-cols-4">
             {[
               ["01", "اختيار دقيق", "نختار لك الأنسب"],
@@ -1351,23 +1363,23 @@ export default function Home() {
       </section>
 
       {/* SERVICES */}
-      <section id="services" className="overflow-hidden bg-white py-24 md:py-28">
-        <div className="mx-auto max-w-[1320px] px-5 md:px-8">
+      <section id="services" className="overflow-hidden bg-white py-14 md:py-28">
+        <div className="mx-auto max-w-[1320px] px-4 md:px-8">
 
-          <div className="mb-12 text-center">
+          <div className="mb-8 text-center md:mb-12">
             <div className="mb-3 text-[10px] font-bold tracking-[3px] text-[#F28C28]">
               OUR SERVICES
             </div>
 
-            <h2 className="text-3xl font-black tracking-[-1px] text-[#172033] md:text-4xl">
+            <h2 className="text-2xl font-black tracking-[-1px] text-[#172033] md:text-4xl">
               خدمات توظيف العاملات المنزلية في الإمارات
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
 
             {/* 01 */}
-            <article className="services-slide services-slide-right services-glass-card services-blue-orange services-six-card rounded-[30px] p-7 md:p-9">
+            <article className="services-slide services-slide-right services-glass-card services-blue-orange services-six-card rounded-[22px] p-5 md:rounded-[30px] md:p-9">
               <div className="services-six-icon">
                 <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.8">
                   <path d="M12 3v18M3 12h18" />
@@ -1379,18 +1391,18 @@ export default function Home() {
                   AL SAADA MAIDS
                 </div>
 
-                <h3 className="mb-4 text-[23px] font-black leading-[1.5] text-white md:text-[27px]">
+                <h3 className="mb-4 text-[19px] font-black leading-[1.45] text-white sm:text-[21px] md:text-[27px]">
                   خدمة توظيف عاملة منزلية بدوام جزئي أو كامل في الإمارات
                 </h3>
 
-                <p className="text-[12px] font-bold leading-8 text-white/90 md:text-[13px]">
+                <p className="text-[11px] font-bold leading-7 text-white/90 md:text-[13px]">
                   وظّف عاملة منزلية بدوام جزئي لإنجاز المهام المنزلية المهمة.
                 </p>
               </div>
             </article>
 
             {/* 02 */}
-            <article className="services-slide services-slide-left services-glass-card services-orange-blue services-six-card rounded-[30px] p-7 md:p-9">
+            <article className="services-slide services-slide-left services-glass-card services-orange-blue services-six-card rounded-[22px] p-5 md:rounded-[30px] md:p-9">
               <div className="services-six-icon">
                 <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.8">
                   <path d="M12 3l2.8 5.7L21 9.6l-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3z" />
@@ -1402,18 +1414,18 @@ export default function Home() {
                   WHY AL SAADA
                 </div>
 
-                <h3 className="mb-4 text-[23px] font-black leading-[1.5] text-white md:text-[27px]">
+                <h3 className="mb-4 text-[19px] font-black leading-[1.45] text-white sm:text-[21px] md:text-[27px]">
                   أفضل خدمة توظيف عاملة منزلية في الإمارات
                 </h3>
 
-                <p className="text-[12px] font-bold leading-8 text-white/90 md:text-[13px]">
+                <p className="text-[11px] font-bold leading-7 text-white/90 md:text-[13px]">
                   هل تبحث عن مساعدة منزلية في الإمارات؟ نقدم مساعدات منزليات مدربات بشكل احترافي وذوات خبرة، ونساعدك في اختيار الحل الأنسب لاحتياجاتك المنزلية.
                 </p>
               </div>
             </article>
 
             {/* 03 */}
-            <article className="services-slide services-slide-right services-glass-card services-orange-blue services-six-card rounded-[30px] p-7 md:p-9">
+            <article className="services-slide services-slide-right services-glass-card services-orange-blue services-six-card rounded-[22px] p-5 md:rounded-[30px] md:p-9">
               <div className="services-six-icon">
                 <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.8">
                   <path d="M4 12h16M12 4v16" />
@@ -1425,18 +1437,18 @@ export default function Home() {
                   FULL TIME
                 </div>
 
-                <h3 className="mb-4 text-[23px] font-black leading-[1.5] text-white md:text-[27px]">
+                <h3 className="mb-4 text-[19px] font-black leading-[1.45] text-white sm:text-[21px] md:text-[27px]">
                   خدمة توظيف عاملة منزلية بدوام كامل في الإمارات
                 </h3>
 
-                <p className="text-[12px] font-bold leading-8 text-white/90 md:text-[13px]">
+                <p className="text-[11px] font-bold leading-7 text-white/90 md:text-[13px]">
                   احصل على خدمة توظيف عاملة منزلية بدوام كامل لمنزلك أو فيلتك أو شقتك في الإمارات.
                 </p>
               </div>
             </article>
 
             {/* 04 */}
-            <article className="services-slide services-slide-left services-glass-card services-blue-orange services-six-card rounded-[30px] p-7 md:p-9">
+            <article className="services-slide services-slide-left services-glass-card services-blue-orange services-six-card rounded-[22px] p-5 md:rounded-[30px] md:p-9">
               <div className="services-six-icon">
                 <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.8">
                   <path d="M6 4h12v16H6z" />
@@ -1449,18 +1461,18 @@ export default function Home() {
                   CHOOSE SMART
                 </div>
 
-                <h3 className="mb-4 text-[23px] font-black leading-[1.5] text-white md:text-[27px]">
+                <h3 className="mb-4 text-[19px] font-black leading-[1.45] text-white sm:text-[21px] md:text-[27px]">
                   استعن بأفضل عاملة منزلية في الإمارات
                 </h3>
 
-                <p className="text-[12px] font-bold leading-8 text-white/90 md:text-[13px]">
+                <p className="text-[11px] font-bold leading-7 text-white/90 md:text-[13px]">
                   عاملاتنا المنزلية المدربات بشكل احترافي سيجعلن الحياة أسهل بكثير من خلال الاعتناء بالمهام المنزلية اليومية.
                 </p>
               </div>
             </article>
 
             {/* 05 */}
-            <article className="services-slide services-slide-right services-glass-card services-blue-orange services-six-card rounded-[30px] p-7 md:p-9">
+            <article className="services-slide services-slide-right services-glass-card services-blue-orange services-six-card rounded-[22px] p-5 md:rounded-[30px] md:p-9">
               <div className="services-six-icon">
                 <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.8">
                   <path d="M4 7h16M7 3v4M17 3v4M5 11h14M5 15h8M5 19h6" />
@@ -1472,18 +1484,18 @@ export default function Home() {
                   CLEAR PRICING
                 </div>
 
-                <h3 className="mb-4 text-[23px] font-black leading-[1.5] text-white md:text-[27px]">
+                <h3 className="mb-4 text-[19px] font-black leading-[1.45] text-white sm:text-[21px] md:text-[27px]">
                   أسعار شفافة / توصيل مجاني
                 </h3>
 
-                <p className="text-[12px] font-bold leading-8 text-white/90 md:text-[13px]">
+                <p className="text-[11px] font-bold leading-7 text-white/90 md:text-[13px]">
                   شركة AL SAADA Maids هي شريكك الموثوق في خدمة توظيف العاملات المنزلية في الإمارات مع أسعار واضحة وتجربة منظمة.
                 </p>
               </div>
             </article>
 
             {/* 06 */}
-            <article className="services-slide services-slide-left services-glass-card services-orange-blue services-six-card rounded-[30px] p-7 md:p-9">
+            <article className="services-slide services-slide-left services-glass-card services-orange-blue services-six-card rounded-[22px] p-5 md:rounded-[30px] md:p-9">
               <div className="services-six-icon">
                 <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current" strokeWidth="1.8">
                   <path d="M7 3h10v18H7z" />
@@ -1496,11 +1508,11 @@ export default function Home() {
                   VISA SUPPORT
                 </div>
 
-                <h3 className="mb-4 text-[23px] font-black leading-[1.5] text-white md:text-[27px]">
+                <h3 className="mb-4 text-[19px] font-black leading-[1.45] text-white sm:text-[21px] md:text-[27px]">
                   أسرع موافقات على تأشيرات العاملات المنزلية
                 </h3>
 
-                <p className="text-[12px] font-bold leading-8 text-white/90 md:text-[13px]">
+                <p className="text-[11px] font-bold leading-7 text-white/90 md:text-[13px]">
                   نتعامل مع متطلبات تأشيرة العاملة المنزلية ونساعدك في استكمال الإجراءات المطلوبة بطريقة واضحة ومنظمة.
                 </p>
               </div>
@@ -1511,8 +1523,8 @@ export default function Home() {
       </section>
 
       {/* LOCATION / GOOGLE MAP */}
-      <section className="border-y border-[#E8EDF4] bg-[#F7F9FC] py-20 md:py-24">
-        <div className="mx-auto max-w-[1320px] px-5 md:px-8">
+      <section className="border-y border-[#E8EDF4] bg-[#F7F9FC] py-12 md:py-24">
+        <div className="mx-auto max-w-[1320px] px-4 md:px-8">
 
           <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
 
@@ -1521,7 +1533,7 @@ export default function Home() {
                 OUR LOCATION
               </div>
 
-              <h2 className="text-3xl font-normal tracking-[-1px] text-[#172033] md:text-4xl">
+              <h2 className="text-2xl font-normal tracking-[-1px] text-[#172033] md:text-4xl">
                 موقعنا في الإمارات
               </h2>
 
@@ -1547,16 +1559,16 @@ export default function Home() {
           <div className="location-map-cta-grid">
 
             <div className="location-map-card">
-<div className="overflow-hidden rounded-[28px] border border-[#E3E9F2] bg-white p-2 shadow-[0_20px_60px_rgba(18,87,214,0.08)]">
+<div className="overflow-hidden rounded-[20px] border border-[#E3E9F2] bg-white p-1.5 md:rounded-[28px] md:p-2 shadow-[0_20px_60px_rgba(18,87,214,0.08)]">
 
-            <div className="relative h-[380px] overflow-hidden rounded-[22px] md:h-[500px]">
+            <div className="relative h-[260px] overflow-hidden rounded-[18px] md:h-[500px] md:rounded-[22px]">
 
               <iframe
                 title="AL SAADA Dubai Location"
-                src={locationUrl || "about:blank"}
+                src={locationEmbed || "about:blank"}
                 className="absolute inset-0 h-full w-full border-0"
                 loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
+                referrerPolicy="strict-origin-when-cross-origin"
                 allowFullScreen
               />
 
@@ -1565,16 +1577,16 @@ export default function Home() {
           </div>
             </div>
 
-<div className="location-cta-card relative mx-auto max-w-[1320px] overflow-hidden rounded-[32px] bg-[#1257D6]">
+<div className="location-cta-card relative mx-auto max-w-[1320px] overflow-hidden rounded-[24px] bg-[#1257D6] md:rounded-[32px]">
 
           <div className="absolute -right-32 -top-32 h-[400px] w-[400px] rounded-full bg-[#F28C28]/20 blur-[90px]" />
 
-          <div className="relative px-6 py-20 text-center md:px-10 md:py-24">
+          <div className="relative px-5 py-12 text-center md:px-10 md:py-24">
             <div className="mb-5 text-[10px] tracking-[3px] text-[#F28C28]">
               GET STARTED
             </div>
 
-            <h2 className="mb-5 text-3xl font-normal leading-[1.4] text-white md:text-5xl">
+            <h2 className="mb-5 text-2xl font-normal leading-[1.4] text-white md:text-5xl">
               جاهز تجد المساعدة
               <br />
               <span className="text-[#1257D6]">
@@ -1603,7 +1615,7 @@ export default function Home() {
           </div>
 
 
-          <div className="mt-5 flex flex-wrap items-center justify-between gap-4 rounded-[20px] border border-[#E8EDF4] bg-white px-5 py-4">
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 lg:gap-4 rounded-[20px] border border-[#E8EDF4] bg-white px-5 py-4">
 
             <div className="flex items-center gap-3">
 
@@ -1639,15 +1651,15 @@ export default function Home() {
 
 
       {/* REVIEWS */}
-      <section className="overflow-hidden bg-[#F7F9FC] py-24 md:py-28">
+      <section className="overflow-hidden bg-[#F7F9FC] pt-14 pb-0 md:pt-28 md:pb-0">
 
-        <div className="mx-auto mb-14 max-w-[1320px] px-5 text-center md:px-8">
+        <div className="mx-auto mb-9 max-w-[1320px] px-4 md:mb-14 md:px-5 text-center md:px-8">
 
           <div className="mb-3 text-[10px] font-medium tracking-[3px] text-[#F28C28]">
             CLIENT REVIEWS
           </div>
 
-          <h2 className="text-3xl font-normal tracking-[-1px] text-[#172033] md:text-4xl">
+          <h2 className="text-2xl font-normal tracking-[-1px] text-[#172033] md:text-4xl">
             تجارب عملائنا
           </h2>
 
@@ -1673,7 +1685,7 @@ export default function Home() {
               <div
                 key={`review-top-${i}`}
                 dir={/[A-Za-z]/.test(review.text) ? "ltr" : "rtl"}
-                className="w-[310px] shrink-0 rounded-[24px] border border-[#E8EDF4] bg-white p-6 shadow-[0_10px_35px_rgba(20,50,90,0.04)] md:w-[390px]"
+                className="w-[275px] shrink-0 rounded-[20px] border border-[#E8EDF4] bg-white p-5 md:w-[390px] md:rounded-[24px] md:p-6 shadow-[0_10px_35px_rgba(20,50,90,0.04)] md:w-[390px]"
               >
                 <div className="mb-5 flex items-center justify-between">
                   <div className="text-[12px] tracking-[3px] text-[#F28C28]">
@@ -1685,7 +1697,7 @@ export default function Home() {
                   </span>
                 </div>
 
-                <p className="mb-6 text-[12px] leading-7 text-black/50">
+                <p className="mb-6 text-[11px] leading-6 text-black/50 md:text-[12px] md:leading-7">
                   “{review.text}”
                 </p>
 
@@ -1718,7 +1730,7 @@ export default function Home() {
               <div
                 key={`review-bottom-${i}`}
                 dir={/[A-Za-z]/.test(review.text) ? "ltr" : "rtl"}
-                className="w-[310px] shrink-0 rounded-[24px] border border-[#E8EDF4] bg-white p-6 shadow-[0_10px_35px_rgba(20,50,90,0.04)] md:w-[390px]"
+                className="w-[275px] shrink-0 rounded-[20px] border border-[#E8EDF4] bg-white p-5 md:w-[390px] md:rounded-[24px] md:p-6 shadow-[0_10px_35px_rgba(20,50,90,0.04)] md:w-[390px]"
               >
                 <div className="mb-5 flex items-center justify-between">
                   <div className="text-[12px] tracking-[3px] text-[#F28C28]">
@@ -1730,7 +1742,7 @@ export default function Home() {
                   </span>
                 </div>
 
-                <p className="mb-6 text-[12px] leading-7 text-black/50">
+                <p className="mb-6 text-[11px] leading-6 text-black/50 md:text-[12px] md:leading-7">
                   “{review.text}”
                 </p>
 
@@ -1757,14 +1769,60 @@ export default function Home() {
 
       </section>
 
-      {/* IMAGE 3 */}
-      <div className="flex justify-center bg-white px-0 py-0">
-        <img
-          src="/images/saada/3.jpg"
-          alt=""
-          className="block h-auto w-[560px] max-w-full object-contain md:w-[700px] lg:w-[840px]"
-        />
-      </div>
+
+      {/* COMPANY LOGOS */}
+      <section
+        ref={logosRef}
+        className={
+          "bg-[#F7F9FC] px-4 pt-0 pb-12 md:px-8 md:pb-16 " +
+          "transition-all duration-700 ease-out " +
+          (logosVisible
+            ? "opacity-100 translate-y-0 scale-100"
+            : "opacity-0 translate-y-8 scale-95")
+        }
+      >
+        <div className="mx-auto flex max-w-[900px] flex-col items-center justify-center gap-10 sm:flex-row sm:gap-16 md:gap-24">
+
+          {/* COMPANY 10 */}
+          <div className="flex items-center justify-center gap-4">
+            <img
+              src="/images/saada/company-logo-10.png"
+              alt=""
+              className="block h-auto w-[190px] object-contain sm:w-[230px] md:w-[280px]"
+            />
+
+            <div className="flex items-center gap-2 whitespace-nowrap text-[#9BC4EA]">
+              <span className="text-[22px] font-black leading-none">
+                ✓
+              </span>
+
+              <span className="text-[10px] font-black sm:text-[11px] md:text-[12px]">
+                هذا الموقع برعاية
+              </span>
+            </div>
+          </div>
+
+          {/* COMPANY 20 */}
+          <div className="flex items-center justify-center gap-4">
+            <img
+              src="/images/saada/company-logo-20.png"
+              alt=""
+              className="block h-auto w-[110px] object-contain sm:w-[135px] md:w-[165px]"
+            />
+
+            <div className="flex items-center gap-2 whitespace-nowrap text-[#9BC4EA]">
+              <span className="text-[22px] font-black leading-none">
+                ✓
+              </span>
+
+              <span className="text-[10px] font-black sm:text-[11px] md:text-[12px]">
+                هذا الموقع برعاية
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </section>
 
       {/* CTA */}
       <Footer />
