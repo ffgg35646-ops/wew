@@ -108,10 +108,14 @@ export async function PATCH(request: Request) {
 }
 
 export async function POST(request: Request) {
-  try {
-    await requireAdmin()
+  // مهم:
+  // نخلي requireAdmin خارج try
+  // حتى لا يتم ابتلاع redirect وتحويله إلى خطأ رفع PDF.
+  await requireAdmin()
 
+  try {
     const formData = await request.formData()
+
     const type = formData.get("type")
     const file = formData.get("file")
 
@@ -169,13 +173,19 @@ export async function POST(request: Request) {
       bucketName: "economic_license_files",
     })
 
+    // حذف الملف القديم لنفس النوع
     if (oldFileId) {
       try {
         await bucket.delete(
           new ObjectId(String(oldFileId))
         )
-      } catch {
-        // الملف القديم قد يكون محذوفًا بالفعل.
+      } catch (deleteError) {
+        // لو الملف القديم غير موجود أصلًا،
+        // نكمل رفع الملف الجديد عادي.
+        console.error(
+          "ECONOMIC_LICENSE_OLD_FILE_DELETE_ERROR",
+          deleteError
+        )
       }
     }
 
@@ -197,10 +207,17 @@ export async function POST(request: Request) {
       (resolve, reject) => {
         uploadStream.on(
           "finish",
-          () => resolve(uploadStream.id as ObjectId)
+          () => {
+            resolve(uploadStream.id as ObjectId)
+          }
         )
 
-        uploadStream.on("error", reject)
+        uploadStream.on(
+          "error",
+          (error) => {
+            reject(error)
+          }
+        )
 
         uploadStream.end(bytes)
       }
@@ -248,7 +265,12 @@ export async function POST(request: Request) {
     )
 
     return NextResponse.json(
-      { error: "Failed to upload PDF" },
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to upload PDF",
+      },
       { status: 500 }
     )
   }
