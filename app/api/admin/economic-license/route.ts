@@ -87,30 +87,41 @@ export async function PATCH(request: Request) {
             updatedAt: new Date(),
           },
           $setOnInsert: {
-            enabled: true,
-            viewEnabled: true,
-            downloadEnabled: true,
+            _id: "economic_license",
             createdAt: new Date(),
           },
         },
         { upsert: true }
       )
 
-    return NextResponse.json({ ok: true })
+    return NextResponse.json({
+      ok: true,
+      ...update,
+    })
   } catch (error) {
     console.error("ECONOMIC_LICENSE_PATCH_ERROR", error)
 
+    if (
+      error instanceof Error &&
+      error.message.includes("redirect")
+    ) {
+      throw error
+    }
+
     return NextResponse.json(
-      { error: "Failed to update settings" },
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to update settings",
+      },
       { status: 500 }
     )
   }
 }
 
 export async function POST(request: Request) {
-  // مهم:
-  // نخلي requireAdmin خارج try
-  // حتى لا يتم ابتلاع redirect وتحويله إلى خطأ رفع PDF.
+  // نخلي التحقق خارج try حتى لا يتم ابتلاع redirect
   await requireAdmin()
 
   try {
@@ -173,15 +184,12 @@ export async function POST(request: Request) {
       bucketName: "economic_license_files",
     })
 
-    // حذف الملف القديم لنفس النوع
     if (oldFileId) {
       try {
         await bucket.delete(
           new ObjectId(String(oldFileId))
         )
       } catch (deleteError) {
-        // لو الملف القديم غير موجود أصلًا،
-        // نكمل رفع الملف الجديد عادي.
         console.error(
           "ECONOMIC_LICENSE_OLD_FILE_DELETE_ERROR",
           deleteError
@@ -244,9 +252,8 @@ export async function POST(request: Request) {
           updatedAt: new Date(),
         },
         $setOnInsert: {
+          _id: "economic_license",
           enabled: true,
-          viewEnabled: true,
-          downloadEnabled: true,
           createdAt: new Date(),
         },
       },
