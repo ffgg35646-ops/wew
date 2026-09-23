@@ -11,15 +11,19 @@ export async function GET() {
     const client = await clientPromise
     const db = client.db("maidora")
 
-    const doc = await db.collection<Document & { _id: string }>("settings").findOne({
-      _id: "economic_license",
-    })
+    const doc = await db
+      .collection<Document & { _id: string }>("settings")
+      .findOne({
+        _id: "economic_license",
+      })
 
     return NextResponse.json({
       enabled: doc?.enabled ?? true,
       viewEnabled: doc?.viewEnabled ?? true,
       downloadEnabled: doc?.downloadEnabled ?? true,
-      viewFileId: doc?.viewFileId ? String(doc.viewFileId) : null,
+      viewFileId: doc?.viewFileId
+        ? String(doc.viewFileId)
+        : null,
       viewFileName: doc?.viewFileName ?? null,
       downloadFileId: doc?.downloadFileId
         ? String(doc.downloadFileId)
@@ -29,7 +33,10 @@ export async function GET() {
   } catch (error) {
     console.error("ECONOMIC_LICENSE_GET_ERROR", error)
 
-    if (error instanceof Error && error.message.includes("redirect")) {
+    if (
+      error instanceof Error &&
+      error.message.includes("redirect")
+    ) {
       throw error
     }
 
@@ -67,24 +74,27 @@ export async function PATCH(request: Request) {
       )
     }
 
-    update.updatedAt = true as never
-
     const client = await clientPromise
     const db = client.db("maidora")
 
-    await db.collection<Document & { _id: string }>("settings").updateOne(
-      { _id: "economic_license" },
-      {
-        $set: {
-          ...update,
-          updatedAt: new Date(),
+    await db
+      .collection<Document & { _id: string }>("settings")
+      .updateOne(
+        { _id: "economic_license" },
+        {
+          $set: {
+            ...update,
+            updatedAt: new Date(),
+          },
+          $setOnInsert: {
+            enabled: true,
+            viewEnabled: true,
+            downloadEnabled: true,
+            createdAt: new Date(),
+          },
         },
-        $setOnInsert: {
-          createdAt: new Date(),
-        },
-      },
-      { upsert: true }
-    )
+        { upsert: true }
+      )
 
     return NextResponse.json({ ok: true })
   } catch (error) {
@@ -142,7 +152,9 @@ export async function POST(request: Request) {
     const client = await clientPromise
     const db = client.db("maidora")
 
-    const settingsCollection = db.collection<Document & { _id: string }>("settings")
+    const settingsCollection = db.collection<
+      Document & { _id: string }
+    >("settings")
 
     const current = await settingsCollection.findOne({
       _id: "economic_license",
@@ -163,34 +175,48 @@ export async function POST(request: Request) {
           new ObjectId(String(oldFileId))
         )
       } catch {
-        // Old file may already be missing.
+        // الملف القديم قد يكون محذوفًا بالفعل.
       }
     }
 
-    const bytes = Buffer.from(await file.arrayBuffer())
+    const bytes = Buffer.from(
+      await file.arrayBuffer()
+    )
 
-    const uploadStream = bucket.openUploadStream(fileName, {
-      metadata: {
-        type,
-        uploadedAt: new Date(),
-      },
-    })
+    const uploadStream = bucket.openUploadStream(
+      fileName,
+      {
+        metadata: {
+          type,
+          uploadedAt: new Date(),
+        },
+      }
+    )
 
-    const fileId = await new Promise<ObjectId>((resolve, reject) => {
-      uploadStream.on("finish", () => resolve(uploadStream.id as ObjectId))
-      uploadStream.on("error", reject)
-      uploadStream.end(bytes)
-    })
+    const fileId = await new Promise<ObjectId>(
+      (resolve, reject) => {
+        uploadStream.on(
+          "finish",
+          () => resolve(uploadStream.id as ObjectId)
+        )
+
+        uploadStream.on("error", reject)
+
+        uploadStream.end(bytes)
+      }
+    )
 
     const update =
       type === "view"
         ? {
             viewFileId: fileId,
             viewFileName: fileName,
+            viewEnabled: true,
           }
         : {
             downloadFileId: fileId,
             downloadFileName: fileName,
+            downloadEnabled: true,
           }
 
     await settingsCollection.updateOne(
@@ -216,7 +242,10 @@ export async function POST(request: Request) {
       fileName,
     })
   } catch (error) {
-    console.error("ECONOMIC_LICENSE_UPLOAD_ERROR", error)
+    console.error(
+      "ECONOMIC_LICENSE_UPLOAD_ERROR",
+      error
+    )
 
     return NextResponse.json(
       { error: "Failed to upload PDF" },
