@@ -26,13 +26,15 @@ export async function GET() {
 
     const location = doc?.location ?? ""
 
+    const locationEmbed =
+      doc?.locationEmbed ||
+      (await buildMapEmbedUrl(location))
+
     return NextResponse.json({
       whatsapp: doc?.whatsapp ?? "",
       phone: doc?.phone ?? "",
       location,
-      locationEmbed:
-        doc?.locationEmbed ||
-        buildMapEmbedUrl(location),
+      locationEmbed,
     })
   } catch (error) {
     console.error("ADMIN_CONTACT_GET_ERROR", error)
@@ -72,10 +74,16 @@ export async function PUT(request: Request) {
         ? body.location.trim()
         : ""
 
+    // يحول تلقائيًا:
+    // google.com/maps
+    // maps.app.goo.gl
+    // روابط Google Maps المختصرة
+    // إلى رابط Embed
     const locationEmbed =
-      buildMapEmbedUrl(location)
+      await buildMapEmbedUrl(location)
 
-    // لو الرابط غير قابل للتحويل، نرفض الحفظ
+    // إذا أدخل الأدمن رابط موقع، يجب أن نقدر
+    // على تحويله إلى موقع قابل للتضمين
     if (location && !locationEmbed) {
       return NextResponse.json(
         {
