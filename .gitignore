@@ -20,3 +20,5 @@ backup-*/
 .DS_Store
 Thumbs.db
 tsconfig.tsbuildinfo
+.logo-tools/
+*.bak-before-*
