@@ -1,8 +1,26 @@
 import { NextResponse } from "next/server"
+import { unstable_cache } from "next/cache"
 import clientPromise from "@/lib/mongodb"
 
 export const runtime = "nodejs"
-export const dynamic = "force-dynamic"
+
+const getSiteImages = unstable_cache(
+  async (page: string) => {
+    const client = await clientPromise
+    const db = client.db("maidora")
+
+    return db
+      .collection("site_images")
+      .find({ page })
+      .sort({ slot: 1 })
+      .toArray()
+  },
+  ["site-images"],
+  {
+    revalidate: 60,
+    tags: ["site-images"],
+  }
+)
 
 export async function GET(request: Request) {
   const url = new URL(request.url)
@@ -11,31 +29,16 @@ export async function GET(request: Request) {
   if (!page) {
     return NextResponse.json(
       { error: "Missing page" },
-      {
-        status: 400,
-        headers: {
-          "Cache-Control":
-            "no-store, no-cache, must-revalidate, proxy-revalidate",
-          Pragma: "no-cache",
-          Expires: "0",
-        },
-      }
+      { status: 400 }
     )
   }
 
   try {
-    const client = await clientPromise
-    const db = client.db("maidora")
-
-    const items = await db
-      .collection("site_images")
-      .find({ page })
-      .sort({ slot: 1 })
-      .toArray()
+    const items = await getSiteImages(page)
 
     return NextResponse.json(
       {
-        items: items.map((item) => ({
+        items: items.map((item: any) => ({
           slot: item.slot,
           url: `/api/maids/media?id=${encodeURIComponent(
             String(item.fileId)
@@ -43,8 +46,7 @@ export async function GET(request: Request) {
             String(
               item.updatedAt ??
                 item.createdAt ??
-                item._id ??
-                Date.now()
+                item._id
             )
           )}`,
         })),
@@ -52,9 +54,7 @@ export async function GET(request: Request) {
       {
         headers: {
           "Cache-Control":
-            "no-store, no-cache, must-revalidate, proxy-revalidate",
-          Pragma: "no-cache",
-          Expires: "0",
+            "public, max-age=30, s-maxage=60, stale-while-revalidate=300",
         },
       }
     )
