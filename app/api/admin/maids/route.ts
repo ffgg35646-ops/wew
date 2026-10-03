@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { ObjectId, GridFSBucket } from "mongodb"
 import clientPromise from "@/lib/mongodb"
 import { requireAdmin } from "@/lib/admin-auth"
+import { revalidateTag } from "next/cache"
 
 function serializeMaid(doc: any) {
   return {
@@ -90,6 +91,8 @@ export async function POST(request: Request) {
     .collection("maids")
     .insertOne(maid)
 
+  revalidateTag("maids", "max")
+
   return NextResponse.json(
     {
       ok: true,
@@ -157,6 +160,8 @@ export async function PATCH(request: Request) {
     )
   }
 
+  revalidateTag("maids", "max")
+
   return NextResponse.json({
     ok: true,
     maid: serializeMaid(result),
@@ -217,6 +222,8 @@ export async function DELETE(request: Request) {
   await db.collection("maids").deleteOne({
     _id: new ObjectId(id),
   })
+
+  revalidateTag("maids", "max")
 
   return NextResponse.json({ ok: true })
 }
