@@ -19,17 +19,68 @@ type SiteImageProps = Omit<
 }
 
 const pageCache = new Map<string, Record<number, string>>()
-
 const pageRequests = new Map<
   string,
   Promise<Record<number, string>>
 >()
 
-async function loadPageImages(page: string) {
-  if (pageCache.has(page)) {
-    return pageCache.get(page) ?? {}
+function browserCacheKey(page: string) {
+  return `maidora-site-images:${page}`
+}
+
+function readBrowserCache(
+  page: string
+): Record<number, string> {
+  if (typeof window === "undefined") {
+    return {}
   }
 
+  try {
+    const raw = window.localStorage.getItem(
+      browserCacheKey(page)
+    )
+
+    if (!raw) {
+      return {}
+    }
+
+    const parsed = JSON.parse(raw)
+
+    if (!parsed || typeof parsed !== "object") {
+      return {}
+    }
+
+    const result: Record<number, string> = {}
+
+    for (const [key, value] of Object.entries(parsed)) {
+      if (typeof value === "string" && value) {
+        result[Number(key)] = value
+      }
+    }
+
+    return result
+  } catch {
+    return {}
+  }
+}
+
+function writeBrowserCache(
+  page: string,
+  images: Record<number, string>
+) {
+  if (typeof window === "undefined") {
+    return
+  }
+
+  try {
+    window.localStorage.setItem(
+      browserCacheKey(page),
+      JSON.stringify(images)
+    )
+  } catch {}
+}
+
+async function refreshPageImages(page: string) {
   const existing = pageRequests.get(page)
 
   if (existing) {
@@ -37,21 +88,14 @@ async function loadPageImages(page: string) {
   }
 
   const request: Promise<Record<number, string>> = fetch(
-    `/api/site-images?page=${encodeURIComponent(page)}&_=${Date.now()}`,
-    {
-      cache: "no-store",
-      headers: {
-        "Cache-Control": "no-cache",
-      },
-    }
+    `/api/site-images?page=${encodeURIComponent(page)}`,
   )
     .then(async (response): Promise<Record<number, string>> => {
       if (!response.ok) {
-        return {}
+        return pageCache.get(page) ?? readBrowserCache(page)
       }
 
       const data = await response.json()
-
       const map: Record<number, string> = {}
 
       for (const item of data.items ?? []) {
@@ -59,10 +103,16 @@ async function loadPageImages(page: string) {
       }
 
       pageCache.set(page, map)
+      writeBrowserCache(page, map)
 
       return map
     })
-    .catch((): Record<number, string> => ({}))
+    .catch((): Record<number, string> => {
+      return pageCache.get(page) ?? readBrowserCache(page)
+    })
+    .finally(() => {
+      pageRequests.delete(page)
+    })
 
   pageRequests.set(page, request)
 
@@ -83,41 +133,46 @@ export default function SiteImage({
   style,
   ...props
 }: SiteImageProps) {
-  const [src, setSrc] = useState<string | null>(null)
-
-  const [loading, setLoading] = useState(
-    page !== undefined && slot !== undefined
-  )
+  // الصورة الاحتياطية تظهر فورًا.
+  // صورة الأدمن تُستبدل في الخلفية عند وصولها.
+  const [src, setSrc] = useState(String(fallbackSrc))
 
   useEffect(() => {
     if (page === undefined || slot === undefined) {
       setSrc(String(fallbackSrc))
-      setLoading(false)
       return
     }
 
     let active = true
+    const pageName = String(page)
+    const slotNumber = Number(slot)
 
-    setLoading(true)
+    // 1) استخدم النسخة المخزنة محليًا فورًا إن وُجدت.
+    const memoryImages = pageCache.get(pageName)
+    const browserImages = readBrowserCache(pageName)
+    const cachedSrc =
+      memoryImages?.[slotNumber] ??
+      browserImages[slotNumber]
 
-    // لا نظهر الـfallback القديم أثناء انتظار صورة الأدمن
-    setSrc(null)
+    if (cachedSrc) {
+      setSrc(cachedSrc)
+    } else {
+      setSrc(String(fallbackSrc))
+    }
 
-    loadPageImages(String(page)).then((images) => {
+    // 2) اجلب آخر نسخة في الخلفية بدون تعطيل الصفحة.
+    refreshPageImages(pageName).then((images) => {
       if (!active) {
         return
       }
 
-      const newSrc = images[Number(slot)]
+      const freshSrc = images[slotNumber]
 
-      if (newSrc) {
-        setSrc(newSrc)
-      } else {
-        // فقط لو الأدمن ليس لديه صورة لهذا الـslot
+      if (freshSrc) {
+        setSrc(freshSrc)
+      } else if (!cachedSrc) {
         setSrc(String(fallbackSrc))
       }
-
-      setLoading(false)
     })
 
     return () => {
@@ -128,17 +183,6 @@ export default function SiteImage({
   const finalClassName = fill
     ? `absolute inset-0 h-full w-full ${className}`
     : className
-
-  // نفس مساحة الصورة بدون عرض الصورة القديمة
-  if (loading || !src) {
-    return (
-      <div
-        className={finalClassName}
-        style={style}
-        aria-hidden="true"
-      />
-    )
-  }
 
   return (
     <img
