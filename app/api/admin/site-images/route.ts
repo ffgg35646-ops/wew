@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { revalidateTag } from "next/cache"
 import clientPromise from "@/lib/mongodb"
 import { requireAdmin } from "@/lib/admin-auth"
 
@@ -70,6 +71,9 @@ export async function POST(request: Request) {
     },
     { upsert: true }
   )
+
+  // تحديث كاش صور الموقع فورًا بعد تغيير صورة من الأدمن.
+  revalidateTag("site-images", "max")
 
   return NextResponse.json({ ok: true })
 }
