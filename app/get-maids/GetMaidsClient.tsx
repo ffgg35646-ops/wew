@@ -6,6 +6,7 @@ import Link from "next/link"
 import Navbar from "@/components/Navbar"
 import { useEffect, useMemo, useState } from "react"
 import Footer from "@/components/Footer"
+import { readClientCache, writeClientCache } from "@/lib/client-cache"
 
 type Language = {
   name: string
@@ -209,19 +210,19 @@ export default function GetMaidsClient({
   useEffect(() => {
     let active = true
 
+    const cachedMaids = readClientCache<Maid[]>("active-maids")
+    if (cachedMaids?.length) {
+      setMaids(cachedMaids)
+    }
+
     async function refreshMaids() {
       try {
-        const response = await fetch("/api/maids", {
-          cache: "no-store",
-        })
-
-        if (!response.ok) {
-          return
-        }
+        const response = await fetch("/api/maids", { cache: "no-store" })
+        if (!response.ok) return
 
         const data = await response.json()
-
         if (active && Array.isArray(data)) {
+          writeClientCache("active-maids", data)
           setMaids(data)
           setError("")
         }
@@ -230,24 +231,28 @@ export default function GetMaidsClient({
       }
     }
 
+    // Never block the page on the network; refresh after cached data is visible.
     refreshMaids()
+
+    const cachedContact = readClientCache<{ whatsapp: string; phone: string }>("contact-settings")
+    if (cachedContact) setContact(cachedContact)
+
+    fetch("/api/contact", { cache: "no-store" })
+      .then((response) => response.ok ? response.json() : null)
+      .then((data) => {
+        if (!active || !data) return
+        const nextContact = {
+          whatsapp: data.whatsapp ?? "",
+          phone: data.phone ?? "",
+        }
+        writeClientCache("contact-settings", nextContact)
+        setContact(nextContact)
+      })
+      .catch(() => {})
 
     return () => {
       active = false
     }
-  }, [])
-  useEffect(() => {
-    fetch("/api/contact", { cache: "no-store" })
-      .then((response) => response.ok ? response.json() : null)
-      .then((data) => {
-        if (data) {
-          setContact({
-            whatsapp: data.whatsapp ?? "",
-            phone: data.phone ?? "",
-          })
-        }
-      })
-      .catch(() => {})
   }, [])
 
 
