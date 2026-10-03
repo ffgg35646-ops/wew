@@ -68,10 +68,7 @@ export async function GET(request: Request) {
 
         // ممنوع تخزين الصورة القديمة في هذا endpoint
         "Cache-Control":
-          "no-store, no-cache, must-revalidate, proxy-revalidate",
-
-        Pragma: "no-cache",
-        Expires: "0",
+          "public, max-age=31536000, immutable",
 
         "Content-Disposition": `inline; filename="${String(
           file.filename || "file"
