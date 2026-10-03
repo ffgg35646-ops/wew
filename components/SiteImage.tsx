@@ -10,7 +10,6 @@ type SiteImageProps = Omit<
   page?: string | number
   slot?: string | number
   fallbackSrc: string | number
-
   fill?: boolean
   priority?: boolean
   sizes?: string
@@ -19,43 +18,25 @@ type SiteImageProps = Omit<
 }
 
 const pageCache = new Map<string, Record<number, string>>()
-const pageRequests = new Map<
-  string,
-  Promise<Record<number, string>>
->()
+const pageRequests = new Map<string, Promise<Record<number, string>>>()
 
 function browserCacheKey(page: string) {
   return `maidora-site-images:${page}`
 }
 
-function readBrowserCache(
-  page: string
-): Record<number, string> {
-  if (typeof window === "undefined") {
-    return {}
-  }
+function readBrowserCache(page: string): Record<number, string> {
+  if (typeof window === "undefined") return {}
 
   try {
-    const raw = window.localStorage.getItem(
-      browserCacheKey(page)
-    )
-
-    if (!raw) {
-      return {}
-    }
+    const raw = window.localStorage.getItem(browserCacheKey(page))
+    if (!raw) return {}
 
     const parsed = JSON.parse(raw)
-
-    if (!parsed || typeof parsed !== "object") {
-      return {}
-    }
+    if (!parsed || typeof parsed !== "object") return {}
 
     const result: Record<number, string> = {}
-
     for (const [key, value] of Object.entries(parsed)) {
-      if (typeof value === "string" && value) {
-        result[Number(key)] = value
-      }
+      if (typeof value === "string" && value) result[Number(key)] = value
     }
 
     return result
@@ -64,31 +45,44 @@ function readBrowserCache(
   }
 }
 
-function writeBrowserCache(
-  page: string,
-  images: Record<number, string>
-) {
-  if (typeof window === "undefined") {
-    return
-  }
+function writeBrowserCache(page: string, images: Record<number, string>) {
+  if (typeof window === "undefined") return
 
   try {
-    window.localStorage.setItem(
-      browserCacheKey(page),
-      JSON.stringify(images)
-    )
+    window.localStorage.setItem(browserCacheKey(page), JSON.stringify(images))
   } catch {}
+}
+
+function preloadImage(src: string): Promise<void> {
+  if (typeof window === "undefined" || !src) return Promise.resolve()
+
+  return new Promise((resolve) => {
+    const image = new window.Image()
+    let settled = false
+
+    const finish = () => {
+      if (settled) return
+      settled = true
+      resolve()
+    }
+
+    image.onload = finish
+    image.onerror = finish
+    image.src = src
+
+    if (image.complete) finish()
+  })
 }
 
 async function refreshPageImages(page: string) {
   const existing = pageRequests.get(page)
-
-  if (existing) {
-    return existing
-  }
+  if (existing) return existing
 
   const request: Promise<Record<number, string>> = fetch(
     `/api/site-images?page=${encodeURIComponent(page)}`,
+    {
+      cache: "no-cache",
+    },
   )
     .then(async (response): Promise<Record<number, string>> => {
       if (!response.ok) {
@@ -99,7 +93,9 @@ async function refreshPageImages(page: string) {
       const map: Record<number, string> = {}
 
       for (const item of data.items ?? []) {
-        map[Number(item.slot)] = String(item.url)
+        const slot = Number(item.slot)
+        const url = String(item.url ?? "")
+        if (slot && url) map[slot] = url
       }
 
       pageCache.set(page, map)
@@ -115,7 +111,6 @@ async function refreshPageImages(page: string) {
     })
 
   pageRequests.set(page, request)
-
   return request
 }
 
@@ -133,52 +128,68 @@ export default function SiteImage({
   style,
   ...props
 }: SiteImageProps) {
-  // الصورة الاحتياطية تظهر فورًا.
-  // صورة الأدمن تُستبدل في الخلفية عند وصولها.
-  const [src, setSrc] = useState(String(fallbackSrc))
+  const pageName =
+    page === undefined ? undefined : String(page)
+  const slotNumber =
+    slot === undefined ? undefined : Number(slot)
+
+  // نبدأ من الكاش المحلي إن كان متاحًا، بدل عرض الصورة الاحتياطية
+  // في كل Refresh ثم استبدالها بعد وصول طلب الـAPI.
+  const [src, setSrc] = useState(() => {
+    if (pageName === undefined || slotNumber === undefined) {
+      return String(fallbackSrc)
+    }
+
+    const cached =
+      pageCache.get(pageName)?.[slotNumber] ??
+      readBrowserCache(pageName)[slotNumber]
+
+    return cached || String(fallbackSrc)
+  })
 
   useEffect(() => {
-    if (page === undefined || slot === undefined) {
+    if (pageName === undefined || slotNumber === undefined) {
       setSrc(String(fallbackSrc))
       return
     }
 
     let active = true
-    const pageName = String(page)
-    const slotNumber = Number(slot)
 
-    // 1) استخدم النسخة المخزنة محليًا فورًا إن وُجدت.
-    const memoryImages = pageCache.get(pageName)
-    const browserImages = readBrowserCache(pageName)
     const cachedSrc =
-      memoryImages?.[slotNumber] ??
-      browserImages[slotNumber]
+      pageCache.get(pageName)?.[slotNumber] ??
+      readBrowserCache(pageName)[slotNumber]
 
     if (cachedSrc) {
       setSrc(cachedSrc)
-    } else {
-      setSrc(String(fallbackSrc))
     }
 
-    // 2) اجلب آخر نسخة في الخلفية بدون تعطيل الصفحة.
-    refreshPageImages(pageName).then((images) => {
-      if (!active) {
-        return
-      }
+    // التحديث يحصل في الخلفية. لا نغير الصورة المعروضة
+    // إلا بعد أن تكون الصورة الجديدة قد انتهت من التحميل.
+    refreshPageImages(pageName).then(async (images) => {
+      if (!active) return
 
       const freshSrc = images[slotNumber]
 
-      if (freshSrc) {
+      if (!freshSrc) {
+        if (!cachedSrc) setSrc(String(fallbackSrc))
+        return
+      }
+
+      if (freshSrc === (cachedSrc || src)) {
+        return
+      }
+
+      await preloadImage(freshSrc)
+
+      if (active) {
         setSrc(freshSrc)
-      } else if (!cachedSrc) {
-        setSrc(String(fallbackSrc))
       }
     })
 
     return () => {
       active = false
     }
-  }, [page, slot, fallbackSrc])
+  }, [pageName, slotNumber, fallbackSrc])
 
   const finalClassName = fill
     ? `absolute inset-0 h-full w-full ${className}`
