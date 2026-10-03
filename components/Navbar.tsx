@@ -7,6 +7,7 @@ import PhoneContactButton from "./PhoneContactButton";
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { startLanguageEngine } from "@/components/LanguageClient"
+import { readClientCache, writeClientCache } from "@/lib/client-cache"
 
 type LicenseSettings = {
   enabled: boolean
@@ -55,40 +56,47 @@ export default function Navbar() {
 
     let mounted = true
 
-    fetch("/api/economic-license/settings", {
-      cache: "no-store",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (!mounted) return
+    const cachedLicense = readClientCache<LicenseSettings>("license-settings")
+    if (cachedLicense) {
+      setLicense(cachedLicense)
+    }
 
-        setLicense({
+    const cachedContact = readClientCache<Contact>("contact-settings")
+    if (cachedContact) {
+      setContact(cachedContact)
+    }
+
+    // Always refresh in the background. Cached data is never replaced by a loading state.
+    fetch("/api/economic-license/settings", { cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
+        if (!mounted || !data) return
+
+        const nextLicense = {
           enabled: true,
           viewEnabled: true,
           downloadEnabled: true,
           viewFileId: data.viewFileId ?? null,
           downloadFileId: data.downloadFileId ?? null,
-        })
-      })
-      .catch(() => {
-        if (mounted) {
-          setLicense(defaultLicense)
         }
-      })
 
-    fetch("/api/contact", {
-      cache: "no-store",
-    })
-      .then((response) =>
-        response.ok ? response.json() : null
-      )
+        writeClientCache("license-settings", nextLicense)
+        setLicense(nextLicense)
+      })
+      .catch(() => {})
+
+    fetch("/api/contact", { cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : null))
       .then((data) => {
         if (!mounted || !data) return
 
-        setContact({
+        const nextContact = {
           whatsapp: data.whatsapp ?? "",
           phone: data.phone ?? "",
-        })
+        }
+
+        writeClientCache("contact-settings", nextContact)
+        setContact(nextContact)
       })
       .catch(() => {})
 
