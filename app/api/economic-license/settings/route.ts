@@ -5,13 +5,20 @@ export async function GET() {
   try {
     const settings = await getEconomicLicenseSettings()
 
-    return NextResponse.json({
-      enabled: settings.enabled,
-      viewEnabled: settings.viewEnabled,
-      downloadEnabled: settings.downloadEnabled,
-      viewFileId: settings.viewFileId ?? null,
-      downloadFileId: settings.downloadFileId ?? null,
-    })
+    return NextResponse.json(
+      {
+        enabled: settings.enabled,
+        viewEnabled: settings.viewEnabled,
+        downloadEnabled: settings.downloadEnabled,
+        viewFileId: settings.viewFileId ?? null,
+        downloadFileId: settings.downloadFileId ?? null,
+      },
+      {
+        headers: {
+          "Cache-Control": "public, max-age=30, s-maxage=60, stale-while-revalidate=300",
+        },
+      }
+    )
   } catch (error) {
     console.error("PUBLIC_ECONOMIC_LICENSE_SETTINGS_ERROR", error)
 
