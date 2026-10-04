@@ -22,7 +22,7 @@ export default function RootLayout({
         <Script
           id="meta-pixel"
           strategy="afterInteractive"
-        >{\`
+        >{`
           !function(f,b,e,v,n,t,s)
           {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
           n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -34,7 +34,7 @@ export default function RootLayout({
 
           fbq('init', '1940138284036945');
           fbq('track', 'PageView');
-        \`}</Script>
+        `}</Script>
 
         <noscript>
           <img
@@ -50,7 +50,7 @@ export default function RootLayout({
         <Script
           id="snap-pixel"
           strategy="afterInteractive"
-        >{\`
+        >{`
           (function(e,t,n){if(e.snaptr)return;var a=e.snaptr=function()
           {a.handleRequest?a.handleRequest.apply(a,arguments):a.queue.push(arguments)};
           a.queue=[];var s='script';r=t.createElement(s);r.async=!0;
@@ -60,7 +60,7 @@ export default function RootLayout({
 
           snaptr('init', 'a3a18a97-5892-4118-a5a7-691589bc686b', {});
           snaptr('track', 'PAGE_VIEW');
-        \`}</Script>
+        `}</Script>
       </body>
     </html>
   )
