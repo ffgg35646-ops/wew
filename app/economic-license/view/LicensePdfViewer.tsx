@@ -38,9 +38,8 @@ type PdfJsLibrary = {
     workerSrc: string
   }
   getDocument: (options: {
-    url: string
+    data: Uint8Array
     rangeChunkSize: number
-    disableStream: boolean
     cMapUrl: string
     cMapPacked: boolean
     standardFontDataUrl: string
@@ -49,147 +48,341 @@ type PdfJsLibrary = {
   }) => PdfLoadingTask
 }
 
+type CachedPreview = {
+  version: string
+  preview: Blob
+  pdfData: ArrayBuffer
+  pageCount: number
+}
+
 declare global {
   interface Window {
     pdfjsLib?: PdfJsLibrary
   }
 }
 
-const PDF_URL = "/api/economic-license/file?type=view"
 const PDFJS_VERSION = "3.11.174"
 const PDFJS_SCRIPT = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/" + PDFJS_VERSION + "/pdf.min.js"
 const PDFJS_WORKER = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/" + PDFJS_VERSION + "/pdf.worker.min.js"
 const PDFJS_CMAPS = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/" + PDFJS_VERSION + "/cmaps/"
 const PDFJS_STANDARD_FONTS = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/" + PDFJS_VERSION + "/standard_fonts/"
+const PREVIEW_DB = "maidora-license-preview"
+const PREVIEW_STORE = "pages"
+
+function openPreviewDb(): Promise<IDBDatabase> {
+  return new Promise((resolve, reject) => {
+    if (typeof indexedDB === "undefined") {
+      reject(new Error("IndexedDB unavailable"))
+      return
+    }
+
+    const request = indexedDB.open(PREVIEW_DB, 1)
+    request.onupgradeneeded = () => {
+      const db = request.result
+      if (!db.objectStoreNames.contains(PREVIEW_STORE)) {
+        db.createObjectStore(PREVIEW_STORE)
+      }
+    }
+    request.onsuccess = () => resolve(request.result)
+    request.onerror = () => reject(request.error || new Error("Could not open preview cache"))
+  })
+}
+
+async function readCachedPreview(): Promise<CachedPreview | null> {
+  const db = await openPreviewDb()
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(PREVIEW_STORE, "readonly")
+    const request = transaction.objectStore(PREVIEW_STORE).get("latest")
+    request.onsuccess = () => {
+      db.close()
+      resolve((request.result as CachedPreview | undefined) ?? null)
+    }
+    request.onerror = () => {
+      db.close()
+      reject(request.error || new Error("Could not read preview cache"))
+    }
+  })
+}
+
+async function saveCachedPreview(value: CachedPreview): Promise<void> {
+  const db = await openPreviewDb()
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(PREVIEW_STORE, "readwrite")
+    transaction.objectStore(PREVIEW_STORE).put(value, "latest")
+    transaction.oncomplete = () => {
+      db.close()
+      resolve()
+    }
+    transaction.onerror = () => {
+      db.close()
+      reject(transaction.error || new Error("Could not save preview cache"))
+    }
+    transaction.onabort = () => {
+      db.close()
+      reject(transaction.error || new Error("Preview cache transaction aborted"))
+    }
+  })
+}
+
+async function paintCachedPreview(
+  canvas: HTMLCanvasElement,
+  blob: Blob,
+  containerWidth: number,
+  zoom: number
+) {
+  const bitmap = await createImageBitmap(blob)
+  const context = canvas.getContext("2d")
+  if (!context) {
+    bitmap.close()
+    return
+  }
+
+  canvas.width = bitmap.width
+  canvas.height = bitmap.height
+  const availableWidth = Math.max(180, (containerWidth || window.innerWidth) - 24)
+  const displayWidth = Math.min(bitmap.width, availableWidth) * zoom
+  canvas.style.width = String(displayWidth) + "px"
+  canvas.style.height = String((bitmap.height / bitmap.width) * displayWidth) + "px"
+  context.drawImage(bitmap, 0, 0)
+  bitmap.close()
+}
 
 export default function LicensePdfViewer() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const cachedPreviewRef = useRef<CachedPreview | null>(null)
+  const pdfDataRef = useRef<ArrayBuffer | null>(null)
   const [scriptReady, setScriptReady] = useState(false)
+  const [cacheReady, setCacheReady] = useState(false)
+  const [serverVersion, setServerVersion] = useState("")
   const [pdf, setPdf] = useState<PdfDocument | null>(null)
+  const [pdfVersion, setPdfVersion] = useState("")
   const [pageNumber, setPageNumber] = useState(1)
   const [pageCount, setPageCount] = useState(0)
   const [zoom, setZoom] = useState(1)
   const [containerWidth, setContainerWidth] = useState(0)
-  const [loading, setLoading] = useState(true)
-  const [rendering, setRendering] = useState(false)
+  const [hasPreview, setHasPreview] = useState(false)
   const [error, setError] = useState("")
 
   useEffect(() => {
+    let mounted = true
+
     const element = containerRef.current
-    if (!element) return
+    if (element) {
+      const updateWidth = () => setContainerWidth(element.getBoundingClientRect().width)
+      updateWidth()
 
-    const updateWidth = () => {
-      setContainerWidth(element.getBoundingClientRect().width)
+      if (typeof ResizeObserver !== "undefined") {
+        const observer = new ResizeObserver(updateWidth)
+        observer.observe(element)
+        window.addEventListener("resize", updateWidth)
+        return () => {
+          mounted = false
+          observer.disconnect()
+          window.removeEventListener("resize", updateWidth)
+        }
+      }
+
+      window.addEventListener("resize", updateWidth)
     }
 
-    updateWidth()
-
-    if (typeof ResizeObserver !== "undefined") {
-      const observer = new ResizeObserver(updateWidth)
-      observer.observe(element)
-      return () => observer.disconnect()
+    return () => {
+      mounted = false
+      window.removeEventListener("resize", () => {})
     }
-
-    window.addEventListener("resize", updateWidth)
-    return () => window.removeEventListener("resize", updateWidth)
   }, [])
 
   useEffect(() => {
-    if (!scriptReady || !window.pdfjsLib) return
+    let mounted = true
+
+    readCachedPreview()
+      .then(async (cached) => {
+        if (!mounted) return
+        if (cached?.preview) {
+          cachedPreviewRef.current = cached
+          setPageCount(cached.pageCount || 1)
+          setHasPreview(true)
+          if (canvasRef.current) {
+            await paintCachedPreview(
+              canvasRef.current,
+              cached.preview,
+              containerWidth || window.innerWidth,
+              zoom
+            )
+          }
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (mounted) setCacheReady(true)
+      })
+
+    fetch("/api/economic-license/settings", { cache: "no-store" })
+      .then((response) => response.ok ? response.json() : null)
+      .then((settings) => {
+        if (!mounted || !settings) return
+        if (settings.enabled === false || settings.viewEnabled === false || !settings.viewFileId) {
+          setError("ملف عرض الترخيص غير متاح حاليًا.")
+          return
+        }
+        setServerVersion(String(settings.viewFileId))
+      })
+      .catch(() => {
+        // Keep the last saved preview visible when the network is unavailable.
+      })
+
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!cacheReady || !scriptReady || !serverVersion || !window.pdfjsLib) return
 
     let cancelled = false
     let loadingTask: PdfLoadingTask | null = null
 
-    setLoading(true)
-    setError("")
-    window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER
-    loadingTask = window.pdfjsLib.getDocument({
-      url: PDF_URL,
-      rangeChunkSize: 65536,
-      disableStream: true,
-      cMapUrl: PDFJS_CMAPS,
-      cMapPacked: true,
-      standardFontDataUrl: PDFJS_STANDARD_FONTS,
-      useSystemFonts: true,
-      disableFontFace: false,
-    })
+    async function loadLatestDocument() {
+      try {
+        const cached = cachedPreviewRef.current
+        let pdfData: ArrayBuffer
 
-    loadingTask.promise
-      .then((loadedPdf) => {
+        if (cached?.version === serverVersion && cached.pdfData) {
+          pdfData = cached.pdfData
+        } else {
+          const response = await fetch(
+            "/api/economic-license/file?type=view&version=" + encodeURIComponent(serverVersion),
+            { cache: "no-store" }
+          )
+
+          if (response.status === 409) {
+            const latestSettings = await fetch("/api/economic-license/settings", { cache: "no-store" })
+            if (latestSettings.ok) {
+              const latest = await latestSettings.json()
+              if (latest.viewFileId && String(latest.viewFileId) !== serverVersion) {
+                setServerVersion(String(latest.viewFileId))
+              }
+            }
+            return
+          }
+
+          if (!response.ok) throw new Error("PDF request failed: " + response.status)
+          pdfData = await response.arrayBuffer()
+        }
+
+        if (cancelled || !window.pdfjsLib) return
+
+        loadingTask = window.pdfjsLib.getDocument({
+          data: new Uint8Array(pdfData),
+          rangeChunkSize: 65536,
+          cMapUrl: PDFJS_CMAPS,
+          cMapPacked: true,
+          standardFontDataUrl: PDFJS_STANDARD_FONTS,
+          useSystemFonts: true,
+          disableFontFace: false,
+        })
+
+        const loadedPdf = await loadingTask.promise
         if (cancelled) {
           void loadedPdf.destroy()
           return
         }
 
+        pdfDataRef.current = pdfData
         setPdf(loadedPdf)
+        setPdfVersion(serverVersion)
         setPageCount(loadedPdf.numPages)
-        setPageNumber(1)
-        setLoading(false)
-      })
-      .catch((loadError: unknown) => {
+        if (cached?.version !== serverVersion) {
+          setPageNumber(1)
+        }
+        setError("")
+      } catch (loadError) {
         if (cancelled) return
-        console.error("ECONOMIC_LICENSE_PDF_LOAD_ERROR", loadError)
-        setError("تعذّر تحميل ملف الترخيص. يرجى تحديث الصفحة والمحاولة مرة أخرى.")
-        setLoading(false)
-      })
+        console.error("ECONOMIC_LICENSE_PDF_BACKGROUND_REFRESH_ERROR", loadError)
+        if (!hasPreview) {
+          setError("تعذّر عرض ملف الترخيص. أعد المحاولة بعد التحقق من الاتصال.")
+        }
+      }
+    }
+
+    void loadLatestDocument()
 
     return () => {
       cancelled = true
       if (loadingTask) void loadingTask.destroy()
     }
-  }, [scriptReady])
+  }, [cacheReady, scriptReady, serverVersion])
 
   useEffect(() => {
     if (!pdf || !canvasRef.current || !containerWidth) return
 
     let cancelled = false
     let renderTask: PdfRenderTask | null = null
-
-    setRendering(true)
+    const renderCanvas = document.createElement("canvas")
 
     pdf.getPage(pageNumber)
       .then((page) => {
-        if (cancelled || !canvasRef.current) return
+        if (cancelled) return
 
-        const canvas = canvasRef.current
-        const context = canvas.getContext("2d")
+        const context = renderCanvas.getContext("2d")
         if (!context) throw new Error("Canvas 2D context is unavailable")
 
         const originalViewport = page.getViewport({ scale: 1 })
         const fitScale = Math.min(1.5, Math.max(0.1, (containerWidth - 24) / originalViewport.width))
-        const displayScale = fitScale * zoom
         const deviceScale = Math.min(window.devicePixelRatio || 1, 2)
-        const viewport = page.getViewport({ scale: displayScale * deviceScale })
+        const viewport = page.getViewport({ scale: fitScale * zoom * deviceScale })
 
-        canvas.width = Math.ceil(viewport.width)
-        canvas.height = Math.ceil(viewport.height)
-        canvas.style.width = String(viewport.width / deviceScale) + "px"
-        canvas.style.height = String(viewport.height / deviceScale) + "px"
-        context.clearRect(0, 0, canvas.width, canvas.height)
+        renderCanvas.width = Math.ceil(viewport.width)
+        renderCanvas.height = Math.ceil(viewport.height)
+        renderTask = page.render({ canvasContext: context, viewport })
+        return renderTask.promise.then(() => {
+          if (cancelled || !canvasRef.current) return
 
-        renderTask = page.render({
-          canvasContext: context,
-          viewport,
+          const visibleCanvas = canvasRef.current
+          const visibleContext = visibleCanvas.getContext("2d")
+          if (!visibleContext) return
+
+          visibleCanvas.width = renderCanvas.width
+          visibleCanvas.height = renderCanvas.height
+          visibleCanvas.style.width = String(viewport.width / deviceScale) + "px"
+          visibleCanvas.style.height = String(viewport.height / deviceScale) + "px"
+          visibleContext.drawImage(renderCanvas, 0, 0)
+          setHasPreview(true)
+
+          if (pageNumber === 1 && pdfDataRef.current && pdfVersion) {
+            renderCanvas.toBlob((previewBlob) => {
+              if (!previewBlob || cancelled) return
+              const cached: CachedPreview = {
+                version: pdfVersion,
+                preview: previewBlob,
+                pdfData: pdfDataRef.current!.slice(0),
+                pageCount: pdf.numPages,
+              }
+              cachedPreviewRef.current = cached
+              void saveCachedPreview(cached).catch(() => {})
+            }, "image/jpeg", 0.94)
+          }
         })
-
-        return renderTask.promise
       })
-      .then(() => {
-        if (!cancelled) setRendering(false)
-      })
-      .catch((renderError: unknown) => {
+      .catch((renderError) => {
         if (cancelled) return
         console.error("ECONOMIC_LICENSE_PDF_RENDER_ERROR", renderError)
-        setError("تعذّر عرض صفحة الترخيص.")
-        setRendering(false)
+        if (!hasPreview) setError("تعذّر رسم صفحة الترخيص.")
       })
 
     return () => {
       cancelled = true
       renderTask?.cancel()
     }
-  }, [pdf, pageNumber, zoom, containerWidth])
+  }, [pdf, pdfVersion, pageNumber, zoom, containerWidth])
+
+  useEffect(() => {
+    const cached = cachedPreviewRef.current
+    if (!cached?.preview || pdf) return
+    if (canvasRef.current) {
+      void paintCachedPreview(canvasRef.current, cached.preview, containerWidth || window.innerWidth, zoom)
+    }
+  }, [containerWidth, zoom, pdf])
 
   const previousPage = () => setPageNumber((current) => Math.max(1, current - 1))
   const nextPage = () => setPageNumber((current) => Math.min(pageCount, current + 1))
@@ -201,8 +394,7 @@ export default function LicensePdfViewer() {
         strategy="afterInteractive"
         onLoad={() => setScriptReady(true)}
         onError={() => {
-          setError("تعذّر تحميل عارض المستندات. تحقق من الاتصال بالإنترنت ثم أعد المحاولة.")
-          setLoading(false)
+          if (!hasPreview) setError("تعذّر تحميل عارض المستندات. تحقق من الاتصال بالإنترنت ثم أعد المحاولة.")
         }}
       />
 
@@ -261,7 +453,7 @@ export default function LicensePdfViewer() {
               <button
                 type="button"
                 onClick={previousPage}
-                disabled={pageNumber <= 1 || loading}
+                disabled={pageNumber <= 1}
                 className="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 disabled:opacity-35"
               >
                 السابقة
@@ -272,7 +464,7 @@ export default function LicensePdfViewer() {
               <button
                 type="button"
                 onClick={nextPage}
-                disabled={!pageCount || pageNumber >= pageCount || loading}
+                disabled={!pageCount || pageNumber >= pageCount}
                 className="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 disabled:opacity-35"
               >
                 التالية
@@ -284,13 +476,7 @@ export default function LicensePdfViewer() {
             ref={containerRef}
             className="relative flex min-h-[65vh] items-start justify-center overflow-auto bg-[#E9EEF4] p-3 sm:p-6"
           >
-            {(loading || rendering) && !error && (
-              <div className="absolute inset-x-0 top-4 z-10 mx-auto w-fit rounded-full bg-white/95 px-4 py-2 text-xs font-bold text-slate-600 shadow">
-                {loading ? "جاري تحميل الترخيص..." : "جاري تجهيز الصفحة..."}
-              </div>
-            )}
-
-            {error ? (
+            {error && !hasPreview ? (
               <div className="m-auto max-w-md rounded-2xl bg-white p-6 text-center shadow-sm">
                 <p className="font-bold text-red-600">{error}</p>
                 <button
