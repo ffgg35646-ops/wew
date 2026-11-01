@@ -87,6 +87,14 @@ async function serveLicense(request: Request, headOnly = false) {
       return NextResponse.json({ error: "File not available" }, { status: 404 })
     }
 
+    const requestedVersion = searchParams.get("version")
+    if (requestedVersion && requestedVersion !== fileId) {
+      return NextResponse.json(
+        { error: "License file changed; refresh settings and retry" },
+        { status: 409 }
+      )
+    }
+
     if (type === "view" && !settings.viewEnabled) {
       return NextResponse.json({ error: "View is disabled" }, { status: 404 })
     }
