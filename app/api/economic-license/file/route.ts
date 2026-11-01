@@ -57,11 +57,12 @@ function contentDisposition(type: "view" | "download", originalName?: string) {
     .trim() || "economic-development-license.pdf"
   const asciiName = name.replace(/[^\x20-\x7E]/g, "_").replace(/[\\"]/g, "_")
   const encodedName = encodeURIComponent(name).replace(/['()*]/g, (char) =>
-    \`%\${char.charCodeAt(0).toString(16).toUpperCase()}\`
+    "%" + char.charCodeAt(0).toString(16).toUpperCase()
   )
   const disposition = type === "view" ? "inline" : "attachment"
 
-  return \`\${disposition}; filename="\${asciiName}"; filename*=UTF-8''\${encodedName}\`
+  return disposition + '; filename="' + asciiName + '"; filename*=UTF-8' +
+    String.fromCharCode(39, 39) + encodedName
 }
 
 async function serveLicense(request: Request, headOnly = false) {
@@ -117,7 +118,7 @@ async function serveLicense(request: Request, headOnly = false) {
     })
 
     if (range === "invalid") {
-      headers.set("Content-Range", \`bytes */\${totalSize}\`)
+      headers.set("Content-Range", "bytes */" + totalSize)
       return new Response(null, { status: 416, headers })
     }
 
@@ -129,7 +130,7 @@ async function serveLicense(request: Request, headOnly = false) {
     headers.set("Content-Length", String(responseLength))
 
     if (isPartial) {
-      headers.set("Content-Range", \`bytes \${start}-\${end}/\${totalSize}\`)
+      headers.set("Content-Range", "bytes " + start + "-" + end + "/" + totalSize)
     }
 
     const status = isPartial ? 206 : 200
