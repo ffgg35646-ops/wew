@@ -52,8 +52,8 @@ declare global {
 
 const PDF_URL = "/api/economic-license/file?type=view"
 const PDFJS_VERSION = "3.11.174"
-const PDFJS_SCRIPT = \`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/\${PDFJS_VERSION}/pdf.min.js\`
-const PDFJS_WORKER = \`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/\${PDFJS_VERSION}/pdf.worker.min.js\`
+const PDFJS_SCRIPT = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/" + PDFJS_VERSION + "/pdf.min.js"
+const PDFJS_WORKER = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/" + PDFJS_VERSION + "/pdf.worker.min.js"
 
 export default function LicensePdfViewer() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -77,10 +77,15 @@ export default function LicensePdfViewer() {
     }
 
     updateWidth()
-    const observer = new ResizeObserver(updateWidth)
-    observer.observe(element)
 
-    return () => observer.disconnect()
+    if (typeof ResizeObserver !== "undefined") {
+      const observer = new ResizeObserver(updateWidth)
+      observer.observe(element)
+      return () => observer.disconnect()
+    }
+
+    window.addEventListener("resize", updateWidth)
+    return () => window.removeEventListener("resize", updateWidth)
   }, [])
 
   useEffect(() => {
@@ -147,8 +152,8 @@ export default function LicensePdfViewer() {
 
         canvas.width = Math.ceil(viewport.width)
         canvas.height = Math.ceil(viewport.height)
-        canvas.style.width = \`\${viewport.width / deviceScale}px\`
-        canvas.style.height = \`\${viewport.height / deviceScale}px\`
+        canvas.style.width = String(viewport.width / deviceScale) + "px"
+        canvas.style.height = String(viewport.height / deviceScale) + "px"
         context.clearRect(0, 0, canvas.width, canvas.height)
 
         renderTask = page.render({
@@ -250,7 +255,7 @@ export default function LicensePdfViewer() {
                 السابقة
               </button>
               <span className="min-w-[76px] text-center text-xs font-bold text-slate-600" aria-live="polite">
-                {pageCount ? \`صفحة \${pageNumber} من \${pageCount}\` : "—"}
+                {pageCount ? "صفحة " + pageNumber + " من " + pageCount : "—"}
               </span>
               <button
                 type="button"
