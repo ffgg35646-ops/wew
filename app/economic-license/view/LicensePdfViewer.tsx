@@ -41,6 +41,11 @@ type PdfJsLibrary = {
     url: string
     rangeChunkSize: number
     disableStream: boolean
+    cMapUrl: string
+    cMapPacked: boolean
+    standardFontDataUrl: string
+    useSystemFonts: boolean
+    disableFontFace: boolean
   }) => PdfLoadingTask
 }
 
@@ -54,6 +59,8 @@ const PDF_URL = "/api/economic-license/file?type=view"
 const PDFJS_VERSION = "3.11.174"
 const PDFJS_SCRIPT = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/" + PDFJS_VERSION + "/pdf.min.js"
 const PDFJS_WORKER = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/" + PDFJS_VERSION + "/pdf.worker.min.js"
+const PDFJS_CMAPS = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/" + PDFJS_VERSION + "/cmaps/"
+const PDFJS_STANDARD_FONTS = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/" + PDFJS_VERSION + "/standard_fonts/"
 
 export default function LicensePdfViewer() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -101,6 +108,11 @@ export default function LicensePdfViewer() {
       url: PDF_URL,
       rangeChunkSize: 65536,
       disableStream: true,
+      cMapUrl: PDFJS_CMAPS,
+      cMapPacked: true,
+      standardFontDataUrl: PDFJS_STANDARD_FONTS,
+      useSystemFonts: true,
+      disableFontFace: false,
     })
 
     loadingTask.promise
