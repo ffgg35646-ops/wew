@@ -165,31 +165,23 @@ export default function LicensePdfViewer() {
   const [error, setError] = useState("")
 
   useEffect(() => {
-    let mounted = true
-
     const element = containerRef.current
-    if (element) {
-      const updateWidth = () => setContainerWidth(element.getBoundingClientRect().width)
-      updateWidth()
+    if (!element) return
 
-      if (typeof ResizeObserver !== "undefined") {
-        const observer = new ResizeObserver(updateWidth)
-        observer.observe(element)
-        window.addEventListener("resize", updateWidth)
-        return () => {
-          mounted = false
-          observer.disconnect()
-          window.removeEventListener("resize", updateWidth)
-        }
+    const updateWidth = () => setContainerWidth(element.getBoundingClientRect().width)
+    updateWidth()
+    window.addEventListener("resize", updateWidth)
+
+    if (typeof ResizeObserver !== "undefined") {
+      const observer = new ResizeObserver(updateWidth)
+      observer.observe(element)
+      return () => {
+        observer.disconnect()
+        window.removeEventListener("resize", updateWidth)
       }
-
-      window.addEventListener("resize", updateWidth)
     }
 
-    return () => {
-      mounted = false
-      window.removeEventListener("resize", () => {})
-    }
+    return () => window.removeEventListener("resize", updateWidth)
   }, [])
 
   useEffect(() => {
