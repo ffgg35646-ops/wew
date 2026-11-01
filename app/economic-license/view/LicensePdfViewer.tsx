@@ -209,22 +209,35 @@ export default function LicensePdfViewer() {
         if (mounted) setCacheReady(true)
       })
 
-    fetch("/api/economic-license/settings", { cache: "no-store" })
-      .then((response) => response.ok ? response.json() : null)
-      .then((settings) => {
-        if (!mounted || !settings) return
-        if (settings.enabled === false || settings.viewEnabled === false || !settings.viewFileId) {
-          setError("ملف عرض الترخيص غير متاح حاليًا.")
-          return
-        }
-        setServerVersion(String(settings.viewFileId))
-      })
-      .catch(() => {
-        // Keep the last saved preview visible when the network is unavailable.
-      })
+    const refreshSettings = () => {
+      fetch("/api/economic-license/settings", { cache: "no-store" })
+        .then((response) => response.ok ? response.json() : null)
+        .then((settings) => {
+          if (!mounted || !settings) return
+          if (settings.enabled === false || settings.viewEnabled === false || !settings.viewFileId) {
+            if (!cachedPreviewRef.current) {
+              setError("ملف عرض الترخيص غير متاح حاليًا.")
+            }
+            return
+          }
+          setServerVersion((current) => {
+            const nextVersion = String(settings.viewFileId)
+            return current === nextVersion ? current : nextVersion
+          })
+        })
+        .catch(() => {
+          // Keep the last saved preview visible when the network is unavailable.
+        })
+    }
+
+    void refreshSettings()
+    const refreshTimer = window.setInterval(refreshSettings, 30000)
+    window.addEventListener("focus", refreshSettings)
 
     return () => {
       mounted = false
+      window.clearInterval(refreshTimer)
+      window.removeEventListener("focus", refreshSettings)
     }
   }, [])
 
